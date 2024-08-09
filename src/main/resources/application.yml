@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: funding_project
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/
+    username:
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  #    show-sql: true
+  #    properties:
+  #      hibernate:
+  #        format_sql: true
+
+  #Swagger 3.0
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  data:
+    redis:
+      #      host: redis
+      host: localhost
+      port: 6379
+
+springdoc:
+  api-docs:
+    enabled: false
+application:
+  security:
+    jwt:
+      sensitive-key :
+      private-key :
+      access-expiration: 600000 # 10 mins
+      refresh-expiration: 2067600000 # 24 days
+
+server:
+  port: 8080

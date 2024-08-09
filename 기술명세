@@ -1,0 +1,13 @@
+펀딩 프로젝트 기술 명세
+--------------------------
+Java 17
+SpringBoot
++ORM - JPA, DataJPA, QueryDSL
+Production RDS-MariaDB, Local test - MySQL
+Thymeleaf -> React
+Redis
+JWT
+Jenkins
+Docker
+AWS - EC2, RDS, ECR
+Kubernetes(EKS)@
