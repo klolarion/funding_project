@@ -28,6 +28,15 @@ public class Payment {
     @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
 
+    @Column(nullable = false)
     private Long amount;
+
     private boolean completed;
+
+    public Payment(Member member, PaymentMethod paymentMethod, Long amount, boolean completed) {
+        this.member = member;
+        this.paymentMethod = paymentMethod;
+        this.amount = amount;
+        this.completed = completed;
+    }
 }

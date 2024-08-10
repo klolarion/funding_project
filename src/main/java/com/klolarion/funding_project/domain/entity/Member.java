@@ -2,6 +2,7 @@ package com.klolarion.funding_project.domain.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -25,8 +26,25 @@ public class Member extends BaseTime{
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @Column(nullable = false, unique = true)
+    @Size(max = 50)
     private String email;
+
+    @Column(nullable = false, unique = true)
+    @Size(max = 100)
     private String memberName;
-    private String tel;
+
+    @Column(nullable = false)
+    private String password;
+
     private boolean enabled;
+
+    public Member( Role role, String email, String memberName, String password) {
+        this.paymentMethodList = null;
+        this.role = role;
+        this.email = email;
+        this.memberName = memberName;
+        this.password = password;
+        this.enabled = false;
+    }
 }

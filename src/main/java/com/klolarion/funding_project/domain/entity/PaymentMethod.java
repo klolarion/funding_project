@@ -1,6 +1,7 @@
 package com.klolarion.funding_project.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 /**
@@ -16,12 +17,18 @@ public class PaymentMethod extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id")
-    private Long id;
+    private Long paymentId;
 
+    @Column(nullable = false, unique = true)
     private int paymentCode;
-    private String paymentName;
-    private String accountNumber;
 
+    @Column(nullable = false, unique = true)
+    @Size(max = 100)
+    private String paymentName;
+
+    @Column(nullable = false, unique = true)
+    @Size(max = 100)
+    private String accountNumber;
 
     /*테스트를 위한 속성*/
     private Long availableAmount;
