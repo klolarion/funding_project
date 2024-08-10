@@ -1,4 +1,4 @@
-package com.klolarion.funding_project.config;
+package com.klolarion.funding_project.infrastructure.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

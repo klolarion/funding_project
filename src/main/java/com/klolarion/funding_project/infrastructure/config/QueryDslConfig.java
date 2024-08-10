@@ -1,4 +1,4 @@
-package com.klolarion.funding_project.config;
+package com.klolarion.funding_project.infrastructure.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
