@@ -1,9 +1,10 @@
 펀딩 프로젝트 기술 명세
 --------------------------
 Java 17
-SpringBoot
-+ORM - JPA, DataJPA, QueryDSL
-Production RDS-MariaDB, Local test - MySQL
+SpringBoot 3.3.2
+ORM - JPA, DataJPA, QueryDSL
+Production RDS-MariaDB 3.1.4
+Local test - MySQL 8.0.28
 Thymeleaf -> React
 Redis
 JWT
