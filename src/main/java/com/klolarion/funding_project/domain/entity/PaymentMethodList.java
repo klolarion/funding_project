@@ -15,7 +15,7 @@ public class PaymentMethodList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_method_list_id")
-    private Long id;
+    private Long paymentMethodListId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payment_method_id")
@@ -27,4 +27,9 @@ public class PaymentMethodList {
 
     private boolean mainPayment;
 
+    public PaymentMethodList(PaymentMethod paymentMethod, Member member) {
+        this.paymentMethod = paymentMethod;
+        this.member = member;
+        this.mainPayment = false;
+    }
 }
