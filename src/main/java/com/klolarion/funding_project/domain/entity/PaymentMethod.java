@@ -12,14 +12,13 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class PaymentMethod extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "payment_id")
-    private Long paymentId;
+    @Column(name = "payment_method_id")
+    private Long paymentMethodId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private int paymentCode;
 
     @Column(nullable = false, unique = true)
@@ -32,5 +31,14 @@ public class PaymentMethod extends BaseTime{
 
     /*테스트를 위한 속성*/
     private Long availableAmount;
+
+    public boolean deposit(Long amount){
+        if(this.availableAmount - amount >= 0){
+            this.availableAmount -= amount;
+            return true;
+        }else {
+            return false;
+        }
+    }
 
 }

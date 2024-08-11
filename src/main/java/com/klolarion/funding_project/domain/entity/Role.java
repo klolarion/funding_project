@@ -18,7 +18,6 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class Role{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

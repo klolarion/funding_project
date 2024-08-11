@@ -8,7 +8,6 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class OrderList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

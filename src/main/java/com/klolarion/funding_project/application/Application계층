@@ -1,4 +1,4 @@
-Application (애플리케이션 계층):
+Application (애플리케이션 계층): ( Use case 계층)
 
 구성 요소: service, dto
 

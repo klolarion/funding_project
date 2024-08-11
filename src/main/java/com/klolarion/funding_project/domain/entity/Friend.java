@@ -7,7 +7,6 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class Friend extends BaseTime{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "friend_id")
