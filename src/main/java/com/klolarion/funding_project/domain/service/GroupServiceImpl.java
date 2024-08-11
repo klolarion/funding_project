@@ -1,17 +1,18 @@
 package com.klolarion.funding_project.domain.service;
 
+import com.klolarion.funding_project.interfaces.dto.GroupDto;
 import com.klolarion.funding_project.domain.entity.Group;
 
 import java.util.List;
 
 public class GroupServiceImpl implements GroupService{
     @Override
-    public List<Group> myGroups() {
+    public List<GroupDto> myGroups() {
         return null;
     }
 
     @Override
-    public Group groupDetail() {
+    public GroupDto groupDetail() {
         return null;
     }
 

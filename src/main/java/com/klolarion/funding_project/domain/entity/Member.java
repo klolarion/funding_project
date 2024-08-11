@@ -12,7 +12,6 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class Member extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +37,7 @@ public class Member extends BaseTime{
     private String password;
 
     private boolean enabled;
+    private boolean offCd;
 
     public Member( Role role, String email, String memberName, String password) {
         this.paymentMethodList = null;
@@ -46,5 +46,6 @@ public class Member extends BaseTime{
         this.memberName = memberName;
         this.password = password;
         this.enabled = false;
+        this.offCd = false;
     }
 }

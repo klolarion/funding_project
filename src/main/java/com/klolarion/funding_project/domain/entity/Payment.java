@@ -12,12 +12,11 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "payment_list_id")
-    private Long id;
+    @Column(name = "payment_id")
+    private Long paymentId;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
