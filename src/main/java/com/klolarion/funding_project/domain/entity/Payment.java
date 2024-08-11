@@ -18,7 +18,6 @@ public class Payment {
     @Column(name = "payment_id")
     private Long paymentId;
 
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -37,5 +36,13 @@ public class Payment {
         this.paymentMethod = paymentMethod;
         this.amount = amount;
         this.completed = completed;
+    }
+
+    public void setCompletedFalse(){
+        this.completed = false;
+    }
+
+    public void setCompletedTrue(){
+        this.completed = true;
     }
 }

@@ -26,9 +26,15 @@ public class PaymentMethodList {
 
     private boolean mainPayment;
 
+    private boolean offCd;
+
     public PaymentMethodList(PaymentMethod paymentMethod, Member member) {
         this.paymentMethod = paymentMethod;
         this.member = member;
         this.mainPayment = false;
+    }
+
+    public void deletePaymentMethodList(){
+        this.offCd = true;
     }
 }

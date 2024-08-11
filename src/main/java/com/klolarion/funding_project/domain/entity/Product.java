@@ -16,13 +16,13 @@ public class Product extends BaseTime{
     @Column(nullable = false, unique = true)
     @Size(max = 50)
     private String productName;
-    private int price;
+    private Long price;
     private int stock;
 
     private boolean restock;
     private boolean saleFinished;
 
-    public Product(String productName, int price, int stock) {
+    public Product(String productName, Long price, int stock) {
         this.productName = productName;
         this.price = price;
         this.stock = stock;

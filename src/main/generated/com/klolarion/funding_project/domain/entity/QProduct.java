@@ -27,7 +27,7 @@ public class QProduct extends EntityPathBase<Product> {
     //inherited
     public final StringPath lastModifiedDate = _super.lastModifiedDate;
 
-    public final NumberPath<Integer> price = createNumber("price", Integer.class);
+    public final NumberPath<Long> price = createNumber("price", Long.class);
 
     public final NumberPath<Long> productId = createNumber("productId", Long.class);
 

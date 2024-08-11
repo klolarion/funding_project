@@ -18,12 +18,16 @@ public class Member extends BaseTime{
     @Column(name = "member_id")
     private Long memberId;
 
-    @OneToMany(mappedBy = "paymentMethodList")
+    @OneToMany(mappedBy = "member")
     private List<PaymentMethodList> paymentMethodList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @Column(nullable = false, unique = true)
+    @Size(max = 50)
+    private String account;
 
     @Column(nullable = false, unique = true)
     @Size(max = 50)
@@ -47,5 +51,15 @@ public class Member extends BaseTime{
         this.password = password;
         this.enabled = false;
         this.offCd = false;
+    }
+
+    //userDetails 로 변환
+    public CustomUserDetails memberToCustom() {
+        return new CustomUserDetails(
+                account,
+                password,
+                enabled,
+                role
+        );
     }
 }

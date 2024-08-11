@@ -24,6 +24,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final QBaseTime _super = new QBaseTime(this);
 
+    public final StringPath account = createString("account");
+
     //inherited
     public final StringPath createdDate = _super.createdDate;
 

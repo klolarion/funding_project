@@ -26,6 +26,8 @@ public class QPaymentMethodList extends EntityPathBase<PaymentMethodList> {
 
     public final QMember member;
 
+    public final BooleanPath offCd = createBoolean("offCd");
+
     public final QPaymentMethod paymentMethod;
 
     public final NumberPath<Long> paymentMethodListId = createNumber("paymentMethodListId", Long.class);
