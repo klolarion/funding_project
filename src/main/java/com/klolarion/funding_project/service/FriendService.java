@@ -10,6 +10,9 @@ public interface FriendService {
     /*친구추가*/
     Friend addFriend(Long accepterId);
 
+    /*친구 검색*/
+    List<FriendDto> searchFriend();
+
     /*친구 목록*/
     List<FriendDto> friendList();
 

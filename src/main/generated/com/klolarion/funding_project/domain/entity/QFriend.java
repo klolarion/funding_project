@@ -24,8 +24,6 @@ public class QFriend extends EntityPathBase<Friend> {
 
     public final QBaseTime _super = new QBaseTime(this);
 
-    public final BooleanPath accepted = createBoolean("accepted");
-
     public final QMember accepter;
 
     public final BooleanPath banned = createBoolean("banned");
