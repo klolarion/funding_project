@@ -57,5 +57,14 @@ public class ProductServiceImpl implements ProductService {
         return result == 1L;
     }
 
+    @Override
+    public boolean deleteProduct(Long productId) {
+        QProduct qProduct = QProduct.product;
+        long result = query.delete(qProduct).where(qProduct.productId.eq(productId)).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
+    }
+
 
 }

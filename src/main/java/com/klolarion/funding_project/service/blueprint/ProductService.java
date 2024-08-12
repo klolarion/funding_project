@@ -10,4 +10,6 @@ public interface ProductService {
 
     boolean dispatchProduct(Long productId, int stock);
 
+    boolean deleteProduct(Long productId);
+
 }

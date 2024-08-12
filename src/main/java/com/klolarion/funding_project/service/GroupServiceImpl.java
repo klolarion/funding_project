@@ -114,10 +114,10 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group startGroup() {
+    public Group startGroup(String groupName) {
         Member member = currentMember.getMember();
-
-        return null;
+        Group group = new Group(member, groupName);
+        return groupRepository.save(group);
     }
 
     @Override
