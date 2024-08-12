@@ -24,6 +24,8 @@ public class QFunding extends EntityPathBase<Funding> {
 
     public final QBaseTime _super = new QBaseTime(this);
 
+    public final BooleanPath closed = createBoolean("closed");
+
     public final BooleanPath completed = createBoolean("completed");
 
     //inherited
@@ -33,9 +35,11 @@ public class QFunding extends EntityPathBase<Funding> {
 
     public final BooleanPath deleted = createBoolean("deleted");
 
-    public final BooleanPath finished = createBoolean("finished");
+    public final StringPath fundingAccount = createString("fundingAccount");
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
+    public final NumberPath<Long> fundingId = createNumber("fundingId", Long.class);
+
+    public final QGroup group;
 
     //inherited
     public final StringPath lastModifiedDate = _super.lastModifiedDate;
@@ -64,6 +68,7 @@ public class QFunding extends EntityPathBase<Funding> {
 
     public QFunding(Class<? extends Funding> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.group = inits.isInitialized("group") ? new QGroup(forProperty("group"), inits.get("group")) : null;
         this.member = inits.isInitialized("member") ? new QMember(forProperty("member"), inits.get("member")) : null;
         this.product = inits.isInitialized("product") ? new QProduct(forProperty("product")) : null;
     }

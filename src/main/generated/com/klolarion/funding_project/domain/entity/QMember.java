@@ -24,6 +24,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final QBaseTime _super = new QBaseTime(this);
 
+    public final StringPath account = createString("account");
+
     //inherited
     public final StringPath createdDate = _super.createdDate;
 
@@ -38,11 +40,13 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath memberName = createString("memberName");
 
+    public final BooleanPath offCd = createBoolean("offCd");
+
+    public final StringPath password = createString("password");
+
     public final ListPath<PaymentMethodList, QPaymentMethodList> paymentMethodList = this.<PaymentMethodList, QPaymentMethodList>createList("paymentMethodList", PaymentMethodList.class, QPaymentMethodList.class, PathInits.DIRECT2);
 
     public final QRole role;
-
-    public final StringPath tel = createString("tel");
 
     public QMember(String variable) {
         this(Member.class, forVariable(variable), INITS);

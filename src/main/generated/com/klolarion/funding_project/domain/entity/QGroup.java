@@ -24,14 +24,10 @@ public class QGroup extends EntityPathBase<Group> {
 
     public final QBaseTime _super = new QBaseTime(this);
 
-    public final BooleanPath accepted = createBoolean("accepted");
-
-    public final BooleanPath banned = createBoolean("banned");
-
     //inherited
     public final StringPath createdDate = _super.createdDate;
 
-    public final BooleanPath exited = createBoolean("exited");
+    public final BooleanPath groupActive = createBoolean("groupActive");
 
     public final NumberPath<Long> groupId = createNumber("groupId", Long.class);
 
@@ -41,8 +37,6 @@ public class QGroup extends EntityPathBase<Group> {
 
     //inherited
     public final StringPath lastModifiedDate = _super.lastModifiedDate;
-
-    public final QMember member;
 
     public QGroup(String variable) {
         this(Group.class, forVariable(variable), INITS);
@@ -63,7 +57,6 @@ public class QGroup extends EntityPathBase<Group> {
     public QGroup(Class<? extends Group> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.groupLeader = inits.isInitialized("groupLeader") ? new QMember(forProperty("groupLeader"), inits.get("groupLeader")) : null;
-        this.member = inits.isInitialized("member") ? new QMember(forProperty("member"), inits.get("member")) : null;
     }
 
 }

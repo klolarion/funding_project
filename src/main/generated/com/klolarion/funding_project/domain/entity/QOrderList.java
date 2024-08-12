@@ -24,9 +24,9 @@ public class QOrderList extends EntityPathBase<OrderList> {
 
     public final QFunding funding;
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final QMember member;
+
+    public final NumberPath<Long> orderId = createNumber("orderId", Long.class);
 
     public final NumberPath<Long> orderPrice = createNumber("orderPrice", Long.class);
 

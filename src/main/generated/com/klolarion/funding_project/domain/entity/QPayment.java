@@ -26,9 +26,9 @@ public class QPayment extends EntityPathBase<Payment> {
 
     public final BooleanPath completed = createBoolean("completed");
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final QMember member;
+
+    public final NumberPath<Long> paymentId = createNumber("paymentId", Long.class);
 
     public final QPaymentMethod paymentMethod;
 
