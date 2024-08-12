@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>admin</title>
+</head>
+<body>
+    <div>
+        <h2>상품 등록</h2>
+        <form method="post">
+            <label>상품명</label><input name="productName"><br>
+            <label>금액</label><input type="number" name="price"><br>
+            <label>재고</label><input type="number" name="stock"><br>
+            <label>재입고여부</label><input type="checkbox" name="restock"><br>
+            <label>판매종료여부</label><input type="checkbox" name="saleFinished"><br>
+
+            <button>상품 등록</button>
+        </form>
+    </div>
+    <div>
+        <h2>상품 조회</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Restock</th>
+                <th>saleFinished</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td >no.</td>
+                <td>title.</td>
+                <td>price</td>
+                <td>stock</td>
+                <td>restock</td>
+                <td>saleFinished</td>
+                <td><a th:href="@{/books/{id}(id=${book.id})}"> delete </a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h2>펀딩 조회</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Funding ID</th>
+                <th>Product ID</th>
+                <th>Member ID</th>
+                <th>Group ID</th>
+                <th>Current Price</th>
+                <th>Funding Account</th>
+                <th>Completed</th>
+                <th>Closed</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr >
+                <td >no.</td>
+                <td>title.</td>
+                <td>title.</td>
+                <td>title.</td>
+                <td>title.</td>
+                <td>title.</td>
+                <td>title.</td>
+                <td>title.</td>
+                <td>title.</td>
+
+                <td><a th:href="@{/books/{id}(id=${book.id})}"> delete </a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h2>사용자 검색</h2>
+        <input placeholder="MemberID"><button>검색</button>
+        <div th:if="${foundUser}">
+            <span th:text="${memberId}">이름</span>
+            <span th:text="${memberId}">아이디</span>
+            <span th:text="${memberId}">이메일</span>
+            <span><a>정지</a></span>
+        </div>
+    </div>
+</body>
+</html>
