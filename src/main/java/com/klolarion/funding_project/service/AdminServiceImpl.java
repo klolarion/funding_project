@@ -15,8 +15,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
-    private final PaymentRepository paymentRepository;
-    private final CurrentMember currentMember;
     private final ProductRepository productRepository;
 
 
@@ -43,7 +41,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Product searchProduct(Long productId) {
-        return null;
+        QProduct qProduct = QProduct.product;
+        Product product = query.selectFrom(qProduct).where(qProduct.productId.eq(productId)).fetchOne();
+        em.flush();
+        em.clear();
+        return product;
     }
 
     @Override

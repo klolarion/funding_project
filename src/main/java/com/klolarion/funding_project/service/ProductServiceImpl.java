@@ -3,8 +3,8 @@ package com.klolarion.funding_project.service;
 import com.klolarion.funding_project.domain.entity.Product;
 import com.klolarion.funding_project.domain.entity.QProduct;
 import com.klolarion.funding_project.repository.ProductRepository;
+import com.klolarion.funding_project.service.blueprint.ProductService;
 import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final EntityManager em;
     private final JPAQueryFactory query;
