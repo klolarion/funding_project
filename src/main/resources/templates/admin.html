@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <title>admin</title>
 </head>
+<style>
+    a{color: #e1103a}
+</style>
 <body>
     <div>
         <h2>상품 등록</h2>
-        <form method="post">
+        <form method="post" th:action="@{/admin/add}">
             <label>상품명</label><input name="productName"><br>
             <label>금액</label><input type="number" name="price"><br>
             <label>재고</label><input type="number" name="stock"><br>
@@ -16,71 +19,59 @@
     </div>
     <div>
         <h2>상품 조회</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Restock</th>
-                <th>saleFinished</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="product: ${products}">
-                <td >no.</td>
-                <td>title.</td>
-                <td>price</td>
-                <td>stock</td>
-                <td>restock</td>
-                <td>saleFinished</td>
-                <td><a > delete </a></td>
-            </tr>
-            </tbody>
-        </table>
+        <form method="post" th:action="@{/admin/productSearch}">
+            <input placeholder="productID" name="productId" value="productId" type="number"><button>검색</button>
+        </form>
+            <div th:if="${foundProduct}">
+                <span th:text="${foundProduct.productId}">아이디</span>
+                <span th:text="${foundProduct.productName}">이름</span>
+                <span th:text="${foundProduct.price}">가격</span>
+                <span th:text="${foundProduct.stock}">재고</span>
+                <span th:text="${foundProduct.restock}">재입고여부</span>
+                <span th:text="${foundProduct.saleFinished}">판매종료여부</span>
+                <div>
+                    <form method="post" th:action="@{/admin/updateStock}">
+                        <input type="hidden" name="productId" th:value="${foundProduct.productId}">
+                        <label>재고 수정</label>
+                        <input name="stock" type="number"><button>수정</button></form>
+                    <form method="post" th:action="@{/admin/productDelete}">
+                        <input type="hidden" name="productId" th:value="${foundProduct.productId}">
+                        <label>상품 삭제</label>
+                        <button>삭제</button>
+                    </form>
+                    <form>
+                        <label>재입고 여부</label>
+                    </form>
+                    <form>
+                        <label>재입고 여부</label>
+                    </form>
+                </div>
+
+            </div>
     </div>
     <div>
         <h2>펀딩 조회</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Funding ID</th>
-                <th>Product ID</th>
-                <th>Member ID</th>
-                <th>Group ID</th>
-                <th>Current Price</th>
-                <th>Funding Account</th>
-                <th>Completed</th>
-                <th>Closed</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr >
-                <td >no.</td>
-                <td>title.</td>
-                <td>title.</td>
-                <td>title.</td>
-                <td>title.</td>
-                <td>title.</td>
-                <td>title.</td>
-                <td>title.</td>
-                <td>title.</td>
-
-<!--                <td><a th:href="@{/books/{id}(id=${book.id})}"> delete </a></td>-->
-            </tr>
-            </tbody>
-        </table>
+        <form method="post" th:action="@{/admin/fundingSearch}">
+            <input placeholder="MemberID" name="memberId" type="number">
+            <button>검색</button>
+        </form>
+        <div th:if="${foundFunding}">
+            <span th:text="${foundFunding.fundingId}">펀딩ID</span>
+            <span th:text="${foundFunding.memberId}">사용자ID</span>
+<!--            <span th:text="${foundFunding.memberEmail}">이메일</span>-->
+            <span><a>정지</a></span>
+        </div>
     </div>
     <div>
         <h2>사용자 검색</h2>
-        <input placeholder="MemberID"><button>검색</button>
-<!--        <div th:if="${foundUser}">-->
-<!--            <span th:text="${memberId}">이름</span>-->
-<!--            <span th:text="${memberId}">아이디</span>-->
-<!--            <span th:text="${memberId}">이메일</span>-->
+        <form method="post" th:action="@{/admin/memberSearch}">
+            <input placeholder="MemberID" name="memberId" type="number">
+            <button>검색</button>
+        </form>
+        <div th:if="${foundMember}">
+            <span th:text="${foundMember.memberId}">아이디</span>
+            <span th:text="${foundMember.memberName}">이름</span>
+            <span th:text="${foundMember.memberEmail}">이메일</span>
             <span><a>정지</a></span>
         </div>
     </div>
