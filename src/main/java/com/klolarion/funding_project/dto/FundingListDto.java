@@ -20,8 +20,21 @@ public class FundingListDto {
     private Long totalFundingAmount;
     private Long currentFundingAmount;
     private String fundingAccount;
-    private boolean completed;
-    private boolean closed;
-    private boolean deleted;
+    private String status;
+
+    public FundingListDto(Long fundingId, Long memberId, String memberName, Long productId, String productName,
+                         double progress, Long totalFundingAmount, Long currentFundingAmount,
+                         String fundingAccount, String status) {
+        this.fundingId = fundingId;
+        this.memberId = memberId;
+        this.memberName = memberName;
+        this.productId = productId;
+        this.productName = productName;
+        this.progress = progress;
+        this.totalFundingAmount = totalFundingAmount;
+        this.currentFundingAmount = currentFundingAmount;
+        this.fundingAccount = fundingAccount;
+        this.status = status;
+    }
 
 }
