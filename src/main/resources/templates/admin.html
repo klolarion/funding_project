@@ -11,9 +11,6 @@
             <label>상품명</label><input name="productName"><br>
             <label>금액</label><input type="number" name="price"><br>
             <label>재고</label><input type="number" name="stock"><br>
-            <label>재입고여부</label><input type="checkbox" name="restock"><br>
-            <label>판매종료여부</label><input type="checkbox" name="saleFinished"><br>
-
             <button>상품 등록</button>
         </form>
     </div>
@@ -32,7 +29,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
+            <tr th:each="product: ${products}">
                 <td >no.</td>
                 <td>title.</td>
                 <td>price</td>
