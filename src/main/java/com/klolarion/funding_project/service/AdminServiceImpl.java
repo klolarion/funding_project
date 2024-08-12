@@ -1,8 +1,6 @@
 package com.klolarion.funding_project.service;
 
-import com.klolarion.funding_project.domain.entity.Payment;
-import com.klolarion.funding_project.domain.entity.Product;
-import com.klolarion.funding_project.domain.entity.QProduct;
+import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.repository.PaymentRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -31,6 +29,11 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
+    public Product searchProduct(Long productId) {
+        return null;
+    }
+
+    @Override
     public Product addProduct(String productName, Long price, int stock) {
         return null;
     }
@@ -54,6 +57,11 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
+    public Funding searchFunding(Long fundingId) {
+        return null;
+    }
+
+    @Override
     public boolean closeFunding(Long fundingId) {
         return false;
     }
@@ -61,5 +69,10 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public boolean deleteFunding(Long fundingId) {
         return false;
+    }
+
+    @Override
+    public Member searchMember(Long id) {
+        return null;
     }
 }

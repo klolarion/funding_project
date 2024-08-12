@@ -1,11 +1,16 @@
 package com.klolarion.funding_project.service;
 
 import com.klolarion.funding_project.domain.entity.*;
+import com.klolarion.funding_project.dto.FundingListDto;
 import com.klolarion.funding_project.dto.JoinFundingDto;
 import com.klolarion.funding_project.repository.FundingRepository;
 import com.klolarion.funding_project.repository.PaymentRepository;
+import com.klolarion.funding_project.util.CurrentMember;
+import com.klolarion.funding_project.util.ProgressCalculator;
 import com.klolarion.funding_project.util.RandomAccountGenerator;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -14,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,66 +31,287 @@ public class FundingServiceImpl implements FundingService {
     private final JPAQueryFactory query;
     private final RandomAccountGenerator randomAccountGenerator;
     private final FundingRepository fundingRepository;
+    private final CurrentMember currentMember;
+    private final ProgressCalculator calculator;
 
     @Override
-    public List<Funding> allFundingList() {
+    public List<FundingListDto> allFundingList() {
         QFunding qFunding = QFunding.funding;
-        JPAQuery<Funding> fundingJPAQuery = query.selectFrom(qFunding).fetchAll();
-        List<Funding> fundings = fundingJPAQuery.fetch();
+        QMember qMember = QMember.member;
+        QProduct qProduct = QProduct.product;
+
+        List<FundingListDto> fundingListDtos = query.select(Projections.constructor(FundingListDto.class,
+                        qFunding.fundingId,
+                        qFunding.member.memberId,
+                        qFunding.member.memberName,
+                        qFunding.product.productId,
+                        qFunding.product.productName,
+                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+                        qFunding.totalFundingAmount,
+                        qFunding.currentFundingAmount,
+                        qFunding.fundingAccount,
+                        new CaseBuilder()
+                                .when(qFunding.deleted.isTrue())
+                                .then("삭제")
+                                .when(qFunding.completed.isTrue())
+                                .then("완료")
+                                .when(qFunding.closed.isTrue())
+                                .then("중단")
+                                .otherwise("펀딩중").as("status")))
+                .from(qFunding)
+                .join(qFunding.member, qMember)   // Member와 조인
+                .join(qFunding.product, qProduct) // Product와 조인
+                .fetch();
         em.flush();
         em.clear();
-        return fundings;
+        return fundingListDtos;
     }
 
     @Override
-    public List<Funding> allFundingListByGroup(List<Long> groupId) {
+    public List<FundingListDto> myFundingList() {
+        Member member = currentMember.getMember();
         QFunding qFunding = QFunding.funding;
-        JPAQuery<Funding> fundingJPAQuery = query.selectFrom(qFunding).where(qFunding.group.groupId.in(groupId)).fetchAll();
-        List<Funding> fundings = fundingJPAQuery.fetch();
+
+        List<FundingListDto> myFundingListDtos = query.select(Projections.constructor(FundingListDto.class,
+                        qFunding.fundingId,
+                        qFunding.member.memberId,
+                        qFunding.member.memberName,
+                        qFunding.product.productId,
+                        qFunding.product.productName,
+                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+                        qFunding.totalFundingAmount,
+                        qFunding.currentFundingAmount,
+                        qFunding.fundingAccount,
+                        new CaseBuilder()
+                                .when(qFunding.deleted.isTrue())
+                                .then("삭제")
+                                .when(qFunding.completed.isTrue())
+                                .then("완료")
+                                .when(qFunding.closed.isTrue())
+                                .then("중단")
+                                .otherwise("펀딩중").as("status")
+                ))
+                .from(qFunding)
+                .where(
+                        qFunding.member.memberId.eq(member.getMemberId())  // 현재 로그인한 사용자와 관련된 펀딩만 조회
+                )
+                .fetch();
         em.flush();
         em.clear();
-        return fundings;
+        return myFundingListDtos;
+    }
+
+
+    /*내가속한 그룹별 펀딩리스트*/
+    @Override
+    public Map<String, List<FundingListDto>> allFundingListByGroup(Long groupId) {
+        Member member = currentMember.getMember();
+        QFunding qFunding = QFunding.funding;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+        QGroup qGroup = QGroup.group;
+
+
+        List<FundingListDto> allGroupFundingListDtos = query.select(Projections.constructor(FundingListDto.class,
+                        qFunding.fundingId,
+                        qFunding.member.memberId,
+                        qGroup.groupId,
+                        qGroup.groupName,
+                        qFunding.member.memberName,
+                        qFunding.product.productId,
+                        qFunding.product.productName,
+                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
+                        qFunding.totalFundingAmount,
+                        qFunding.currentFundingAmount,
+                        qFunding.fundingAccount,
+                        new CaseBuilder()
+                                .when(qFunding.deleted.isTrue())
+                                .then("삭제")
+                                .when(qFunding.completed.isTrue())
+                                .then("완료")
+                                .when(qFunding.closed.isTrue())
+                                .then("중단")
+                                .otherwise("펀딩중").as("status")
+                ))
+                .from(qFunding)
+                .join(qFunding.group, qGroup) // Funding과 Group 간의 관계를 조인
+                .join(qGroupStatus).on(qGroupStatus.group.eq(qGroup)) // GroupStatus와 Group 간의 관계를 조인
+                .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId())) // 멤버가 속한 그룹만 필터링
+                .fetch();
+
+        // 결과를 그룹 이름을 key로 하는 Map으로 변환
+        Map<String, List<FundingListDto>> groupedFundingMap = allGroupFundingListDtos.stream()
+                .collect(Collectors.groupingBy(FundingListDto::getGroupName));
+
+        return groupedFundingMap;
+    }
+
+
+    /* 내 친구들의 친구별 펀딩 리스트를 반환 */
+    @Override
+    public Map<String, List<FundingListDto>> allFundingListByMyFriend(Long memberId) {
+        QFunding qFunding = QFunding.funding;
+        QFriend qFriend = QFriend.friend;
+        QMember qMember = QMember.member;
+        QProduct qProduct = QProduct.product;
+        QGroup qGroup = QGroup.group;
+
+        // 내 친구들이 가진 펀딩 데이터를 조회하여 FundingListDto 리스트로 변환
+        List<FundingListDto> allFriendFundingListDtos = query.select(Projections.constructor(FundingListDto.class,
+                        qFunding.fundingId,
+                        qMember.memberId,
+                        qGroup.groupId,
+                        qGroup.groupName,
+                        qMember.memberName,
+                        qProduct.productId,
+                        qProduct.productName,
+                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
+                        qFunding.totalFundingAmount,
+                        qFunding.currentFundingAmount,
+                        qFunding.fundingAccount,
+                        qFunding.completed,
+                        qFunding.closed,
+                        qFunding.deleted
+                ))
+                .from(qFunding)
+                .join(qFunding.member, qMember)  // Funding과 Member 간의 관계 조인
+                .join(qFunding.group, qGroup)    // Funding과 Group 간의 관계 조인
+                .join(qFunding.product, qProduct) // Funding과 Product 간의 관계 조인
+                .join(qFriend).on(qFriend.requester.eq(qMember).or(qFriend.accepter.eq(qMember)))  // 친구 관계 조인
+                .where(qFriend.deleted.isFalse()
+                        .and(qFriend.banned.isFalse()) // 친구 관계가 수락된 상태인지 확인
+                        .and(qFriend.requester.memberId.eq(memberId).or(qFriend.accepter.memberId.eq(memberId)))  // 현재 사용자가 친구 관계에 포함되어 있는지 확인
+                )
+                .fetch();
+
+        // 결과를 친구 이름을 key로 하는 Map으로 변환
+        Map<String, List<FundingListDto>> groupedFundingMap = allFriendFundingListDtos.stream()
+                .collect(Collectors.groupingBy(FundingListDto::getMemberName)); // 친구 이름으로 그룹화
+
+        return groupedFundingMap;
+    }
+
+
+    @Override
+    public List<FundingListDto> fundingListByMyFriend(Long friendId) {
+        Member member = currentMember.getMember();
+        QFunding qFunding = QFunding.funding;
+        QFriend qFriend = QFriend.friend;
+        QMember qMember = QMember.member;
+        QGroup qGroup = QGroup.group;  // 그룹 정보도 사용한다고 가정
+
+        List<FundingListDto> friendFundingListDtos = query.select(Projections.constructor(FundingListDto.class,
+                        qFunding.fundingId,
+                        qMember.memberId,
+                        qGroup.groupId,
+                        qGroup.groupName,
+                        qMember.memberName,
+                        qFunding.product.productId,
+                        qFunding.product.productName,
+                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
+                        qFunding.totalFundingAmount,
+                        qFunding.currentFundingAmount,
+                        qFunding.fundingAccount,
+                        new CaseBuilder()
+                                .when(qFunding.deleted.isTrue())
+                                .then("삭제")
+                                .when(qFunding.completed.isTrue())
+                                .then("완료")
+                                .when(qFunding.closed.isTrue())
+                                .then("중단")
+                                .otherwise("펀딩중").as("status")
+                ))
+                .from(qFunding)
+                .join(qFunding.member, qMember)
+                .join(qFunding.group, qGroup) // 가정: Funding과 Group 간의 관계 조인
+                .join(qFriend).on(qFriend.requester.eq(qMember).or(qFriend.accepter.eq(qMember)))
+                .where(qFriend.friendId.eq(friendId)
+                        .and(qFriend.deleted.isFalse())
+                        .and(qFriend.banned.isFalse())
+                        .and(qFriend.requester.memberId.eq(member.getMemberId()).or(qFriend.accepter.memberId.eq(member.getMemberId())))
+                )
+                .fetch();
+
+        return friendFundingListDtos;
+    }
+
+    /*내가 속한 그룹의 펀딩 리스트*/
+    @Override
+    public List<FundingListDto> fundingListByMyGroup(Long groupId) {
+        Member member = currentMember.getMember();
+        QFunding qFunding = QFunding.funding;
+        QGroup qGroup = QGroup.group;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+
+
+        List<FundingListDto> allGroupFundingListDtos = query.select(Projections.constructor(FundingListDto.class,
+                        qFunding.fundingId,
+                        qFunding.member.memberId,
+                        qFunding.member.memberName,
+                        qFunding.product.productId,
+                        qFunding.product.productName,
+                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+                        qFunding.totalFundingAmount,
+                        qFunding.currentFundingAmount,
+                        qFunding.fundingAccount,
+                        new CaseBuilder()
+                                .when(qFunding.deleted.isTrue())
+                                .then("삭제")
+                                .when(qFunding.completed.isTrue())
+                                .then("완료")
+                                .when(qFunding.closed.isTrue())
+                                .then("중단")
+                                .otherwise("펀딩중").as("status")
+                ))
+                .from(qFunding)
+                .join(qGroupStatus).on(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
+                .join(qGroup).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
+                .where(
+                        qFunding.member.memberId.eq(member.getMemberId())
+                                .and(qGroup.groupId.eq(qGroupStatus.group.groupId))
+                )
+                .fetch();
+        em.flush();
+        em.clear();
+        return allGroupFundingListDtos;
     }
 
     @Override
-    public List<Funding> allFundingListByMyFriend(List<Long> memberId) {
+    public List<FundingListDto> fundingListByProduct(Long productId) {
+        Member member = currentMember.getMember();
         QFunding qFunding = QFunding.funding;
-        JPAQuery<Funding> fundingJPAQuery = query.selectFrom(qFunding).where(qFunding.member.memberId.in(memberId)).fetchAll();
-        List<Funding> fundings = fundingJPAQuery.fetch();
-        em.flush();
-        em.clear();
-        return fundings;
-    }
+        QFriend qFriend = QFriend.friend;
+        QMember qMember = QMember.member;
+        QProduct qProduct = QProduct.product;
+        QGroup qGroup = QGroup.group;
 
-    @Override
-    public List<Funding> fundingListByMyFriend(Long friendId) {
-        QFunding qFunding = QFunding.funding;
-        JPAQuery<Funding> fundingJPAQuery = query.selectFrom(qFunding).where(qFunding.member.memberId.eq(friendId)).fetchAll();
-        List<Funding> fundings = fundingJPAQuery.fetch();
-        em.flush();
-        em.clear();
-        return fundings;
-    }
+        List<FundingListDto> fundingListByProduct = query.select(Projections.constructor(FundingListDto.class,
+                        qFunding.fundingId,
+                        qMember.memberId,
+                        qGroup.groupId,
+                        qGroup.groupName,
+                        qMember.memberName,
+                        qProduct.productId,
+                        qProduct.productName,
+                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
+                        qFunding.totalFundingAmount,
+                        qFunding.currentFundingAmount,
+                        qFunding.fundingAccount,
+                        qFunding.completed,
+                        qFunding.closed,
+                        qFunding.deleted
+                ))
+                .from(qFunding)
+                .join(qFunding.member, qMember)  // Funding과 Member 간의 관계 조인
+                .join(qFunding.group, qGroup)    // Funding과 Group 간의 관계 조인
+                .join(qFunding.product, qProduct) // Funding과 Product 간의 관계 조인
+                .join(qFriend).on(qFriend.requester.eq(qMember).or(qFriend.accepter.eq(qMember)))  // 친구 관계 조인
+                .where(qProduct.productId.eq(productId)   // 특정 productId에 해당하는 펀딩만 필터링
+                        .and(qFriend.deleted.isFalse())
+                        .and(qFriend.banned.isFalse())
+                        .and(qFriend.requester.memberId.eq(member.getMemberId()).or(qFriend.accepter.memberId.eq(member.getMemberId()))))
+                .fetch();
 
-    @Override
-    public List<Funding> fundingListByMyGroup(Long groupId) {
-        QFunding qFunding = QFunding.funding;
-        JPAQuery<Funding> fundingJPAQuery = query.selectFrom(qFunding).where(qFunding.group.groupId.eq(groupId)).fetchAll();
-        List<Funding> fundings = fundingJPAQuery.fetch();
-        em.flush();
-        em.clear();
-        return fundings;
-    }
-
-    @Override
-    public List<Funding> fundingListByProduct(Long productId) {
-        QFunding qFunding = QFunding.funding;
-        JPAQuery<Funding> fundingJPAQuery = query.selectFrom(qFunding).where(qFunding.product.productId.eq(productId)).fetchAll();
-        List<Funding> fundings = fundingJPAQuery.fetch();
-        em.flush();
-        em.clear();
-        return fundings;
-
+        return fundingListByProduct;
     }
 
     @Override

@@ -20,14 +20,13 @@ public class Friend extends BaseTime{
     @JoinColumn(name = "accepter_id")
     private Member accepter;
 
-    private boolean accepted;
+
     private boolean deleted;
     private boolean banned;
 
     public Friend(Member requester, Member accepter) {
         this.requester = requester;
         this.accepter = accepter;
-        this.accepted = false;
         this.deleted = false;
         this.banned = false;
     }

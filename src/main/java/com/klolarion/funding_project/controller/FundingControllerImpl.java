@@ -5,13 +5,19 @@ import com.klolarion.funding_project.service.FundingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
+@RequestMapping("/")
 @RequiredArgsConstructor
 public class FundingControllerImpl implements FundingController{
     private final FundingServiceImpl fundingService;
+
+    @GetMapping("/login")
+    public String main(){
+        System.out.println("hello");
+        return "hello";
+    }
 
 
     @Override
