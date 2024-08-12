@@ -25,8 +25,7 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public List<Product> allProducts() {
         QProduct qProduct = QProduct.product;
-        JPAQuery<Product> JPAQuery = query.selectFrom(qProduct).fetchAll();
-        List<Product> products = JPAQuery.fetch();
+        List<Product> products = query.selectFrom(qProduct).fetch();
         em.flush();
         em.clear();
         return products;
