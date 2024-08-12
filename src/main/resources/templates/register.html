@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<style>
+    *{ margin: 0; padding: 0; text-decoration: none}
+    #login-form{ margin: 0 auto; width:450px}
+    h1{ margin: 100px 0 40px 0}
+    form div { margin-bottom: 1rem;}
+    form label {margin-left: 5px;font-size: 13px; color: #737272}
+    form input {width: 100%; padding: 15px; box-sizing: border-box; border: 1px solid #EFEFEF; border-radius: 5px}
+    form button {width: 100%; margin: 20px 0; padding: 15px; border: none; background-color: #e9e9fa; color: #4949cc; border-radius: 5px
+    }
+    a {color: #4949CCFF; font-size:14px}
+    #buttons{display: flex; justify-content: flex-end;}
+</style>
+<body>
+    <div id="login-form">
+        <h1>회원가입</h1>
+        <form method="post">
+            <div>
+                <label>이름</label>
+                <input name="memberName" >
+            </div>
+            <div>
+                <label>아이디</label>
+                <input name="memberId" >
+            </div>
+            <div>
+                <label>비밀번호</label>
+                <input name="password" type="password" >
+            </div>
+            <div>
+                <label>이메일</label>
+                <input  name="email" type="email" >
+            </div>
+            <div>
+                <label>전화번호</label>
+                <input  name="tel" >
+            </div>
+            <button>회원가입 하기</button>
+        </form>
+        <div id="buttons">
+            <a href="@{/login}">로그인</a>
+        </div>
+    </div>
+</body>
+</html>

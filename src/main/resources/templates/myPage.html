@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My page</title>
+</head>
+<style>
+    body{padding: 0 90px}
+    #mypage{display: flex; }
+    #mypage-left{width: 150px; padding:80px; border-right: 1px solid #cccccc
+    }
+    #mypage-util button {width:100%; padding:10px ; margin-bottom: 10px; border:none; border-radius: 5px; background-color: #ecebeb; color: #79797e;}
+    #mypage-util button:nth-child(2) {background-color: #ffdae3; color: #e1103a
+    }
+    #mypage-right{padding: 0 50px}
+    #mypage-top{display: flex; flex-wrap: wrap; justify-content: space-between;  gap: 20px;margin-bottom: 50px}
+    .mypage-top-list{width: 230px; padding: 20px; border: 1px solid #cccccc; border-radius: 10px; }
+    .mypage-top-list button {padding: 15px 20px; width: 100%; border: none; border-radius: 5px;}
+
+    .mypage-bottom-list ul{border: 1px solid #cccccc; border-radius: 5px; padding: 20px;}
+    .mypage-bottom-list li{margin-left: 10px}
+</style>
+<body>
+    <div id="mypage">
+        <div id="mypage-left">
+            <div>
+                <h2>윤효정</h2>
+                <p>email</p>
+                <p>phone number</p>
+            </div>
+            <div id="mypage-util">
+                <button>로그아웃</button>
+                <button>회원탈퇴</button>
+            </div>
+        </div>
+        <div id="mypage-right">
+            <div id="mypage-top">
+                <div class="mypage-top-list" >
+                    <h3>친구 관리</h3>
+                    <ul>
+                        <li>친구 이름</li>
+                    </ul>
+                    <button>친구 관리</button>
+                </div>
+                <div class="mypage-top-list" >
+                    <h3>그룹 리스트</h3>
+                    <ul>
+                        <li>친구 이름</li>
+                    </ul>
+                    <button>그룹 추가</button>
+                </div>
+                <div class="mypage-top-list">
+                    <h3>결제 수단</h3>
+                    <ul>
+                        <li>친구 이름</li>
+                    </ul>
+                    <button>결제 수단 관리</button>
+                </div>
+            </div>
+            <div class="mypage-bottom-list">
+                <h3>펀딩 내역</h3>
+                <ul>
+                    <li><a>펀딩 이름</a></li>
+                </ul>
+            </div>
+            <div class="mypage-bottom-list">
+                <h3>구매 내역</h3>
+                <ul>
+                    <li><a>상품 이름</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

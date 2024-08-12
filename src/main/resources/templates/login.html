@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<style>
+    *{ margin: 0; padding: 0; text-decoration: none}
+    #login-form{ margin: 0 auto; width:450px}
+    h1{ margin: 120px 0 40px 0}
+    form div { margin-bottom: 1rem }
+    form input {width: 100%; padding: 15px; box-sizing: border-box; border: 1px solid #EFEFEF; border-radius: 5px}
+    form button {width: 100%; margin: 20px 0; padding: 15px; border: none; background-color: #e9e9fa; color: #4949cc; border-radius: 5px
+    }
+    a {color: #4949CCFF; font-size:14px}
+    #buttons{display: flex; justify-content: flex-end;}
+</style>
+<body>
+    <div id="login-form">
+        <h1>로그인</h1>
+        <form method="post">
+            <div>
+                <input placeholder="아이디를 입력하세요.">
+            </div>
+            <div>
+                <input type="password" placeholder="비밀번호를 입력하세요.">
+            </div>
+            <button> 로그인 하기</button>
+        </form>
+        <div id="buttons">
+            <a href="@{/register}">회원가입</a>
+        </div>
+    </div>
+
+</body>
+</html>
