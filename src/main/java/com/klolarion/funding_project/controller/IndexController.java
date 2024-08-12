@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 //@RequestMapping("/")
 public class IndexController {
     private final FundingServiceImpl fundingServiceImpl;
-    Member member = new Member(new Role(1L,"user"), "0213@funding.java", "윤효정","1111");
+//    Member member = new Member(new Role(1L,"user"), "0213@funding.java", "윤효정","1111");
 
     @GetMapping("/")
     public String goIndex(Model model, HttpSession session){

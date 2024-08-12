@@ -8,6 +8,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "member_groups") //group, groups는 mysql 예약어
 public class Group extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,10 +19,11 @@ public class Group extends BaseTime{
     @JoinColumn(name = "group_leader_id")
     private Member groupLeader;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "group_name")
     @Size(max = 50)
     private String groupName;
 
+    @Column(name = "group_active")
     private boolean groupActive;
 
 
