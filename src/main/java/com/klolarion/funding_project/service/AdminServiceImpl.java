@@ -25,11 +25,19 @@ public class AdminServiceImpl implements AdminService{
     //payment
     @Override
     public List<Payment> getAllPayments() {
-        return null;
+        QPayment qPayment = QPayment.payment;
+        List<Payment> payments = query.selectFrom(qPayment).fetch();
+        em.flush();
+        em.close();
+        return payments;
     }
     @Override
     public boolean changeComplete(Long paymentId, boolean completeStatus) {
-        return false;
+        QPayment qPayment = QPayment.payment;
+        long result = query.update(qPayment).set(qPayment.completed, true).where(qPayment.paymentId.eq(paymentId)).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
 
     @Override
@@ -61,11 +69,19 @@ public class AdminServiceImpl implements AdminService{
     }
     @Override
     public boolean setRestock(Long productId) {
-        return false;
+        QProduct qProduct = QProduct.product;
+        long result = query.update(qProduct).set(qProduct.restock, true).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
     @Override
     public boolean setSellFinished(Long productId) {
-        return false;
+        QProduct qProduct = QProduct.product;
+        long result = query.update(qProduct).set(qProduct.saleFinished, true).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
 
     @Override
@@ -75,16 +91,28 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public boolean closeFunding(Long fundingId) {
-        return false;
+        QFunding qFunding = QFunding.funding;
+        long result = query.update(qFunding).set(qFunding.closed, true).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
 
     @Override
     public boolean deleteFunding(Long fundingId) {
-        return false;
+        QFunding qFunding = QFunding.funding;
+        long result = query.update(qFunding).set(qFunding.deleted, true).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
 
     @Override
-    public Member searchMember(Long id) {
-        return null;
+    public Member searchMember(Long memberId) {
+        QMember qMember = QMember.member;
+        Member member = query.selectFrom(qMember).where(qMember.memberId.eq(memberId)).fetchOne();
+        em.flush();
+        em.close();
+        return member;
     }
 }

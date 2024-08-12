@@ -20,8 +20,7 @@ public class SpringSecurityConfig {
 
 
         http.authorizeHttpRequests(
-                        (requests) -> requests.requestMatchers("/login").permitAll()
-                                .anyRequest().authenticated()
+                        (requests) -> requests.anyRequest().permitAll()
                 );
         return http.build();
     }

@@ -22,8 +22,8 @@ public class IndexController {
     @GetMapping("/")
     public String goIndex(Model model, HttpSession session){
         session.setAttribute("member", member);
-//        System.out.println(member);
-//        model.addAttribute("AllFundingList", fundingServiceImpl.allFundingList());
+        System.out.println(member);
+        model.addAttribute("AllFundingList", fundingServiceImpl.allFundingList());
         return "index";
     }
 
