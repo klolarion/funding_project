@@ -1,4 +1,4 @@
-package com.klolarion.funding_project.service;
+package com.klolarion.funding_project.service.blueprint;
 
 import com.klolarion.funding_project.domain.entity.Product;
 
@@ -9,5 +9,7 @@ public interface ProductService {
     Product getProduct(Long productId);
 
     boolean dispatchProduct(Long productId, int stock);
+
+    boolean deleteProduct(Long productId);
 
 }

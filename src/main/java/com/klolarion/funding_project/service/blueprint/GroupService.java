@@ -1,4 +1,4 @@
-package com.klolarion.funding_project.service;
+package com.klolarion.funding_project.service.blueprint;
 
 import com.klolarion.funding_project.dto.GroupDto;
 import com.klolarion.funding_project.domain.entity.Group;
@@ -12,7 +12,7 @@ public interface GroupService {
     /*그룹 정보 조회 */
     GroupDto groupDetail(Long groupId);
     /*그룹 생성*/
-    Group startGroup();
+    Group startGroup(String groupName);
     /*내 그룹 목록 */
     boolean inviteMember(Long groupId, Long memberId);
     /*그룹 초대 수락 */

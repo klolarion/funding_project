@@ -6,7 +6,6 @@ import com.klolarion.funding_project.repository.ProductRepository;
 import com.klolarion.funding_project.util.CurrentMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +43,11 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Product searchProduct(Long productId) {
-        return null;
+        QProduct qProduct = QProduct.product;
+        Product product = query.selectFrom(qProduct).where(qProduct.productId.eq(productId)).fetchOne();
+        em.flush();
+        em.clear();
+        return product;
     }
 
     @Override

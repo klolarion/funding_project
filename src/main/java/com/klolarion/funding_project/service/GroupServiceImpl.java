@@ -4,12 +4,11 @@ import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.dto.GroupDto;
 import com.klolarion.funding_project.repository.GroupRepository;
 import com.klolarion.funding_project.repository.GroupStatusRepository;
+import com.klolarion.funding_project.service.blueprint.GroupService;
 import com.klolarion.funding_project.util.CurrentMember;
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -115,8 +114,10 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group startGroup() {
-        return null;
+    public Group startGroup(String groupName) {
+        Member member = currentMember.getMember();
+        Group group = new Group(member, groupName);
+        return groupRepository.save(group);
     }
 
     @Override

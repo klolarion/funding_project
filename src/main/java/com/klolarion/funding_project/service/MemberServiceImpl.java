@@ -3,6 +3,7 @@ package com.klolarion.funding_project.service;
 import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.repository.MemberRepository;
 import com.klolarion.funding_project.repository.PaymentMethodRepository;
+import com.klolarion.funding_project.service.blueprint.MemberService;
 import com.klolarion.funding_project.util.CurrentMember;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -18,7 +19,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
     private final PaymentMethodRepository paymentMethodRepository;
     private final MemberRepository memberRepository;
     private final EntityManager em;

@@ -1,7 +1,5 @@
 package com.klolarion.funding_project.controller;
 
-import com.klolarion.funding_project.domain.entity.Funding;
-import com.klolarion.funding_project.service.FundingService;
 import com.klolarion.funding_project.service.FundingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -32,6 +32,14 @@ public class PaymentMethod extends BaseTime{
     /*테스트를 위한 속성*/
     private Long availableAmount;
 
+
+    public PaymentMethod(int paymentCode, String paymentName, String accountNumber, Long availableAmount) {
+        this.paymentCode = paymentCode;
+        this.paymentName = paymentName;
+        this.accountNumber = accountNumber;
+        this.availableAmount = availableAmount;
+    }
+
     public boolean deposit(Long amount){
         if(this.availableAmount - amount >= 0){
             this.availableAmount -= amount;

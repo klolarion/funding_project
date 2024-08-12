@@ -4,6 +4,7 @@ import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.dto.FriendDto;
 import com.klolarion.funding_project.repository.FriendRepository;
 import com.klolarion.funding_project.repository.FriendStatusRepository;
+import com.klolarion.funding_project.service.blueprint.FriendService;
 import com.klolarion.funding_project.util.CurrentMember;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class FriendServiceImpl implements FriendService{
+public class FriendServiceImpl implements FriendService {
 
     private final FriendRepository friendRepository;
     private final FriendStatusRepository friendStatusRepository;
@@ -46,23 +47,6 @@ public class FriendServiceImpl implements FriendService{
 
     @Override
     public List<FriendDto> friendList() {
-//        Member member = currentMember.getMember();
-//        QFriend qFriend = QFriend.friend;
-//        QFriendStatus qFriendStatus = QFriendStatus.friendStatus;
-//        List<FriendDto> friends = query.select(Projections.constructor(FriendDto.class,
-//                        qFriend.friendId,
-//                        qFriend.requester.memberId,
-//                        qFriend.requester.memberName))
-//                .from(qFriend)
-//                .where(
-//                        qFriend.requester.memberId.eq(member.getMemberId())
-//                                .and(qFriend.accepter.memberId.eq(member.getMemberId()))
-//                                .and(qFriendStatus..isTrue())
-//                )
-//                .fetch();
-//
-//        em.flush();
-//        em.clear();
         return null;
     }
 
@@ -89,31 +73,29 @@ public class FriendServiceImpl implements FriendService{
 
     @Override
     public boolean acceptFriendRequest(Long friendId) {
-//        QFriend qFriend = QFriend.friend;
-//        long result = query.update(qFriend).set(qFriend.accepted, true).where(qFriend.friendId.eq(friendId)).execute();
-//        em.flush();
-//        em.clear();
-//        return result == 1L;
-        return false;
+        QFriendStatus qFriendStatus = QFriendStatus.friendStatus;
+        long result = query.update(qFriendStatus).set(qFriendStatus.accepted, true).execute();
+
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
 
     @Override
     public boolean removeFriend(Long friendId) {
-//        QFriend qFriend = QFriend.friend;
-//        long result = query.update(qFriend).set(qFriend.deleted, true).where(qFriend.friendId.eq(friendId)).execute();
-//        em.flush();
-//        em.clear();
-//        return result == 1L;
-        return false;
+        QFriend qFriend = QFriend.friend;
+        long result = query.update(qFriend).set(qFriend.deleted, true).where(qFriend.friendId.eq(friendId)).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
 
     @Override
     public boolean banMember(Long friendId) {
-//        QFriend qFriend = QFriend.friend;
-//        long result = query.update(qFriend).set(qFriend.banned, true).where(qFriend.friendId.eq(friendId)).execute();
-//        em.flush();
-//        em.clear();
-//        return result == 1L;
-        return false;
+        QFriend qFriend = QFriend.friend;
+        long result = query.update(qFriend).set(qFriend.banned, true).where(qFriend.friendId.eq(friendId)).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
 }

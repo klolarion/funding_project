@@ -1,8 +1,10 @@
 package com.klolarion.funding_project.controller;
 
-import com.klolarion.funding_project.service.*;
+import com.klolarion.funding_project.service.AdminService;
+import com.klolarion.funding_project.service.AdminServiceImpl;
+import com.klolarion.funding_project.service.MemberService;
+import com.klolarion.funding_project.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,7 +27,6 @@ public class AdminController {
         return "admin";
     }
 
-    //상품추가
     @PostMapping("/add")
     public String addProduct(@RequestParam String productName, @RequestParam Long price, @RequestParam int stock) {
         adminServiceImpl.addProduct(productName, price, stock);
