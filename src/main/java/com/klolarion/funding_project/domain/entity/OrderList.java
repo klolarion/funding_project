@@ -26,6 +26,10 @@ public class OrderList {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "group_id")
+    private Group group;
+
     @Column(nullable = false)
     private Long orderPrice;
 

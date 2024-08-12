@@ -24,6 +24,8 @@ public class QOrderList extends EntityPathBase<OrderList> {
 
     public final QFunding funding;
 
+    public final QGroup group;
+
     public final QMember member;
 
     public final NumberPath<Long> orderId = createNumber("orderId", Long.class);
@@ -53,6 +55,7 @@ public class QOrderList extends EntityPathBase<OrderList> {
     public QOrderList(Class<? extends OrderList> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.funding = inits.isInitialized("funding") ? new QFunding(forProperty("funding"), inits.get("funding")) : null;
+        this.group = inits.isInitialized("group") ? new QGroup(forProperty("group"), inits.get("group")) : null;
         this.member = inits.isInitialized("member") ? new QMember(forProperty("member"), inits.get("member")) : null;
         this.product = inits.isInitialized("product") ? new QProduct(forProperty("product")) : null;
     }

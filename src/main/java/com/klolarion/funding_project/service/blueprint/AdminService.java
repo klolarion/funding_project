@@ -1,4 +1,4 @@
-package com.klolarion.funding_project.service;
+package com.klolarion.funding_project.service.blueprint;
 
 import com.klolarion.funding_project.domain.entity.Funding;
 import com.klolarion.funding_project.domain.entity.Member;

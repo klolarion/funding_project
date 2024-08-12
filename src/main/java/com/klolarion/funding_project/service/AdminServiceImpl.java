@@ -3,6 +3,7 @@ package com.klolarion.funding_project.service;
 import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.repository.PaymentRepository;
 import com.klolarion.funding_project.repository.ProductRepository;
+import com.klolarion.funding_project.service.blueprint.AdminService;
 import com.klolarion.funding_project.util.CurrentMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AdminServiceImpl implements AdminService{
+public class AdminServiceImpl implements AdminService {
     private final PaymentRepository paymentRepository;
     private final CurrentMember currentMember;
     private final ProductRepository productRepository;
@@ -53,8 +54,6 @@ public class AdminServiceImpl implements AdminService{
                 stock
         );
         Product saved = productRepository.save(product);
-        em.flush();
-        em.clear();
         return saved;
     }
 
