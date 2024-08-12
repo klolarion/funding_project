@@ -26,6 +26,8 @@ public class QFriendStatus extends EntityPathBase<FriendStatus> {
 
     public final QMember accepter;
 
+    public final BooleanPath denied = createBoolean("denied");
+
     public final NumberPath<Long> friendStatusId = createNumber("friendStatusId", Long.class);
 
     public final QMember requester;

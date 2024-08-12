@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 //@RequestMapping("/")
 public class IndexController {
     private final FundingServiceImpl fundingServiceImpl;
-//    Member member = new Member(new Role(1L,"user"), "0213@funding.java", "윤효정","1111");
+    Member member = new Member(new Role(1L,"user"), "0213@funding.java", "윤효정","1111");
 
     @GetMapping("/")
     public String goIndex(Model model, HttpSession session){
-//        session.setAttribute("member", member);
-//        System.out.println(member);
-//        model.addAttribute("AllFundingList", fundingServiceImpl.allFundingList());
+        session.setAttribute("member", member);
+        System.out.println(member);
+        model.addAttribute("AllFundingList", fundingServiceImpl.allFundingList());
         return "index";
     }
 
