@@ -2,7 +2,6 @@ package com.klolarion.funding_project.controller;
 
 import com.klolarion.funding_project.service.AdminServiceImpl;
 import com.klolarion.funding_project.service.MemberServiceImpl;
-import com.klolarion.funding_project.service.PaymentMethodServiceImpl;
 import com.klolarion.funding_project.service.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AdminController {
     private final AdminServiceImpl adminServiceImpl;
     private final ProductServiceImpl productServiceImpl;
-    private final PaymentMethodServiceImpl paymentMethodServiceImpl;
     private MemberServiceImpl memberServiceImpl;
 
     @GetMapping
@@ -82,13 +80,13 @@ public class AdminController {
 
     @PostMapping("/addPaymentMethod")
     public String addPaymentMethod(@RequestParam int code, @RequestParam String paymentName, @RequestParam String accountNumber, @RequestParam Long availableAmount, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("paymentList", paymentMethodServiceImpl.addPaymentMethod(code, paymentName, accountNumber, availableAmount));
+        redirectAttributes.addFlashAttribute("paymentList", adminServiceImpl.addPaymentMethod(code, paymentName, accountNumber, availableAmount));
         return "redirect:/admin";
     }
 
     @GetMapping("/paymentDelete")
     public String paymentDelete(@RequestParam Long paymentMethodId) {
-        paymentMethodServiceImpl.deletePaymentMethod(paymentMethodId);
+        adminServiceImpl.deletePaymentMethod(paymentMethodId);
         return "redirect:/admin";
     }
 }

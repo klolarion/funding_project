@@ -9,6 +9,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.klolarion.funding_project.repository.CodeRepository;
+import com.klolarion.funding_project.repository.PaymentMethodRepository;
 
 import java.util.List;
 
@@ -18,6 +20,9 @@ public class AdminServiceImpl implements AdminService {
     private final PaymentRepository paymentRepository;
     private final CurrentMember currentMember;
     private final ProductRepository productRepository;
+    private final PaymentMethodRepository paymentMethodRepository;
+    private final CodeRepository codeRepository;
+
 
 
     private final JPAQueryFactory query;
