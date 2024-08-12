@@ -5,9 +5,7 @@ import com.klolarion.funding_project.service.FundingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
@@ -51,18 +49,6 @@ public class FundingControllerImpl implements FundingController{
         return null;
     }
 
-    @Override
-    public ResponseEntity<?> stopFunding() {
-        return null;
-    }
-
-    //흐름확인용 구현
-    @Override
-    @PutMapping("/funding/{fundingId}")
-    public ResponseEntity<?> closeFunding(@PathVariable Long fundingId) {
-        boolean result = fundingService.closeFunding(fundingId);
-        return null;
-    }
 
     //흐름확인용 구현
     @Override

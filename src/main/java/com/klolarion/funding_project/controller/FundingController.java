@@ -20,7 +20,6 @@ public interface FundingController {
     ResponseEntity<?> fundingListByProduct();
 
     ResponseEntity<?> startFunding();
-    ResponseEntity<?> stopFunding();
-    ResponseEntity<?> closeFunding(Long fundingId);
+
     ResponseEntity<?> joinFunding(JoinFundingDto joinFundingDto);
 }

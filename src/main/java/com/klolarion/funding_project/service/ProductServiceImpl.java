@@ -21,16 +21,6 @@ public class ProductServiceImpl implements ProductService{
     private final EntityManager em;
     private final JPAQueryFactory query;
 
-    public Product addProduct(String productName, Long price, int stock){
-        Product product = new Product(
-                productName,
-                price,
-                stock
-        );
-        em.flush();
-        em.clear();
-        return productRepository.save(product);
-    }
 
     @Override
     public List<Product> allProducts() {
@@ -52,14 +42,7 @@ public class ProductServiceImpl implements ProductService{
 
     }
 
-    public Product addStock(Long productId, int stock){
-        QProduct qProduct = QProduct.product;
-        query.update(qProduct).set(qProduct.stock, qProduct.stock.add(stock)).execute();
 
-        em.flush();
-        em.clear();
-        return null;
-    }
 
     @Override
     public boolean dispatchProduct(Long productId, int stock) {
@@ -75,22 +58,5 @@ public class ProductServiceImpl implements ProductService{
         return result == 1L;
     }
 
-    @Override
-    public boolean setRestock(Long productId) {
-        QProduct qProduct = QProduct.product;
-        long result = query.update(qProduct).set(qProduct.restock, true).where(qProduct.productId.eq(productId)).execute();
-        em.flush();
-        em.clear();
-        return result == 1L;
 
-    }
-
-    @Override
-    public boolean setSellFinished(Long productId) {
-        QProduct qProduct = QProduct.product;
-        long result = query.update(qProduct).set(qProduct.saleFinished, true).where(qProduct.productId.eq(productId)).execute();
-        em.flush();
-        em.clear();
-        return result == 1L;
-    }
 }
