@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -19,8 +18,6 @@ public class QRole extends EntityPathBase<Role> {
     private static final long serialVersionUID = 270923888L;
 
     public static final QRole role = new QRole("role");
-
-    public final ListPath<Member, QMember> members = this.<Member, QMember>createList("members", Member.class, QMember.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> roleId = createNumber("roleId", Long.class);
 

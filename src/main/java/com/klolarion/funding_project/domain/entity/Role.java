@@ -27,6 +27,6 @@ public class Role{
     @Size(max = 50)
     private String roleName;
 
-    @OneToMany(mappedBy = "role")
-    private List<Member> members = new ArrayList<>();
+//    @OneToMany(mappedBy = "role")
+//    private List<Member> members = new ArrayList<>();
 }
