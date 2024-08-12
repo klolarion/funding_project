@@ -13,6 +13,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.klolarion.funding_project.repository.CodeRepository;
+import com.klolarion.funding_project.repository.PaymentMethodRepository;
 
 import java.util.List;
 
@@ -20,9 +22,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class AdminServiceImpl implements AdminService {
+    private final PaymentRepository paymentRepository;
+    private final CurrentMember currentMember;
     private final ProductRepository productRepository;
     private final PaymentMethodRepository paymentMethodRepository;
     private final CodeRepository codeRepository;
+
 
 
     private final JPAQueryFactory query;
@@ -71,8 +76,6 @@ public class AdminServiceImpl implements AdminService {
         QProduct qProduct = QProduct.product;
         query.update(qProduct).set(qProduct.stock, qProduct.stock.add(stock)).execute();
 
-        em.flush();
-        em.clear();
         return null;
     }
     @Override
@@ -123,8 +126,6 @@ public class AdminServiceImpl implements AdminService {
     public Member searchMember(Long memberId) {
         QMember qMember = QMember.member;
         Member member = query.selectFrom(qMember).where(qMember.memberId.eq(memberId)).fetchOne();
-        em.flush();
-        em.close();
         return member;
     }
 

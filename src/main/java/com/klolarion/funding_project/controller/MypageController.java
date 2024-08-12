@@ -1,5 +1,6 @@
 package com.klolarion.funding_project.controller;
 
+import com.klolarion.funding_project.service.PaymentServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("/myPage")
 public class MypageController {
+    private final PaymentServiceImpl paymentServiceImpl;
+
     @GetMapping
     public String myPage(HttpSession session, Model model) {
         model.addAttribute("member", session.getAttribute("member") );
-        System.out.println(session.getAttribute("member"));
+        model.addAttribute("myPaymentList", paymentServiceImpl.getMyPayments() );
+
         return "myPage";
     }
 

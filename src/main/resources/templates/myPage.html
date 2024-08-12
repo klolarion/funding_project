@@ -22,8 +22,8 @@
     .mypage-top-list{width: 230px; padding: 20px; border: 1px solid #cccccc; border-radius: 10px; }
     .mypage-top-list button {padding: 15px 20px; width: 100%; border: none; border-radius: 5px;}
 
-    .mypage-bottom-list ul{border: 1px solid #cccccc; border-radius: 5px; padding: 20px;}
-    .mypage-bottom-list li{margin-left: 10px}
+    .mypage-bottom-list ul{border: 1px solid #cccccc; border-radius: 5px; padding: 20px; max-height: 200px; overflow: scroll}
+    .mypage-bottom-list li{margin: 0 0 20px 10px}
 
 </style>
 <div th:insert="fragments/header :: header"></div>
@@ -57,10 +57,8 @@
                 </div>
                 <div class="mypage-top-list">
                     <h3>결제 수단</h3>
-                    <ul>
-                        <li>친구 이름</li>
-                    </ul>
-                    <a th:href="@{/payment}"><button>결제 수단 관리</button></a>
+                    <p>내 대표 결제 수단</p>
+                    <a th:href="@{/paymentMethod}"><button>결제 수단 관리</button></a>
                 </div>
             </div>
             <div class="mypage-bottom-list">
@@ -72,7 +70,19 @@
             <div class="mypage-bottom-list">
                 <h3>구매 내역</h3>
                 <ul>
-                    <li><a>상품 이름</a></li>
+                    <li>상품 이름</li>
+                    <li>상품 이름</li>
+                    <li>상품 이름</li>
+                    <li>상품 이름</li>
+                    <li>상품 이름</li>
+                    <li>상품 이름</li>
+                    <li>상품 이름</li>
+                    <li>상품 이름</li>
+                    <li>상품 이름</li>
+                    <li>상품 이름</li>
+                    <li>상품 이름</li>
+                    <li>상품 이름</li>
+                    <li>상품 이름</li>
                 </ul>
             </div>
 
