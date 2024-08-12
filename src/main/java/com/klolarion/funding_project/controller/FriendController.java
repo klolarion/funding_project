@@ -1,17 +1,19 @@
 package com.klolarion.funding_project.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * 친구 관련 기능
- * 윤효정
- * */
-public interface FriendController {
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/friend")
+public class FriendController {
 
-    ResponseEntity<?> myFriends();
-    ResponseEntity<?> addFriend();
-    ResponseEntity<?> acceptRequest();
-    ResponseEntity<?> denyRequest();
-    ResponseEntity<?> removeFriend();
-    ResponseEntity<?> banFriend();
+    @GetMapping
+    public String friend(Model model) {
+        return "friend";
+    }
 }

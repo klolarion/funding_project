@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>header</title>
+
 </head>
 <style>
     header {display: flex; justify-content: space-between; padding: 0px 90px}
     #header-right{ margin: 20px 20px}
-    button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
-    a{text-decoration: none; padding: 10px 20px; color: black}
+    header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
+    header a{text-decoration: none; padding: 10px 20px; color: black}
 </style>
 <body>
 <div th:fragment="header">
     <header>
         <h2>FUNDING PROJECT</h2>
         <div id="header-right">
-            <a href="my page">my page</a>
-            <button>펀딩 시작하기</button>
+            <a th:href="@{/myPage}">my page</a>
+            <a th:href="@{/create}"><button>펀딩 시작하기</button></a>
         </div>
     </header>
 </div>

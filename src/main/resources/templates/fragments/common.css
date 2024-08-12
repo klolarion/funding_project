@@ -1,0 +1,4 @@
+header {display: flex; justify-content: space-between; padding: 0px 90px}
+#header-right{ margin: 20px 20px}
+header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
+header a{text-decoration: none; padding: 10px 20px; color: black}

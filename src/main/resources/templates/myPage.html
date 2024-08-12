@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>My page</title>
 </head>
 <style>
-    body{padding: 0 90px}
+    header {display: flex; justify-content: space-between; padding: 0px}
+    #header-right{ margin: 20px 20px}
+    header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
+    header a{text-decoration: none; padding: 10px 20px; color: black}
+
+    body{padding: 0 180px}
     #mypage{display: flex; }
-    #mypage-left{width: 150px; padding:80px; border-right: 1px solid #cccccc
+    #mypage-left{width: 150px; padding-right:100px; border-right: 1px solid #cccccc
     }
     #mypage-util button {width:100%; padding:10px ; margin-bottom: 10px; border:none; border-radius: 5px; background-color: #ecebeb; color: #79797e;}
     #mypage-util button:nth-child(2) {background-color: #ffdae3; color: #e1103a
@@ -19,14 +24,15 @@
 
     .mypage-bottom-list ul{border: 1px solid #cccccc; border-radius: 5px; padding: 20px;}
     .mypage-bottom-list li{margin-left: 10px}
+
 </style>
+<div th:insert="fragments/header :: header"></div>
 <body>
     <div id="mypage">
         <div id="mypage-left">
             <div>
-                <h2>윤효정</h2>
-                <p>email</p>
-                <p>phone number</p>
+                <h3 th:text="${member.memberName}">hi</h3>
+                <p th:text="${member.email}">email</p>
             </div>
             <div id="mypage-util">
                 <button>로그아웃</button>
@@ -40,21 +46,21 @@
                     <ul>
                         <li>친구 이름</li>
                     </ul>
-                    <button>친구 관리</button>
+                    <a th:href="@{/friend}"><button>친구 관리</button></a>
                 </div>
                 <div class="mypage-top-list" >
                     <h3>그룹 리스트</h3>
                     <ul>
                         <li>친구 이름</li>
                     </ul>
-                    <button>그룹 추가</button>
+                    <a th:href="@{/friend}"><button>그룹 추가</button></a>
                 </div>
                 <div class="mypage-top-list">
                     <h3>결제 수단</h3>
                     <ul>
                         <li>친구 이름</li>
                     </ul>
-                    <button>결제 수단 관리</button>
+                    <a th:href="@{/payment}"><button>결제 수단 관리</button></a>
                 </div>
             </div>
             <div class="mypage-bottom-list">

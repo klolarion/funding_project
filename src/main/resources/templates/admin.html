@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>admin</title>
@@ -39,7 +39,7 @@
                 <td>stock</td>
                 <td>restock</td>
                 <td>saleFinished</td>
-                <td><a th:href="@{/books/{id}(id=${book.id})}"> delete </a></td>
+                <td><a > delete </a></td>
             </tr>
             </tbody>
         </table>
@@ -72,7 +72,7 @@
                 <td>title.</td>
                 <td>title.</td>
 
-                <td><a th:href="@{/books/{id}(id=${book.id})}"> delete </a></td>
+<!--                <td><a th:href="@{/books/{id}(id=${book.id})}"> delete </a></td>-->
             </tr>
             </tbody>
         </table>
@@ -80,10 +80,10 @@
     <div>
         <h2>사용자 검색</h2>
         <input placeholder="MemberID"><button>검색</button>
-        <div th:if="${foundUser}">
-            <span th:text="${memberId}">이름</span>
-            <span th:text="${memberId}">아이디</span>
-            <span th:text="${memberId}">이메일</span>
+<!--        <div th:if="${foundUser}">-->
+<!--            <span th:text="${memberId}">이름</span>-->
+<!--            <span th:text="${memberId}">아이디</span>-->
+<!--            <span th:text="${memberId}">이메일</span>-->
             <span><a>정지</a></span>
         </div>
     </div>

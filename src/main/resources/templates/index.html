@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Funding Project</title>
+
 </head>
 <style>
-  body{text-decoration: none; padding: 0 90px}
+  header {display: flex; justify-content: space-between; padding: 0px}
+  #header-right{ margin: 20px 20px}
+  header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
+  header a{text-decoration: none; padding: 10px 20px; color: black}
+
+  body{text-decoration: none; padding: 0 180px}
   .funding-list{display: flex;  flex-wrap: wrap; justify-content: space-between; }
   .list-items{width:280px; height: 180px; margin-bottom: 40px;  background-color: gray; margin-right: 20px; padding: 10px;  border-radius: 10px;flex-shrink: 0;}
 
 
 </style>
+<div th:insert="fragments/header :: header"></div>
 <body>
-  <div th:insert="fragments/header :: header"></div>
     <h3>전체 펀딩</h3>
     <div class="funding-list">
       <div class="list-items">

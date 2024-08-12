@@ -5,27 +5,38 @@
     <title>create</title>
 </head>
 <style>
-    body{padding: 0 90px; margin: 50px auto; width: 500px}
+    body{padding: 0 90px; margin: 150px auto; width: 500px}
     #total-money {display: flex; justify-content: space-between; margin:30px 0; padding: 20px 0; border-top: 1px solid #cccccc
     }
-    button{width:100%; padding:15px; background-color: #E9E9FAFF; color: #4949CCFF; border:none; border-radius: 5px;  }
-    input {width: 100%; margin:10px 0; padding: 15px; box-sizing: border-box; border: 1px solid #cccccc; border-radius: 5px}
+    button{width:100%; padding:15px; background-color: #E9E9FAFF; color: #4949CCFF; border:none; border-radius: 5px; font-size: 15px; font-weight: bold;}
+    .list {margin-bottom: 20px}
+    #product-option {margin-bottom: 10px}
+    #target-price p {width: 100%; margin:10px 0; padding: 15px; box-sizing: border-box; border: 1px solid #cccccc; border-radius: 5px}
+    #group-option span {font-size: small; color: #79797e}
 </style>
 <body>
 <div>
     <div>
         <h1>펀딩 만들기</h1>
         <div>
-            <form>
-                <div>
+            <form method="post" >
+                <div class="list" id="product-option">
+                    <label>상품 선택</label><br>
+                    <input type="radio" name="option" value="option1"> Option 1<br>
+                    <input type="radio" name="option" value="option2"> Option 2<br>
+                    <input type="radio" name="option" value="option3"> Option 3<br>
+                </div>
+                <div class="list" id="target-price">
                     <label>목표 금액</label><br>
-                    <input type="number">
+                    <p></p>
                 </div>
-                <div>
-                    <label>펀딩 계좌</label><br>
-                    <input>
+                <div class="list" id="group-option">
+                    <label>그룹 선택 <span>   *옵션</span></label><br>
+                    <input type="radio" name="group" value="option1"> Option 1<br>
+                    <input type="radio" name="group" value="option2"> Option 2<br>
+                    <input type="radio" name="group" value="option3"> Option 3<br>
                 </div>
-                <button>결제하기</button>
+                <button>펀딩 만들기</button>
             </form>
 
         </div>
