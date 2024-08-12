@@ -1,10 +1,11 @@
 package com.klolarion.funding_project.controller;
 
-import com.klolarion.funding_project.service.AdminService;
 import com.klolarion.funding_project.service.AdminServiceImpl;
-import com.klolarion.funding_project.service.MemberService;
 import com.klolarion.funding_project.service.MemberServiceImpl;
+import com.klolarion.funding_project.service.PaymentMethodServiceImpl;
+import com.klolarion.funding_project.service.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AdminController {
     private final AdminServiceImpl adminServiceImpl;
     private final ProductServiceImpl productServiceImpl;
+    private final PaymentMethodServiceImpl paymentMethodServiceImpl;
     private MemberServiceImpl memberServiceImpl;
 
     @GetMapping
@@ -56,13 +58,37 @@ public class AdminController {
 
     //상품 action
 //    @PostMapping("/productDelete")
-//    public String productDelete(@RequestParam Long productId, RedirectAttributes redirectAttributes) {
+//    public String productDelete(@RequestParam Long productId) {
 //
 //        return "redirect:/admin";
 //    }
     @PostMapping("/updateStock")
-    public String productDelete(@RequestParam Long productId, @RequestParam int stock, RedirectAttributes redirectAttributes) {
+    public String productDelete(@RequestParam Long productId, @RequestParam int stock) {
         adminServiceImpl.addStock(productId, stock);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/restock")
+    public  String restock(@RequestParam Long productId) {
+        adminServiceImpl.setRestock(productId);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/saleFinished")
+    public String saleFinished(@RequestParam Long productId) {
+        adminServiceImpl.setSellFinished(productId);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/addPaymentMethod")
+    public String addPaymentMethod(@RequestParam int code, @RequestParam String paymentName, @RequestParam String accountNumber, @RequestParam Long availableAmount, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("paymentList", paymentMethodServiceImpl.addPaymentMethod(code, paymentName, accountNumber, availableAmount));
+        return "redirect:/admin";
+    }
+
+    @GetMapping("/paymentDelete")
+    public String paymentDelete(@RequestParam Long paymentMethodId) {
+        paymentMethodServiceImpl.deletePaymentMethod(paymentMethodId);
         return "redirect:/admin";
     }
 }

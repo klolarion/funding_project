@@ -5,14 +5,24 @@
     <title>Payment</title>
 </head>
 <style>
-    body{padding: 0 90px; margin: 100px auto; width: 500px}
+    body{padding: 0 90px; margin: 50px auto; width: 500px}
+    p {border: 1px solid #bcbcbc; border-radius: 10px; padding:20px}
+    ul{border: 1px solid #bcbcbc; border-radius: 10px; padding:20px}
+    li{list-style-type: none; overflow: scroll; height: 50px}
     button{width:100%; margin:80px 0; padding:15px; background-color: #E9E9FAFF; color: #4949CCFF; border:none; border-radius: 5px; }
+    .icons{display: flex; flex-wrap: wrap; width:100%; box-sizing: border-box; border: 1px solid #bcbcbc; border-radius: 10px;}
+    .icon{width: 120px; height: 120px; margin: 20px; background-color: #d2d2f8; border-radius: 10px; text-align: center; align-content: center; }
+    .icon:hover{background-color: white}
 </style>
 <body>
 <div>
-    <h2>결제 수단 관리</h2>
+    <h2>결제 수단 관리 </h2>
     <div>
-        <p>내 결제 수단</p>
+        <h3>대표 결제 수단</h3>
+        <p>NH 어쩌구 저쩌구</p>
+    </div>
+    <div>
+        <h3>결제 수단 리스트</h3>
         <ul>
             <li>계좌1</li>
             <li>계좌2</li>
@@ -20,14 +30,16 @@
         </ul>
     </div>
     <div>
-        <p>결제 수단 등록하기</p>
-        <div>
+        <h3>결제 수단 등록하기</h3>
+        <div class="icons">
+            <div class="icon"><span>농협</span></div>
+            <div class="icon"><span>신한</span></div>
+            <div class="icon"><span>국민</span></div>
+            <div class="icon"><span>카카오 페이</span></div>
+            <div class="icon"><span>네이버 페이</span></div>
 
         </div>
 
-    </div>
-    <div>
-        <p>친구 추가</p>
     </div>
 </div>
 </body>

@@ -5,10 +5,14 @@
     <title>admin</title>
 </head>
 <style>
+    body{margin: 0 500px; }
     a{color: #e1103a}
+    #product {margin: 20px 0}
+    #product span {font-weight: bold}
+    #util form {margin-bottom: 5px}
 </style>
 <body>
-    <div>
+    <div id="add-product">
         <h2>상품 등록</h2>
         <form method="post" th:action="@{/admin/add}">
             <label>상품명</label><input name="productName"><br>
@@ -23,13 +27,15 @@
             <input placeholder="productID" name="productId" value="productId" type="number"><button>검색</button>
         </form>
             <div th:if="${foundProduct}">
-                <span th:text="${foundProduct.productId}">아이디</span>
-                <span th:text="${foundProduct.productName}">이름</span>
-                <span th:text="${foundProduct.price}">가격</span>
-                <span th:text="${foundProduct.stock}">재고</span>
-                <span th:text="${foundProduct.restock}">재입고여부</span>
-                <span th:text="${foundProduct.saleFinished}">판매종료여부</span>
-                <div>
+                <div id="product">
+                    <span th:text="${foundProduct.productId}">아이디</span>
+                    <span th:text="${foundProduct.productName}">이름</span>
+                    <span th:text="${foundProduct.price}">가격</span>
+                    <span th:text="${foundProduct.stock}">재고</span>
+                    <span th:text="${foundProduct.restock}">재입고여부</span>
+                    <span th:text="${foundProduct.saleFinished}">판매종료여부</span>
+                </div>
+                <div id="util">
                     <form method="post" th:action="@{/admin/updateStock}">
                         <input type="hidden" name="productId" th:value="${foundProduct.productId}">
                         <label>재고 수정</label>
@@ -39,11 +45,17 @@
                         <label>상품 삭제</label>
                         <button>삭제</button>
                     </form>
-                    <form>
+                    <form method="post" th:action="@{/admin/restock}" >
+                        <input type="hidden" name="productId" th:value="${foundProduct.productId}">
                         <label>재입고 여부</label>
+                        <input type="checkbox">
+                        <button>반영</button>
                     </form>
-                    <form>
-                        <label>재입고 여부</label>
+                    <form method="post" th:action="@{/admin/saleFinished}">
+                        <input type="hidden" name="productId" th:value="${foundProduct.productId}">
+                        <label>판매종료</label>
+                        <input type="checkbox">
+                        <button>반영</button>
                     </form>
                 </div>
 
@@ -73,6 +85,22 @@
             <span th:text="${foundMember.memberName}">이름</span>
             <span th:text="${foundMember.memberEmail}">이메일</span>
             <span><a>정지</a></span>
+        </div>
+    </div>
+    <div>
+        <h2>결제 수단 등록</h2>
+        <form method="post" th:action="@{/admin/addPaymentMethod}">
+            <label>코드</label><input type="number" name="code"><br>
+            <label>결제 수단명</label><input name="paymentName"><br>
+            <label>계좌번호</label><input name="accountNumber"><br>
+            <label>잔고</label><input type="number" name="availableAmount"><br>
+            <button>결제 수단 등록</button>
+        </form>
+        <div th:if="${paymentList}" th:each="payment : ${paymentList}">
+            <span th:text="${payment.code}">아이디</span>
+            <span th:text="${payment.paymeneName}">이름</span>
+            <span th:text="${payment.accountNumber}">이메일</span>
+            <span><a th:href="@{/admin/paymentDelete(paymentId=${payment.id})}">삭제</a></span>
         </div>
     </div>
 </body>

@@ -3,9 +3,11 @@ package com.klolarion.funding_project.service;
 import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.repository.PaymentRepository;
 import com.klolarion.funding_project.repository.ProductRepository;
+import com.klolarion.funding_project.service.blueprint.AdminService;
 import com.klolarion.funding_project.util.CurrentMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AdminServiceImpl implements AdminService{
+public class AdminServiceImpl implements AdminService {
     private final PaymentRepository paymentRepository;
     private final CurrentMember currentMember;
     private final ProductRepository productRepository;
@@ -114,4 +116,6 @@ public class AdminServiceImpl implements AdminService{
         Member member = query.selectFrom(qMember).where(qMember.memberId.eq(memberId)).fetchOne();
         return member;
     }
+
+
 }
