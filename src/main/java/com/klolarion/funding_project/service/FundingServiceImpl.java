@@ -127,24 +127,6 @@ public class FundingServiceImpl implements FundingService {
     }
 
     @Override
-    public boolean closeFunding(Long fundingId) {
-        QFunding qFunding = QFunding.funding;
-        long result = query.update(qFunding).set(qFunding.closed, true).execute();
-        em.flush();
-        em.clear();
-        return result == 1L;
-    }
-
-    @Override
-    public boolean deleteFunding(Long fundingId) {
-        QFunding qFunding = QFunding.funding;
-        long result = query.update(qFunding).set(qFunding.completed, true).execute();
-        em.flush();
-        em.clear();
-        return result == 1L;
-    }
-
-    @Override
     public boolean completeFunding(Long fundingId) {
         QFunding qFunding = QFunding.funding;
         long result = query.update(qFunding).set(qFunding.deleted, true).execute();
