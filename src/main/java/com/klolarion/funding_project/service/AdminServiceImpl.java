@@ -1,6 +1,7 @@
 package com.klolarion.funding_project.service;
 
 import com.klolarion.funding_project.domain.entity.*;
+import com.klolarion.funding_project.dto.PaymentMethodDto;
 import com.klolarion.funding_project.repository.CodeRepository;
 import com.klolarion.funding_project.repository.PaymentMethodRepository;
 import com.klolarion.funding_project.repository.PaymentRepository;
@@ -9,6 +10,7 @@ import com.klolarion.funding_project.service.blueprint.AdminService;
 import com.klolarion.funding_project.util.CurrentMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AdminServiceImpl implements AdminService {
     private final ProductRepository productRepository;
     private final PaymentMethodRepository paymentMethodRepository;
@@ -128,8 +131,12 @@ public class AdminServiceImpl implements AdminService {
     // paymentMethod
 
     @Override
-    public PaymentMethod addPaymentMethod(int code, String paymentName, String accountNumber, Long availableAmount) {
-        PaymentMethod paymentMethod = new PaymentMethod(code, paymentName, accountNumber, availableAmount);
+    public PaymentMethod addPaymentMethod(PaymentMethodDto paymentMethodDto) {
+        PaymentMethod paymentMethod = new PaymentMethod(
+                paymentMethodDto.getCodeMaster().getCode(),
+                paymentMethodDto.getCodeMaster().getDescription(),
+                paymentMethodDto.getAccountNumber(),
+                paymentMethodDto.getAvailableAmount());
         PaymentMethod saved = paymentMethodRepository.save(paymentMethod);
         return saved;
     }
@@ -152,6 +159,15 @@ public class AdminServiceImpl implements AdminService {
         em.flush();
         em.clear();
         return codes;
+    }
+
+    @Override
+    public CodeMaster getCode(Long codeId) {
+        QCodeMaster qCodeMaster = QCodeMaster.codeMaster;
+        CodeMaster codeMaster = query.selectFrom(qCodeMaster).where(qCodeMaster.codeId.eq(codeId)).fetchOne();
+        em.flush();
+        em.clear();
+        return codeMaster;
     }
 
     @Override
