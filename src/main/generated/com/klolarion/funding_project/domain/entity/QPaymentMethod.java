@@ -28,12 +28,12 @@ public class QPaymentMethod extends EntityPathBase<PaymentMethod> {
     //inherited
     public final StringPath createdDate = _super.createdDate;
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     //inherited
     public final StringPath lastModifiedDate = _super.lastModifiedDate;
 
     public final NumberPath<Integer> paymentCode = createNumber("paymentCode", Integer.class);
+
+    public final NumberPath<Long> paymentMethodId = createNumber("paymentMethodId", Long.class);
 
     public final StringPath paymentName = createString("paymentName");
 

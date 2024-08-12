@@ -22,13 +22,15 @@ public class QPaymentMethodList extends EntityPathBase<PaymentMethodList> {
 
     public static final QPaymentMethodList paymentMethodList = new QPaymentMethodList("paymentMethodList");
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final BooleanPath mainPayment = createBoolean("mainPayment");
 
     public final QMember member;
 
+    public final BooleanPath offCd = createBoolean("offCd");
+
     public final QPaymentMethod paymentMethod;
+
+    public final NumberPath<Long> paymentMethodListId = createNumber("paymentMethodListId", Long.class);
 
     public QPaymentMethodList(String variable) {
         this(PaymentMethodList.class, forVariable(variable), INITS);

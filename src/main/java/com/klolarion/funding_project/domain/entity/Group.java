@@ -1,13 +1,13 @@
 package com.klolarion.funding_project.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class Group extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,14 +18,16 @@ public class Group extends BaseTime{
     @JoinColumn(name = "group_leader_id")
     private Member groupLeader;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
+    @Column(nullable = false, unique = true)
+    @Size(max = 50)
     private String groupName;
 
-    private boolean accepted;
-    private boolean exited;
-    private boolean banned;
+    private boolean groupActive;
 
+
+    public Group(Member groupLeader, String groupName) {
+        this.groupLeader = groupLeader;
+        this.groupName = groupName;
+        this.groupActive = true;
+    }
 }
