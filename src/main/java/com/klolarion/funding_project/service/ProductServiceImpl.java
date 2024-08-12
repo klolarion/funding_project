@@ -17,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class ProductServiceImpl implements ProductService {
-    private final ProductRepository productRepository;
     private final EntityManager em;
     private final JPAQueryFactory query;
 

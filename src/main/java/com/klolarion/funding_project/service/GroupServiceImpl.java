@@ -122,6 +122,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean inviteMember(Long groupId, Long memberId) {
+
         return false;
     }
 

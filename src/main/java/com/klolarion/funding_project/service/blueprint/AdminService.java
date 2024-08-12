@@ -1,9 +1,6 @@
 package com.klolarion.funding_project.service.blueprint;
 
-import com.klolarion.funding_project.domain.entity.Funding;
-import com.klolarion.funding_project.domain.entity.Member;
-import com.klolarion.funding_project.domain.entity.Payment;
-import com.klolarion.funding_project.domain.entity.Product;
+import com.klolarion.funding_project.domain.entity.*;
 
 import java.util.List;
 
@@ -26,4 +23,14 @@ public interface AdminService {
 
     //member
     Member searchMember(Long id);
+
+    //paymentMethod
+    PaymentMethod addPaymentMethod(int code, String paymentName, String accountNumber, Long availableAmount);
+    boolean deletePaymentMethod(Long paymentMethodId);
+
+    //code
+    List<CodeMaster> getCodes();
+    CodeMaster addCode(int code, String description, String reference);
+    boolean deleteCode(Long codeId);
+
 }

@@ -7,7 +7,6 @@ import com.klolarion.funding_project.service.blueprint.AdminService;
 import com.klolarion.funding_project.util.CurrentMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class AdminServiceImpl implements AdminService {
     private final PaymentRepository paymentRepository;
     private final CurrentMember currentMember;
@@ -89,7 +87,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Funding searchFunding(Long fundingId) {
-        return null;
+        QFunding qFunding = QFunding.funding;
+        Funding funding = query.selectFrom(qFunding).where(qFunding.fundingId.eq(fundingId)).fetchOne();
+        em.flush();
+        em.clear();
+        return funding;
     }
 
     @Override
@@ -117,5 +119,50 @@ public class AdminServiceImpl implements AdminService {
         return member;
     }
 
+    // paymentMethod
 
+    @Override
+    public PaymentMethod addPaymentMethod(int code, String paymentName, String accountNumber, Long availableAmount) {
+        PaymentMethod paymentMethod = new PaymentMethod(code, paymentName, accountNumber, availableAmount);
+        PaymentMethod saved = paymentMethodRepository.save(paymentMethod);
+        return saved;
+    }
+
+    @Override
+    public boolean deletePaymentMethod(Long paymentMethodId) {
+        QPaymentMethod qPaymentMethod = QPaymentMethod.paymentMethod;
+        long result = query.delete(qPaymentMethod).where(qPaymentMethod.paymentMethodId.eq(paymentMethodId)).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
+    }
+
+    // code
+
+    @Override
+    public List<CodeMaster> getCodes() {
+        QCodeMaster qCodeMaster = QCodeMaster.codeMaster;
+        List<CodeMaster> codes = query.selectFrom(qCodeMaster).fetch();
+        em.flush();
+        em.clear();
+        return codes;
+    }
+
+    @Override
+    public CodeMaster addCode(int code, String description, String reference) {
+        CodeMaster codeMaster = new CodeMaster(
+                code, description, reference
+        );
+        return codeRepository.save(codeMaster);
+
+    }
+
+    @Override
+    public boolean deleteCode(Long codeId) {
+        QCodeMaster qCodeMaster = QCodeMaster.codeMaster;
+        long result = query.delete(qCodeMaster).where(qCodeMaster.codeId.eq(codeId)).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
+    }
 }

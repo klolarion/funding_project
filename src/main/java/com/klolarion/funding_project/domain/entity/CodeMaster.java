@@ -19,4 +19,9 @@ public class CodeMaster {
     private String description;
     private String reference;
 
+    public CodeMaster(int code, String description, String reference) {
+        this.code = code;
+        this.description = description;
+        this.reference = reference;
+    }
 }
