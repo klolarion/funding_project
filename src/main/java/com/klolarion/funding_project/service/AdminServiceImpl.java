@@ -137,14 +137,7 @@ public class AdminServiceImpl implements AdminService {
         return member;
     }
 
-    @Override
-    public List<PaymentMethod> paymentMethodList() {
-        QPaymentMethod qPaymentMethod = QPaymentMethod.paymentMethod;
-        List<PaymentMethod> fetched = query.selectFrom(qPaymentMethod).fetch();
-        em.flush();
-        em.clear();
-        return fetched;
-    }
+
 
     // paymentMethod
 
@@ -166,6 +159,15 @@ public class AdminServiceImpl implements AdminService {
         em.flush();
         em.clear();
         return result == 1L;
+    }
+
+    @Override
+    public List<PaymentMethod> paymentMethodList() {
+        QPaymentMethod qPaymentMethod = QPaymentMethod.paymentMethod;
+        List<PaymentMethod> fetched = query.selectFrom(qPaymentMethod).fetch();
+        em.flush();
+        em.clear();
+        return fetched;
     }
 
     // code

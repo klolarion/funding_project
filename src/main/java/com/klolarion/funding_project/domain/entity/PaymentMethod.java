@@ -21,7 +21,7 @@ public class PaymentMethod extends BaseTime{
     @Column(nullable = false)
     private int paymentCode;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @Size(max = 100)
     private String paymentName;
 
