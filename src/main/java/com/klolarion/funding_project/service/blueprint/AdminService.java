@@ -15,7 +15,6 @@ public interface AdminService {
     Product addProduct(String productName, Long price, int stock);
     Product addStock(Long productId, int stock);
     boolean setRestock(Long productId);
-    boolean setRestockFalse(Long productId);
     boolean setSellFinished(Long productId);
 
     //funding
@@ -27,6 +26,7 @@ public interface AdminService {
     Member searchMember(Long id);
 
     //paymentMethod
+    List<PaymentMethod> paymentMethodList();
     PaymentMethod addPaymentMethod(PaymentMethodDto paymentMethodDto);
     boolean deletePaymentMethod(Long paymentMethodId);
 
