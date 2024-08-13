@@ -38,19 +38,19 @@ values (6, '커피사탕', 300, 3000, false, false);
 
 --code
 
-insert into code(code_id, code, description, reference)
+insert into code_master(code_id, code, description, reference)
 values (1, 101, 'KB은행', '은행');
 
-insert into code(code_id, code, description, reference)
+insert into code_master(code_id, code, description, reference)
 values (2, 102, '신한은행', '은행');
 
-insert into code(code_id, code, description, reference)
+insert into code_master(code_id, code, description, reference)
 values (3, 105, '하나은행', '은행');
 
-insert into code(code_id, code, description, reference)
+insert into code_master(code_id, code, description, reference)
 values (4, 201, '네이버페이', 'pay');
 
-insert into code(code_id, code, description, reference)
+insert into code_master(code_id, code, description, reference)
 values (5, 203, '카카오페이', 'pay');
 
 --paymentMethod
@@ -68,34 +68,34 @@ insert into payment_method(payment_method_id, payment_name, payment_code, accoun
 values (4, '네이버페이', 201, '003-00328-98', 3000);
 
 insert into payment_method(payment_method_id, payment_name, payment_code, account_number, available_amount)
-values (5, '카카오페이', 203, '333-33213-776', 0);
+values (5, '카카오페이', 203, '333-33213-77', 0);
 
 
 --paymentMethodList
 
-insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment)
-values (1, 1, 2, true);
+insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
+values (1, 1, 2, true, false);
 
-insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment)
-values (2, 3, 2, false);
+insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
+values (2, 3, 2, false, false);
 
-insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment)
-values (3, 4, 2, false);
+insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
+values (3, 4, 2, false, false);
 
-insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment)
-values (4, 1, 3, false);
+insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
+values (4, 1, 3, false, false);
 
-insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment)
-values (5, 2, 3, false);
+insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
+values (5, 2, 3, false, true);
 
-insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment)
-values (6, 5, 3, true);
+insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
+values (6, 5, 3, true, false);
 
-insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment)
-values (7, 2, 4, false);
+insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
+values (7, 2, 4, false, false);
 
-insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment)
-values (8, 3, 4, false);
+insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
+values (8, 3, 4, false, false);
 
 --member_groups(group)
 
