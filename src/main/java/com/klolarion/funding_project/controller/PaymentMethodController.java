@@ -9,13 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/paymentMethod")
+@RequestMapping("/f1")
 public class PaymentMethodController {
 //    private final PaymentServiceImpl paymentServiceImpl;
 
-    @GetMapping
-    public String payment(Model model, HttpSession session) {
-//        Payment payment1 =
+    @GetMapping("/paymentMethodGet")
+    public String paymentMethod(Model model, HttpSession session) {
         session.getAttribute("member");
         
 //        model.addAttribute("myPayment", paymentServiceImpl.getMyPayments() );

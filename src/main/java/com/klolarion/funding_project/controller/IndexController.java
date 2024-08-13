@@ -17,20 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class IndexController {
     private final FundingServiceImpl fundingServiceImpl;
     private final MemberServiceImpl memberService;
-    Member member = new Member(new Role(1L,"user"), "0213@funding.java", "윤효정","1111");
 
     @GetMapping
-    public String goIndex(Model model, HttpSession session){
+    public String getIndex(Model model, HttpSession session){
         Member member = memberService.myInfo();
-//        session.setAttribute("member", member);
-        System.out.println("hi");
-//        model.addAttribute("AllFundingList", fundingServiceImpl.allFundingList());
+        session.setAttribute("member", member);
+        model.addAttribute("allFundingList", fundingServiceImpl.allFundingList());
         return "index";
     }
 
-//    @GetMapping
-//    public String index(Model model) {
-////        model.addAttribute("allFundingList", fundingServiceImpl.allFundingList());
-//        return "index";
-//    }
 }

@@ -13,38 +13,18 @@
 
   body{text-decoration: none; padding: 0 180px}
   .funding-list{display: flex;  flex-wrap: wrap; }
-  .list-items{width:280px; height: 180px; margin-bottom: 40px;  background-color: gray; margin-right: 20px; padding: 10px;  border-radius: 10px;flex-shrink: 0;}
-
+  .list-items{width:280px; height: 110px; margin-bottom: 40px;  border: 1px solid #bfbfbf; margin-right: 20px; padding: 10px;  border-radius: 10px;flex-shrink: 0;}
+  .funding-progress {color: #4b85ff; font-weight: bolder}
 
 </style>
 <div th:insert="fragments/header :: header"></div>
 <body>
     <h3>전체 펀딩</h3>
-    <div class="funding-list">
-      <div class="list-items">
-        <p>상품 이미지</p>
-        <p>펀딩진행률</p>
-        <p>상품 이름</p>
-      </div>
-      <div class="list-items">
-        <p>상품 이미지</p>
-        <p>펀딩진행률</p>
-        <p>상품 이름</p>
-      </div>
-      <div class="list-items">
-        <p>상품 이미지</p>
-        <p>펀딩진행률</p>
-        <p>상품 이름</p>
-      </div>
-      <div class="list-items">
-        <p>상품 이미지</p>
-        <p>펀딩진행률</p>
-        <p>상품 이름</p>
-      </div>
-      <div class="list-items">
-        <p>상품 이미지</p>
-        <p>펀딩진행률</p>
-        <p>상품 이름</p>
+    <div class="funding-list" >
+      <div class="list-items" th:each="funding : ${allFundingList}">
+        <p class="funding-progress"  th:text="${funding.getProgress()} + '%'">펀딩진행률</p>
+        <p th:text="${funding.getProductName()}">상품 이름</p>
+        <p th:text="${funding.getCurrentFundingAmount()}">상품 이름</p>
       </div>
     </div>
     <h3>그룹 펀딩</h3>
