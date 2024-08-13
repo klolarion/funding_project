@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -10,27 +10,54 @@
     h1{ margin: 120px 0 40px 0}
     form div { margin-bottom: 1rem }
     form input {width: 100%; padding: 15px; box-sizing: border-box; border: 1px solid #EFEFEF; border-radius: 5px}
-    form button {width: 100%; margin: 20px 0; padding: 15px; border: none; background-color: #e9e9fa; color: #4949cc; border-radius: 5px
-    }
-    a {color: #4949CCFF; font-size:14px}
-    #buttons{display: flex; justify-content: flex-end;}
+    form button {width: 100%; margin: 20px 0; padding: 15px; border: none; background-color: #e9e9fa; color: #4949cc; border-radius: 5px}
 </style>
 <body>
-    <div id="login-form">
-        <h1>로그인</h1>
-        <form method="post">
-            <div>
-                <input placeholder="아이디를 입력하세요.">
-            </div>
-            <div>
-                <input type="password" placeholder="비밀번호를 입력하세요.">
-            </div>
-            <button> 로그인 하기</button>
-        </form>
-        <div id="buttons">
-            <a href="@{/register}">회원가입</a>
+<div id="login-form">
+    <h1>로그인</h1>
+    <form id="loginForm">
+        <div>
+            <input name="account" id="account" placeholder="아이디를 입력하세요.">
         </div>
-    </div>
+        <div>
+            <input name="password" id="password" type="password" placeholder="비밀번호를 입력하세요.">
+        </div>
+        <button type="button" onclick="submitForm()"> 로그인 하기</button>
+    </form>
+</div>
 
+<script>
+    function submitForm(event) {
+        // 기본 폼 제출 동작 방지
+        // event.preventDefault();
+
+        const data = {
+            username: document.getElementById('account').value,
+            password: document.getElementById('password').value
+        };
+
+        fetch('https://almagest-auth.com/api/v1/auth', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();  // 응답이 성공적이라면 JSON으로 파싱
+                } else {
+                    throw new Error('Authentication failed');
+                }
+            })
+            .then(result => {
+                console.log('Authentication successful:', result);
+                // 인증이 성공하면 원하는 작업을 수행 (예: 리다이렉트)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+</script>
 </body>
 </html>
