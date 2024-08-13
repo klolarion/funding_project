@@ -17,8 +17,8 @@ import java.util.Optional;
 public class CurrentMember {
     private final MemberRepository memberRepository;
     public Member getMember(){
-        String account = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        Optional<Member> findMember = memberRepository.findByAccount(account);
+//        String account = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        Optional<Member> findMember = memberRepository.findByAccount("admin");
         return findMember.orElseThrow(() -> new UsernameNotFoundException("사용자 조회 실패"));
     }
 }

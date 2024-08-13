@@ -2,6 +2,8 @@ package com.klolarion.funding_project.config.filter;
 
 import com.klolarion.funding_project.config.CustomUserDetailsService;
 import com.klolarion.funding_project.domain.entity.CustomUserDetails;
+import com.klolarion.funding_project.util.CacheHandler;
+import com.klolarion.funding_project.util.RedisService;
 import com.klolarion.funding_project.util.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,6 +25,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
     private final CustomUserDetailsService customUserDetailsService;
+    private final RedisService redisService;
+    private final CacheHandler cacheHandler;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
