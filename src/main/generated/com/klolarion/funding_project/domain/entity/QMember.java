@@ -26,6 +26,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath account = createString("account");
 
+    public final BooleanPath banned = createBoolean("banned");
+
     //inherited
     public final StringPath createdDate = _super.createdDate;
 
@@ -35,6 +37,8 @@ public class QMember extends EntityPathBase<Member> {
 
     //inherited
     public final StringPath lastModifiedDate = _super.lastModifiedDate;
+
+    public final StringPath lastUpdateDate = createString("lastUpdateDate");
 
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
@@ -47,6 +51,8 @@ public class QMember extends EntityPathBase<Member> {
     public final ListPath<PaymentMethodList, QPaymentMethodList> paymentMethodList = this.<PaymentMethodList, QPaymentMethodList>createList("paymentMethodList", PaymentMethodList.class, QPaymentMethodList.class, PathInits.DIRECT2);
 
     public final QRole role;
+
+    public final StringPath tel = createString("tel");
 
     public QMember(String variable) {
         this(Member.class, forVariable(variable), INITS);

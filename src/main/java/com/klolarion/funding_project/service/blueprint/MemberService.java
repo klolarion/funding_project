@@ -1,11 +1,17 @@
 package com.klolarion.funding_project.service.blueprint;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.klolarion.funding_project.domain.entity.Member;
 import com.klolarion.funding_project.domain.entity.PaymentMethodList;
 
 import java.util.List;
 
 public interface MemberService {
+
+    /*멤버정보 캐시등록*/
+    Member getMember() throws JsonProcessingException;
+    /*캐시에서 멤버정보 조회 => 실패시 DB에서 조회 후 리턴*/
+    void setMemberCache(Member member);
 
     /*내 정보*/
     Member myInfo();
@@ -14,7 +20,7 @@ public interface MemberService {
     List<PaymentMethodList> myPaymentLists(Long memberId);
 
     /*결제수단 추가*/
-    PaymentMethodList addPayment(Long paymentMethodId);
+    PaymentMethodList addPaymentMethod(Long paymentMethodId);
 
     /*주 결제수단으로 등록*/
     boolean makeMainPayment(Long paymentMethodListId);

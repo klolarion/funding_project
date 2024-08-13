@@ -1,19 +1,13 @@
 package com.klolarion.funding_project.config.filter;
 
 import com.klolarion.funding_project.config.CustomUserDetailsService;
-import com.klolarion.funding_project.domain.entity.CustomUserDetails;
-import com.klolarion.funding_project.util.CacheHandler;
 import com.klolarion.funding_project.util.RedisService;
 import com.klolarion.funding_project.util.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -26,7 +20,6 @@ public class JwtFilter extends OncePerRequestFilter {
     private final TokenService tokenService;
     private final CustomUserDetailsService customUserDetailsService;
     private final RedisService redisService;
-    private final CacheHandler cacheHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

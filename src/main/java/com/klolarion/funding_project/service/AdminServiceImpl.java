@@ -11,18 +11,16 @@ import com.klolarion.funding_project.util.CurrentMember;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.klolarion.funding_project.repository.CodeRepository;
-import com.klolarion.funding_project.repository.PaymentMethodRepository;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+
 public class AdminServiceImpl implements AdminService {
     private final PaymentRepository paymentRepository;
     private final CurrentMember currentMember;
@@ -53,6 +51,7 @@ public class AdminServiceImpl implements AdminService {
         return result == 1L;
     }
 
+    //product
     @Override
     public Product searchProduct(Long productId) {
         QProduct qProduct = QProduct.product;
@@ -73,13 +72,18 @@ public class AdminServiceImpl implements AdminService {
         return saved;
     }
 
-    //product
+    /*동시성제어 필요*/
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public Product addStock(Long productId, int stock){
         QProduct qProduct = QProduct.product;
         query.update(qProduct).set(qProduct.stock, qProduct.stock.add(stock)).execute();
 
         return null;
     }
+
+    /*동시성제어 필요*/
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public boolean setRestock(Long productId) {
         QProduct qProduct = QProduct.product;
@@ -91,7 +95,8 @@ public class AdminServiceImpl implements AdminService {
         return result == 1L;
     }
 
-
+    /*동시성제어 필요*/
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public boolean setSellFinished(Long productId) {
         QProduct qProduct = QProduct.product;
@@ -113,7 +118,9 @@ public class AdminServiceImpl implements AdminService {
         return funding;
     }
 
+    /*동시성제어 필요*/
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean closeFunding(Long fundingId) {
         QFunding qFunding = QFunding.funding;
         long result = query.update(qFunding).set(qFunding.closed, true).execute();
@@ -122,7 +129,9 @@ public class AdminServiceImpl implements AdminService {
         return result == 1L;
     }
 
+    /*동시성제어 필요*/
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean deleteFunding(Long fundingId) {
         QFunding qFunding = QFunding.funding;
         long result = query.update(qFunding).set(qFunding.deleted, true).execute();

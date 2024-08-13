@@ -31,7 +31,7 @@ public class PaymentMethodController {
 
     @PostMapping("/myPaymentMethod")
     public String addMyPaymentMethod(@RequestParam Long paymentMethodId, Model model, HttpSession session) {
-        memberServiceImpl.addPayment(paymentMethodId);
+        memberServiceImpl.addPaymentMethod(paymentMethodId);
         return "redirect:/f1/paymentMethod";
     }
 

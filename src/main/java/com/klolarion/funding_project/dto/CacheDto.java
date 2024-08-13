@@ -11,15 +11,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @NoArgsConstructor
-public class CacheCacheDto {
+public class CacheDto {
     private Long memberId;
     private String account;
     private String email;
     private String tel;
-    private String firebaseToken;
     private LocalDateTime lastUpdate;
     private boolean enabled;
     private boolean banned;
     private String role;
-
 }

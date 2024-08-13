@@ -7,15 +7,15 @@ import com.klolarion.funding_project.service.blueprint.ProductService;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ProductServiceImpl implements ProductService {
     private final EntityManager em;
     private final JPAQueryFactory query;
@@ -30,6 +30,7 @@ public class ProductServiceImpl implements ProductService {
         return products;
     }
 
+
     @Override
     public Product getProduct(Long productId) {
         QProduct qProduct = QProduct.product;
@@ -41,7 +42,9 @@ public class ProductServiceImpl implements ProductService {
 
 
 
+    /*동시성제어 필요*/
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean dispatchProduct(Long productId, int stock) {
         QProduct qProduct = QProduct.product;
         long result = query.update(qProduct)
@@ -55,7 +58,10 @@ public class ProductServiceImpl implements ProductService {
         return result == 1L;
     }
 
+
+    /*동시성제어 필요*/
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean deleteProduct(Long productId) {
         QProduct qProduct = QProduct.product;
         long result = query.delete(qProduct).where(qProduct.productId.eq(productId)).execute();

@@ -15,9 +15,10 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@jakarta.transaction.Transactional
 public class FundingServiceImpl implements FundingService {
     private final PaymentRepository paymentRepository;
     private final EntityManager em;
@@ -401,7 +402,9 @@ public class FundingServiceImpl implements FundingService {
         return result == 1L;
     }
 
+    /*동시성제어 필요*/
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean joinFunding(JoinFundingDto joinFundingDto) {
 
         Long fundingId = joinFundingDto.getFundingId();

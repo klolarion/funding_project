@@ -34,22 +34,32 @@ public class Member extends BaseTime{
     private String email;
 
     @Column(nullable = false, unique = true)
+    @Size(max = 50)
+    private String tel;
+
+    @Column(nullable = false, unique = true)
     @Size(max = 100)
     private String memberName;
 
     @Column(nullable = false)
     private String password;
 
+    private String lastUpdateDate;
+
     private boolean enabled;
+    private boolean banned;
     private boolean offCd;
 
-    public Member( Role role, String email, String memberName, String password) {
+    public Member( Role role, String email, String tel, String memberName, String password, String lastUpdateDate) {
         this.paymentMethodList = null;
         this.role = role;
         this.email = email;
+        this.tel = tel;
         this.memberName = memberName;
         this.password = password;
+        this.lastUpdateDate = lastUpdateDate;
         this.enabled = false;
+        this.banned = false;
         this.offCd = false;
     }
 
