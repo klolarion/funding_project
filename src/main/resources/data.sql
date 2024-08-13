@@ -5,16 +5,16 @@ insert into role(role_id, role_name) values (2, 'ROLE_USER');
 --member
 
 insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (1, 1, 'admin', 'admin@admin.com', 'Admin', '010-0000-1111', '1234', true, false);
+values (1, 1, 'admin', 'admin@admin.com', 'Admin', '010-0000-1111', '1234', true, false, false);
 
 insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (2, 2, 'tester1', 'tester1@user.com', 'Tester1', '010-1234-1234', '1234', true, false);
+values (2, 2, 'tester1', 'tester1@user.com', 'Tester1', '010-1234-1234', '1234', true, false, false);
 
 insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (3, 2, 'tester2', 'tester2@user.com', 'Tester2', '010-9911-3344', '1234', false, false);
+values (3, 2, 'tester2', 'tester2@user.com', 'Tester2', '010-9911-3344', '1234', false, false, false);
 
 insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (4, 2, 'tester3', 'tester3@user.com', 'Tester3', '010-5932-1927', '1234', true, true);
+values (4, 2, 'tester3', 'tester3@user.com', 'Tester3', '010-5932-1927', '1234', true, false, true);
 
 --product
 
