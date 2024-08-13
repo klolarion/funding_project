@@ -89,19 +89,13 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public boolean removeFriend(Long friendId) {
-        QFriend qFriend = QFriend.friend;
-        long result = query.update(qFriend).set(qFriend.deleted, true).where(qFriend.friendId.eq(friendId)).execute();
-        em.flush();
-        em.clear();
-        return result == 1L;
+
+        return false;
     }
 
     @Override
     public boolean banMember(Long friendId) {
-        QFriend qFriend = QFriend.friend;
-        long result = query.update(qFriend).set(qFriend.banned, true).where(qFriend.friendId.eq(friendId)).execute();
-        em.flush();
-        em.clear();
-        return result == 1L;
+
+        return false;
     }
 }
