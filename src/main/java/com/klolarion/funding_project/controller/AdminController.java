@@ -1,8 +1,10 @@
 package com.klolarion.funding_project.controller;
 
+import com.klolarion.funding_project.dto.PaymentMethodDto;
 import com.klolarion.funding_project.service.AdminServiceImpl;
 import com.klolarion.funding_project.service.MemberServiceImpl;
 import com.klolarion.funding_project.service.ProductServiceImpl;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -79,8 +81,9 @@ public class AdminController {
     }
 
     @PostMapping("/addPaymentMethod")
-    public String addPaymentMethod(@RequestParam int code, @RequestParam String paymentName, @RequestParam String accountNumber, @RequestParam Long availableAmount, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("paymentList", adminServiceImpl.addPaymentMethod(code, paymentName, accountNumber, availableAmount));
+    public String addPaymentMethod(@RequestBody PaymentMethodDto paymentMethodDto, RedirectAttributes redirectAttributes) {
+        adminServiceImpl.addPaymentMethod(paymentMethodDto);
+        redirectAttributes.addFlashAttribute("paymentList", adminServiceImpl.addPaymentMethod(paymentMethodDto));
         return "redirect:/admin";
     }
 
