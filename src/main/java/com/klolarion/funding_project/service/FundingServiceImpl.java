@@ -172,8 +172,8 @@ public class FundingServiceImpl implements FundingService {
                                 .otherwise("펀딩중").as("status")
                 ))
                 .from(qFunding)
-                .join(qFunding.group, qGroup) // Funding과 Group 간의 관계를 조인
-                .join(qGroupStatus).on(qGroupStatus.group.eq(qGroup)) // GroupStatus와 Group 간의 관계를 조인
+                .leftJoin(qFunding.group, qGroup) // Funding과 Group 간의 관계를 조인
+                .leftJoin(qGroupStatus).on(qGroupStatus.group.eq(qGroup)) // GroupStatus와 Group 간의 관계를 조인
                 .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId())) // 멤버가 속한 그룹만 필터링
                 .fetch();
 
@@ -213,9 +213,9 @@ public class FundingServiceImpl implements FundingService {
                 ))
                 .from(qFunding)
                 .join(qFunding.member, qMember)  // Funding과 Member 간의 관계 조인
-                .join(qFunding.group, qGroup)    // Funding과 Group 간의 관계 조인
+                .leftJoin(qFunding.group, qGroup)    // Funding과 Group 간의 관계 조인
                 .join(qFunding.product, qProduct) // Funding과 Product 간의 관계 조인
-                .join(qFriend).on(qFriend.requester.eq(qMember).or(qFriend.accepter.eq(qMember)))  // 친구 관계 조인
+                .leftJoin(qFriend).on(qFriend.requester.eq(qMember).or(qFriend.accepter.eq(qMember)))  // 친구 관계 조인
                 .where(qFriend.deleted.isFalse()
                         .and(qFriend.banned.isFalse()) // 친구 관계가 수락된 상태인지 확인
                         .and(qFriend.requester.memberId.eq(memberId).or(qFriend.accepter.memberId.eq(memberId)))  // 현재 사용자가 친구 관계에 포함되어 있는지 확인
@@ -261,8 +261,8 @@ public class FundingServiceImpl implements FundingService {
                 ))
                 .from(qFunding)
                 .join(qFunding.member, qMember)
-                .join(qFunding.group, qGroup) // 가정: Funding과 Group 간의 관계 조인
-                .join(qFriend).on(qFriend.requester.eq(qMember).or(qFriend.accepter.eq(qMember)))
+                .leftJoin(qFunding.group, qGroup) // 가정: Funding과 Group 간의 관계 조인
+                .leftJoin(qFriend).on(qFriend.requester.eq(qMember).or(qFriend.accepter.eq(qMember)))
                 .where(qFriend.friendId.eq(friendId)
                         .and(qFriend.deleted.isFalse())
                         .and(qFriend.banned.isFalse())
@@ -302,8 +302,8 @@ public class FundingServiceImpl implements FundingService {
                                 .otherwise("펀딩중").as("status")
                 ))
                 .from(qFunding)
-                .join(qGroupStatus).on(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
-                .join(qGroup).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
+                .leftJoin(qGroupStatus).on(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
+                .leftJoin(qGroup).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
                 .where(
                         qFunding.member.memberId.eq(member.getMemberId())
                                 .and(qGroup.groupId.eq(qGroupStatus.group.groupId))
@@ -341,9 +341,9 @@ public class FundingServiceImpl implements FundingService {
                 ))
                 .from(qFunding)
                 .join(qFunding.member, qMember)  // Funding과 Member 간의 관계 조인
-                .join(qFunding.group, qGroup)    // Funding과 Group 간의 관계 조인
-                .join(qFunding.product, qProduct) // Funding과 Product 간의 관계 조인
-                .join(qFriend).on(qFriend.requester.eq(qMember).or(qFriend.accepter.eq(qMember)))  // 친구 관계 조인
+                .leftJoin(qFunding.group, qGroup)    // Funding과 Group 간의 관계 조인
+                .leftJoin(qFunding.product, qProduct) // Funding과 Product 간의 관계 조인
+                .leftJoin(qFriend).on(qFriend.requester.eq(qMember).or(qFriend.accepter.eq(qMember)))  // 친구 관계 조인
                 .where(qProduct.productId.eq(productId)   // 특정 productId에 해당하는 펀딩만 필터링
                         .and(qFriend.deleted.isFalse())
                         .and(qFriend.banned.isFalse())
