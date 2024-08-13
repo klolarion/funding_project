@@ -3,10 +3,10 @@ spring:
     name: funding_project
   #DB connection
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test_db
-    username: root
-    password: 1234
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://almagest-auth-server-db.c6xfdqe0sq9a.ap-northeast-2.rds.amazonaws.com:3306/almagest_auth
+    username: admin
+    password: almagest88
   thymeleaf:
     cache: false
     prefix: classpath:/templates/
@@ -47,4 +47,4 @@ application:
       expiration: 6000000 # 100 mins
 
 server:
-  port: 8081
+  port: 9091
