@@ -26,6 +26,7 @@ public interface AdminService {
     Member searchMember(Long id);
 
     //paymentMethod
+    List<PaymentMethod> paymentMethodList();
     PaymentMethod addPaymentMethod(PaymentMethodDto paymentMethodDto);
     boolean deletePaymentMethod(Long paymentMethodId);
 

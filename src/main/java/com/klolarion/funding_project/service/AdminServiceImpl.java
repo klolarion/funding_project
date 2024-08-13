@@ -8,6 +8,7 @@ import com.klolarion.funding_project.repository.PaymentRepository;
 import com.klolarion.funding_project.repository.ProductRepository;
 import com.klolarion.funding_project.service.blueprint.AdminService;
 import com.klolarion.funding_project.util.CurrentMember;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -82,15 +83,22 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public boolean setRestock(Long productId) {
         QProduct qProduct = QProduct.product;
-        long result = query.update(qProduct).set(qProduct.restock, true).execute();
+        long result = query.update(qProduct).set(qProduct.restock, new CaseBuilder()
+                .when(qProduct.restock.isTrue()).then(false)
+                .otherwise(true)).execute();
         em.flush();
         em.clear();
         return result == 1L;
     }
+
+
     @Override
     public boolean setSellFinished(Long productId) {
         QProduct qProduct = QProduct.product;
-        long result = query.update(qProduct).set(qProduct.saleFinished, true).execute();
+        long result = query.update(qProduct).set(qProduct.saleFinished,
+                new CaseBuilder()
+                        .when(qProduct.saleFinished.isTrue()).then(false)
+                        .otherwise(true)).execute();
         em.flush();
         em.clear();
         return result == 1L;
@@ -130,6 +138,8 @@ public class AdminServiceImpl implements AdminService {
         return member;
     }
 
+
+
     // paymentMethod
 
     @Override
@@ -150,6 +160,15 @@ public class AdminServiceImpl implements AdminService {
         em.flush();
         em.clear();
         return result == 1L;
+    }
+
+    @Override
+    public List<PaymentMethod> paymentMethodList() {
+        QPaymentMethod qPaymentMethod = QPaymentMethod.paymentMethod;
+        List<PaymentMethod> fetched = query.selectFrom(qPaymentMethod).fetch();
+        em.flush();
+        em.clear();
+        return fetched;
     }
 
     // code
