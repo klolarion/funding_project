@@ -121,38 +121,103 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean inviteMember(Long groupId, Long memberId) {
+    public GroupStatus inviteMember(Long groupId, Long memberId) {
+        QMember qMember = QMember.member;
+        QGroup qGroup = QGroup.group;
 
-        return false;
+        Group group = query.selectFrom(qGroup).where(qGroup.groupId.eq(groupId)).fetchOne();
+        Member groupLeader = query.selectFrom(qMember).where(qMember.memberId.eq(group.getGroupLeader().getMemberId())).fetchOne();
+        Member member = query.selectFrom(qMember).where(qMember.memberId.eq(memberId)).fetchOne();
+
+        GroupStatus groupStatus = new GroupStatus(
+                group, groupLeader, member
+        );
+        return groupStatusRepository.save(groupStatus);
     }
 
     @Override
-    public boolean acceptInviteRequest(Long groupId, Long memberId) {
-        return false;
+    public boolean acceptInviteRequest(Long groupStatusId, Long memberId) {
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+        long result = query.update(qGroupStatus).set(qGroupStatus.accepted, true).where(
+                qGroupStatus.groupMember.memberId.eq(memberId)
+                        .and(qGroupStatus.banned.isFalse())
+                        .and(qGroupStatus.exited.isFalse())
+        ).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
 
     @Override
-    public boolean requestToGroup(Long groupId) {
-        return false;
+    public GroupStatus requestToGroup(Long groupId) {
+        Member member = currentMember.getMember();
+        QMember qMember = QMember.member;
+        QGroup qGroup = QGroup.group;
+
+        Group group = query.selectFrom(qGroup).where(qGroup.groupId.eq(groupId)).fetchOne();
+        Member groupLeader = query.selectFrom(qMember).where(qMember.memberId.eq(group.getGroupLeader().getMemberId())).fetchOne();
+
+        GroupStatus groupStatus = new GroupStatus(
+                group,
+                groupLeader,
+                member
+        );
+        return groupStatusRepository.save(groupStatus);
+
     }
 
     @Override
-    public boolean acceptMemberRequest(Long groupId, Long memberId) {
-        return false;
+    public boolean acceptMemberRequest(Long groupStatusId, Long memberId) {
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+
+        long result = query.update(qGroupStatus)
+                .set(qGroupStatus.accepted, true)
+                .where(qGroupStatus.groupStatusId.eq(groupStatusId)
+                        .and(qGroupStatus.groupMember.memberId.eq(memberId))).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
 
     @Override
     public boolean exileMember(Long groupId, Long memberId) {
-        return false;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+        long result = query.update(qGroupStatus)
+                .set(qGroupStatus.exited, true)
+                .set(qGroupStatus.banned, true)
+                .where(
+                        qGroupStatus.group.groupId.eq(groupId)
+                        .and(qGroupStatus.groupMember.memberId.eq(memberId))
+                        .and(qGroupStatus.accepted.isTrue())
+        ).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
 
     @Override
     public boolean exitGroup(Long groupId, Long memberId) {
-        return false;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+        long result = query.update(qGroupStatus).set(qGroupStatus.exited, true).where(
+                qGroupStatus.group.groupId.eq(groupId)
+                        .and(qGroupStatus.groupMember.memberId.eq(memberId))
+                        .and(qGroupStatus.accepted.isTrue())
+        ).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
 
     @Override
     public boolean banMember(Long groupId, Long memberId) {
-        return false;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+        long result = query.update(qGroupStatus).set(qGroupStatus.banned, true).where(
+                qGroupStatus.group.groupId.eq(groupId)
+                        .and(qGroupStatus.groupMember.memberId.eq(memberId))
+                        .and(qGroupStatus.accepted.isTrue())
+        ).execute();
+        em.flush();
+        em.clear();
+        return result == 1L;
     }
 }
