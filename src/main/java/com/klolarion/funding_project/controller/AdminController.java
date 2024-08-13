@@ -1,5 +1,6 @@
 package com.klolarion.funding_project.controller;
 
+import com.klolarion.funding_project.domain.entity.CodeMaster;
 import com.klolarion.funding_project.dto.PaymentMethodDto;
 import com.klolarion.funding_project.service.AdminServiceImpl;
 import com.klolarion.funding_project.service.FundingServiceImpl;
@@ -28,7 +29,8 @@ public class AdminController {
     @GetMapping
     public String admin(Model model){
         model.addAttribute("products",productServiceImpl.allProducts() );
-        System.out.println(model.getAttribute("foundMember"));
+        model.addAttribute("codeList", adminServiceImpl.getCodes());
+//        model.addAttribute("paymentMethodList", adminServiceImpl());
         return "admin";
     }
 
@@ -36,6 +38,24 @@ public class AdminController {
     public String addProduct(@RequestParam String productName, @RequestParam Long price, @RequestParam int stock) {
         adminServiceImpl.addProduct(productName, price, stock);
         log.debug("상품 추가 성공");
+        return "redirect:/f1/admin";
+    }
+
+    @PostMapping("/stock")
+    public String addStock(@RequestParam Long productId, @RequestParam int stock) {
+        adminServiceImpl.addStock(productId, stock);
+        return "redirect:/f1/admin";
+    }
+
+    @PostMapping("/restock")
+    public  String restock(@RequestParam Long productId) {
+        adminServiceImpl.setRestock(productId);
+        return "redirect:/f1/admin";
+    }
+
+    @PostMapping("/saleFinished")
+    public String saleFinished(@RequestParam Long productId) {
+        adminServiceImpl.setSellFinished(productId);
         return "redirect:/f1/admin";
     }
 
@@ -58,33 +78,39 @@ public class AdminController {
         return "redirect:/f1/admin";
     }
 
-    //상품 action
-//    @PostMapping("/productDelete")
-//    public String productDelete(@RequestParam Long productId) {
-//
-//        return "redirect:/admin";
-//    }
-    @PostMapping("/stock")
-    public String addStock(@RequestParam Long productId, @RequestParam int stock) {
-        adminServiceImpl.addStock(productId, stock);
+    //펀딩
+    @PostMapping("/funding/closed")
+    public String closeFunding(@RequestParam Long fundingId, RedirectAttributes redirectAttributes) {
+        adminServiceImpl.closeFunding(fundingId);
         return "redirect:/f1/admin";
     }
 
-    @PostMapping("/restock")
-    public  String restock(@RequestParam Long productId) {
-        adminServiceImpl.setRestock(productId);
+    @PostMapping("/funding/delete")
+    public String deleteFunding(@RequestParam Long fundingId, RedirectAttributes redirectAttributes) {
+        adminServiceImpl.deleteFunding(fundingId);
         return "redirect:/f1/admin";
     }
 
-    @PostMapping("/saleFinished")
-    public String saleFinished(@RequestParam Long productId) {
-        adminServiceImpl.setSellFinished(productId);
+    //코드
+    @PostMapping("/code")
+    public  String addCode(@RequestParam int code, @RequestParam String description, @RequestParam String reference, RedirectAttributes redirectAttributes) {
+        adminServiceImpl.addCode(code, description, reference);
         return "redirect:/f1/admin";
     }
 
+    @GetMapping("/code")
+    public String deleteCode(@RequestParam Long codeId, RedirectAttributes redirectAttributes) {
+        adminServiceImpl.deleteCode(codeId);
+        return "redirect:/f1/admin";
+    }
+
+    //결제 수단
     @PostMapping("/paymentMethod")
-    public String addPaymentMethod(@RequestParam int code, @RequestParam String paymentName, @RequestParam String accountNumber, @RequestParam Long availableAmount, RedirectAttributes redirectAttributes) {
-//        redirectAttributes.addFlashAttribute("paymentList", adminServiceImpl.addPaymentMethod(code, paymentName, accountNumber, availableAmount));
+    public String addPaymentMethod(@RequestParam Long codeId, @RequestParam String accountNumber, @RequestParam Long availableAmount, RedirectAttributes redirectAttributes) {
+//        adminServiceImpl.getCode(codeId);
+//        System.out.println(adminServiceImpl.getCode(codeId).getDescription());
+        PaymentMethodDto paymentMethodDto = new PaymentMethodDto(adminServiceImpl.getCode(codeId), accountNumber, availableAmount);
+        adminServiceImpl.addPaymentMethod(paymentMethodDto);
         return "redirect:/f1/admin";
     }
 

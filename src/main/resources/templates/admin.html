@@ -10,6 +10,8 @@
     #product {margin: 20px 0}
     #product span {font-weight: bold}
     #util form {margin-bottom: 5px}
+    #code{display: flex}
+    #code-list{margin-left: 30px; border:1px solid gray; max-height:200px ; overflow: scroll}
 </style>
 <body>
     <div id="add-product">
@@ -69,9 +71,31 @@
             <button>검색</button>
         </form>
         <div th:if="${foundFunding}">
-            <span th:text="${foundFunding.fundingId}">펀딩ID</span>
-            <span th:text="${foundFunding.memberId}">사용자ID</span>
-            <span><a>정지</a></span>
+            <div>
+                <span th:text="${foundFunding.fundingId}">펀딩ID</span>
+                <span th:text="${foundFunding.member.memberName}">사용자 이름</span>
+                <span th:text="${foundFunding.product.productName}">상품 이름</span>
+                <span th:text="${foundFunding.totalFundingAmount}">펀딩 금액</span>
+                <span th:text="${foundFunding.currentFundingAmount}">현재 금액</span>
+                <span th:text="${foundFunding.completed}">완료</span>
+                <span th:text="${foundFunding.closed}">종료</span>
+                <span th:text="${foundFunding.deleted}">삭제</span>
+            </div>
+            <div>
+                <form method="post" th:action="@{/f1/admin/funding/closed}">
+                    <input type="hidden" name="fundingId" th:value="${foundFunding.fundingId}">
+                    <label>펀딩종료</label>
+                    <input type="checkbox">
+                    <button>반영</button>
+                </form>
+
+                <form method="post" th:action="@{/f1/admin/funding/delete}">
+                    <input type="hidden" name="fundingId" th:value="${foundFunding.fundingId}">
+                    <label>펀딩삭제</label>
+                    <input type="checkbox">
+                    <button>반영</button>
+                </form>
+            </div>
         </div>
     </div>
     <div>
@@ -86,20 +110,40 @@
             <span><a>정지</a></span>
         </div>
     </div>
-    <div>
+    <div id="code">
+        <div>
+            <h2>코드 등록</h2>
+            <form method="post" th:action="@{/f1/admin/code}">
+                <label>코드</label><input type="number" name="code"><br>
+                <label>설명</label><input name="description"><br>
+                <label>레퍼런스</label><input name="reference"><br>
+                <button>코드 등록</button>
+            </form>
+        </div>
+        <div id="code-list">
+            <h2>코드 리스트</h2>
+            <div id="code-list-box" th:if="${codeList}" th:each="code : ${codeList}">
+                <span th:text="${code.getCodeId()}">아이디</span>
+                <span th:text="${code.getCode()}">코드</span>
+                <span th:text="${code.getDescription()}">코드이름</span>
+                <span th:text="${code.getReference()}">레퍼런스</span>
+                <span><a th:href="@{/f1/admin/code(codeId=${code.getCodeId()})}"> 코드삭제</a></span>
+            </div>
+        </div>
+    </div>
+    <div >
         <h2>결제 수단 등록</h2>
         <form method="post" th:action="@{/f1/admin/paymentMethod}">
-            <label>코드</label><input type="number" name="code"><br>
-            <label>결제 수단명</label><input name="paymentName"><br>
+            <label>코드 아이디</label><input type="number" name="codeId"><br>
             <label>계좌번호</label><input name="accountNumber"><br>
             <label>잔고</label><input type="number" name="availableAmount"><br>
             <button>결제 수단 등록</button>
         </form>
-        <div th:if="${paymentList}" th:each="payment : ${paymentList}">
-            <span th:text="${payment.code}">아이디</span>
-            <span th:text="${payment.paymeneName}">이름</span>
-            <span th:text="${payment.accountNumber}">이메일</span>
-            <span><a th:href="@{/admin/paymentDelete(paymentId=${payment.id})}">삭제</a></span>
+        <div th:if="${paymentMethodList}" th:each="paymentMethod : ${paymentMethodList}">
+            <span th:text="${paymentMethod.code}">아이디</span>
+            <span th:text="${paymentMethod.paymeneName}">이름</span>
+            <span th:text="${paymentMethod.accountNumber}">이메일</span>
+            <span><a th:href="@{/f1/admin/paymentDelete(paymentId=${payment.id})}">삭제</a></span>
         </div>
     </div>
 </body>
