@@ -40,6 +40,12 @@ public class FriendServiceImpl implements FriendService {
         return saved;
     }
 
+
+    /*친구이름으로 친구 검색
+    * 나와 친구가 아니고 -> friend테이블에 없어야함
+    * 요청 차단중이 아니고 -> friend테이블에 banned확인
+    * 이미 수락된 요청이 있는지 확인 -> friend_status accepted확인
+    * */
     @Override
     public List<FriendDto> searchFriend() {
         return null;
