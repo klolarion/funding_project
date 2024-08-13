@@ -32,8 +32,10 @@
         // event.preventDefault();
 
         const data = {
+            id : null,
             account: document.getElementById('account').value,
-            password: document.getElementById('password').value
+            password: document.getElementById('password').value,
+            firebaseToken : null
         };
 
         console.log(data.account);
@@ -51,6 +53,7 @@
                 if (response.ok) {
                     return response.json();  // 응답이 성공적이라면 JSON으로 파싱
                 } else {
+                    console.log(JSON.stringify(data))
                     throw new Error('Authentication failed');
                 }
             })
