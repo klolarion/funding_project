@@ -18,10 +18,14 @@
 <body>
     <div id="login-form">
         <h1>로그인</h1>
-        <form th:action="@{/f1/loginPost}" method="post">
-            <input type="text" name="account" placeholder="Account" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
+        <form method="post">
+            <div>
+                <input placeholder="아이디를 입력하세요.">
+            </div>
+            <div>
+                <input type="password" placeholder="비밀번호를 입력하세요.">
+            </div>
+            <button> 로그인 하기</button>
         </form>
         <div id="buttons">
             <a href="@{/register}">회원가입</a>
