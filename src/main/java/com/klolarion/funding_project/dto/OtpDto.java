@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDto {
-    private String id;
+@Data
+public class OtpDto {
     private String account;
-    private String password;
+    private String serviceName;
+    private String code;
     private String firebaseToken;
 }

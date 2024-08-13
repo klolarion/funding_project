@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>OTP</title>
 </head>
 <style>
     *{ margin: 0; padding: 0; text-decoration: none}
@@ -10,22 +10,17 @@
     h1{ margin: 120px 0 40px 0}
     form div { margin-bottom: 1rem }
     form input {width: 100%; padding: 15px; box-sizing: border-box; border: 1px solid #EFEFEF; border-radius: 5px}
-    form button {width: 100%; margin: 20px 0; padding: 15px; border: none; background-color: #e9e9fa; color: #4949cc; border-radius: 5px
-    }
-    a {color: #4949CCFF; font-size:14px}
-    #buttons{display: flex; justify-content: flex-end;}
+    form button {width: 100%; margin: 20px 0; padding: 15px; border: none; background-color: #e9e9fa; color: #4949cc; border-radius: 5px}
 </style>
 <body>
 <div id="login-form">
-    <h1>로그인</h1>
+    <h1>OTP</h1>
     <form id="loginForm">
         <div>
-            <input name="account" id="account" placeholder="아이디를 입력하세요.">
+            <input type="hidden" name="account" value="${account}">
+            <input name="code" id="code" placeholder="OTP를 입력하세요.">
         </div>
-        <div>
-            <input name="password" id="password" type="password" placeholder="비밀번호를 입력하세요.">
-        </div>
-        <button type="button" onclick="submitForm()"> 로그인 하기</button>
+        <button type="button" onclick="submitForm()">전송</button>
     </form>
 </div>
 
@@ -35,16 +30,13 @@
         // event.preventDefault();
 
         const data = {
-            id : null,
-            account: document.getElementById('account').value,
-            password: document.getElementById('password').value,
-            firebaseToken : null
+            code: document.getElementById('code').value,
+            account: document.getElementById('account').value
         };
 
         console.log(JSON.stringify(data));
 
-
-        fetch('https://almagest-auth.com/api/v1/auth/login', {
+        fetch('https://almagest-auth.com/api/v1/auth/req', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -55,7 +47,6 @@
                 if (response.ok) {
                     return response.json();  // 응답이 성공적이라면 JSON으로 파싱
                 } else {
-                    console.log(JSON.stringify(data))
                     throw new Error('Authentication failed');
                 }
             })
