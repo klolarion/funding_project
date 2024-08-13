@@ -23,13 +23,11 @@ public class LoginController {
     @GetMapping("/login")
     public String login() {
 
-        System.out.println("------- Login get -----");
-
         return "login";
     }
 
     @GetMapping("/otp")
-    public String otp(@ModelAttribute Model model) {
+    public String otp(Model model) {
         String account = (String) model.getAttribute("account");
         model.addAttribute("account", account);
 
@@ -37,16 +35,13 @@ public class LoginController {
         System.out.println("------- Otp get-----");
         System.out.println(account);
 
-        return "login";
+        return "otp";
     }
 
     @PostMapping("/loginPost")
     public String loginPost(@ModelAttribute LoginDto loginDto, RedirectAttributes redirectAttributes) {
         // 외부 서버로 요청을 보내기 위해 RestTemplate 사용
         RestTemplate restTemplate = new RestTemplate();
-
-        System.out.println("--------Login--------");
-        System.out.println(loginDto.getAccount() +", " + loginDto.getPassword());
 
         // 외부 서버의 URL
         String externalUrl = "https://almagest-auth.com/api/v1/auth/login";

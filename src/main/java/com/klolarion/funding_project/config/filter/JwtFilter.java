@@ -35,7 +35,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         //토큰인증없이 넘어갈 경로
         if (request.getServletPath().contains("/f1")){
-//            System.out.println(request.getServletPath());
             filterChain.doFilter(request, response);
             return;
         }
@@ -116,13 +115,9 @@ public class JwtFilter extends OncePerRequestFilter {
 //                return;
 //            }
 //
-//            //csrf토큰이 redis에 저장된 토큰과 같은지 확인
-//            try {
-//                tokenService.isMemberCsrfTokenValid(csrfToken);
-//            } catch (Exception e) {
-//                filterChain.doFilter(request, response);
-//                return;
-//            }
+
+            //csrf토큰이 redis에 저장된 토큰과 같은지 확인
+
 //
 //            //httpOnly쿠키에서 access_token추출
 //            Cookie[] cookies = request.getCookies();
@@ -167,5 +162,6 @@ public class JwtFilter extends OncePerRequestFilter {
 //
 //            filterChain.doFilter(request, response);
 //        }
+
     }
 }
