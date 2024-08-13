@@ -12,6 +12,7 @@ import com.klolarion.funding_project.util.RandomAccountGenerator;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -325,7 +326,7 @@ public class FundingServiceImpl implements FundingService {
                         qGroup
                 ).from(qMember)
                 .join(qProduct).on(qProduct.productId.eq(productId))
-                .join(qGroup).on(qGroup.groupId.eq(groupId))
+                .leftJoin(qGroup).on((groupId != null ? qGroup.groupId.eq(groupId) : Expressions.TRUE))
                 .where(qMember.memberId.eq(memberId))
                 .fetchOne();
 
