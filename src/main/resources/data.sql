@@ -74,13 +74,13 @@ values (5, '카카오페이', 203, '333-33213-77', 0);
 --paymentMethodList
 
 insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
-values (1, 1, 2, true, false);
+values (1, 1, 1, true, false);
 
 insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
-values (2, 3, 2, false, false);
+values (2, 3, 1, false, false);
 
 insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
-values (3, 4, 2, false, false);
+values (3, 4, 1, false, false);
 
 insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
 values (4, 1, 3, false, false);
