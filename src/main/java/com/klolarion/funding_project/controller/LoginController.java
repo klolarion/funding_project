@@ -48,7 +48,7 @@ public class LoginController {
         System.out.println(loginDto.getAccount() +", " + loginDto.getPassword());
 
         // 외부 서버의 URL
-        String externalUrl = "https://almagest-auth.com/api/v1/auth";
+        String externalUrl = "https://almagest-auth.com/api/v1/auth/login";
 
         // 요청 헤더 설정 (필요한 경우)
         HttpHeaders headers = new HttpHeaders();
