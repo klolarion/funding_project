@@ -104,12 +104,16 @@ public class FundingServiceImpl implements FundingService {
 
     public FundingListDto fundingDetail(Long fundingId){
         QFunding qFunding = QFunding.funding;
-
+//        System.out.println("tlfgod");
         FundingListDto fundingListDto = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
                         qFunding.member.memberId,
-                        qFunding.group.groupId,
-                        qFunding.group.groupName,
+//                        new CaseBuilder()
+//                        .when(qFunding.group.groupId.isNull()).then(Expressions.constant(0L))  // 그룹 ID가 null인 경우 null로 처리
+//                        .otherwise(qFunding.group.groupId),  // 그룹 ID가 null이 아닌 경우
+//                    new CaseBuilder()
+//                        .when(qFunding.group.groupName.isNull()).then(Expressions.constant(""))  // 그룹 이름이 null인 경우 빈 문자열로 처리
+//                        .otherwise(qFunding.group.groupName),
                         qFunding.member.memberName,
                         qFunding.product.productId,
                         qFunding.product.productName,
@@ -129,10 +133,10 @@ public class FundingServiceImpl implements FundingService {
                 .from(qFunding)
                 .where(qFunding.fundingId.eq(fundingId))  // 특정 fundingId에 해당하는 펀딩 조회
                 .fetchOne();
+//        System.out.println("hhh");
         em.flush();
         em.clear();
         return fundingListDto;
-
     }
 
 
@@ -409,7 +413,6 @@ public class FundingServiceImpl implements FundingService {
         QPaymentMethod qPaymentMethod = QPaymentMethod.paymentMethod;
         QMember qMember = QMember.member;
 
-
         //조건에 해당하는 펀딩, 결제수단 객체 조회
         Tuple result = query.select(
                         qFunding,
@@ -427,7 +430,6 @@ public class FundingServiceImpl implements FundingService {
         Funding funding = result.get(qFunding);
         PaymentMethod paymentMethod = result.get(qPaymentMethod);
         Member member = result.get(qMember);
-
 
         //금액조건이 유효하면 송금처리 후 결제목록 생성
         if (paymentMethod.getAvailableAmount() >= amount &&

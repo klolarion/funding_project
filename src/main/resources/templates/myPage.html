@@ -5,13 +5,13 @@
     <title>My page</title>
 </head>
 <style>
-    header {display: flex; justify-content: space-between; padding: 0px}
+    header {display: flex; justify-content: space-between;}
     #header-right{ margin: 20px 20px}
     header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
-    header a{text-decoration: none; padding: 10px 20px; color: black}
+    #header-right a{text-decoration: none; padding: 10px 20px; color: black}
 
     body{padding: 0 180px}
-    #mypage{display: flex; }
+    #mypage{display: flex; margin-top: 20px}
     #mypage-left{width: 150px; padding-right:100px; border-right: 1px solid #cccccc
     }
     #mypage-util button {width:100%; padding:10px ; margin-bottom: 10px; border:none; border-radius: 5px; background-color: #ecebeb; color: #79797e;}
@@ -24,6 +24,10 @@
 
     .mypage-bottom-list ul{border: 1px solid #cccccc; border-radius: 5px; padding: 20px; max-height: 200px; overflow: scroll}
     .mypage-bottom-list li{margin: 0 0 20px 10px}
+
+    a{text-decoration: none; color: black}
+    span {margin-right: 5px}
+    #funding-status{border-radius: 20px; background-color: #E9E9FAFF; color:#7171DFFF; font-size: small; padding: 5px 10px}
 
 </style>
 <div th:insert="fragments/header :: header"></div>
@@ -58,33 +62,41 @@
                 <div class="mypage-top-list">
                     <h3>결제 수단</h3>
                     <p>내 대표 결제 수단</p>
-                    <a th:href="@{/paymentMethod}"><button>결제 수단 관리</button></a>
+                    <a th:href="@{/f1/paymentMethod}"><button>결제 수단 관리</button></a>
                 </div>
             </div>
             <div class="mypage-bottom-list">
                 <h3>펀딩 내역</h3>
                 <ul>
-                    <li><a>펀딩 이름</a></li>
+                    <li th:each="myFunding: ${myFundingList}">
+                        <a th:href="@{/f1/detail(fundingId=${myFunding.getFundingId()})}">
+                            <span th:text="${myFunding.productName}"></span>
+                            <span th:text="${myFunding.progress} +'%'"></span>
+                            <span th:text="${myFunding.totalFundingAmount} +'원'"></span>
+                            <span id="funding-status" th:text="${myFunding.status}"></span>
+                        </a>
+
+                    </li>
                 </ul>
             </div>
-            <div class="mypage-bottom-list">
-                <h3>구매 내역</h3>
-                <ul>
-                    <li>상품 이름</li>
-                    <li>상품 이름</li>
-                    <li>상품 이름</li>
-                    <li>상품 이름</li>
-                    <li>상품 이름</li>
-                    <li>상품 이름</li>
-                    <li>상품 이름</li>
-                    <li>상품 이름</li>
-                    <li>상품 이름</li>
-                    <li>상품 이름</li>
-                    <li>상품 이름</li>
-                    <li>상품 이름</li>
-                    <li>상품 이름</li>
-                </ul>
-            </div>
+<!--            <div class="mypage-bottom-list">-->
+<!--                <h3>구매 내역</h3>-->
+<!--                <ul>-->
+<!--                    <li>상품 이름</li>-->
+<!--                    <li>상품 이름</li>-->
+<!--                    <li>상품 이름</li>-->
+<!--                    <li>상품 이름</li>-->
+<!--                    <li>상품 이름</li>-->
+<!--                    <li>상품 이름</li>-->
+<!--                    <li>상품 이름</li>-->
+<!--                    <li>상품 이름</li>-->
+<!--                    <li>상품 이름</li>-->
+<!--                    <li>상품 이름</li>-->
+<!--                    <li>상품 이름</li>-->
+<!--                    <li>상품 이름</li>-->
+<!--                    <li>상품 이름</li>-->
+<!--                </ul>-->
+<!--            </div>-->
 
         </div>
 

@@ -103,10 +103,10 @@ public class JwtFilter extends OncePerRequestFilter {
 //
 //            filterChain.doFilter(request, response);
 //        }
-        //기타 모든 요청 (사용자)
-        else {
-
-            //csrf토큰추출
+//        //기타 모든 요청 (사용자)
+//        else {
+//
+//            //csrf토큰추출
 //            final String csrfToken = request.getHeader("csrf");
 //
 //            //헤더에 csrf토큰이 없으면 거부
@@ -114,57 +114,54 @@ public class JwtFilter extends OncePerRequestFilter {
 //                filterChain.doFilter(request, response);
 //                return;
 //            }
+//
 
             //csrf토큰이 redis에 저장된 토큰과 같은지 확인
+
+//
+//            //httpOnly쿠키에서 access_token추출
+//            Cookie[] cookies = request.getCookies();
+//            String token = null;
 //            try {
-//                tokenService.isMemberCsrfTokenValid(csrfToken);
+//                for (Cookie cookie : cookies) {
+//                    if ("access_token".equals(cookie.getName())) {
+//                        token = cookie.getValue();
+//                        break;
+//                    }
+//                }
 //            } catch (Exception e) {
-//                filterChain.doFilter(request, response);
-//                return;
 //            }
+//            final String jwt = token;
+//            final String account;
+//            try {
+//                account = tokenService.extractMemberAccount(jwt);//jwt토큰에서 계정명 추출
+//                //추출된 계정명인 null이 아니고 보안컨텍스트의 인증정보가 null인경우 추출된 계정명으로 사용자정보를 db에서 불러온다.
+//                //보안컨텍스트에 인증정보가 존재하면 넘어간다.
+//                //불러온 사용자정보를 UsernamePasswordAuthenticationToken에 넣고 보안컨텍스트에 등록한다.
+//
+//                if (account != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//
+//                    CustomUserDetails userDetails = this.customUserDetailsService.loadUserByUsername(account);
+//
+//                    //토큰검증
+//                    if (tokenService.isMemberTokenValid(jwt, userDetails)) {
+//                        //UsernamePasswordAuthenticationToken은 추후 인증이 끝나고 SecurityContextHolder.getContext()에 등록될 Authentication 객체이다
+//                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+//                                userDetails.getUsername(),
+//                                userDetails.getPassword(),
+//                                userDetails.getAuthorities()
+//                        );
+//                        authToken.setDetails(
+//                                new WebAuthenticationDetailsSource().buildDetails(request)
+//                        );
+//                        SecurityContextHolder.getContext().setAuthentication(authToken);
+//                    }
+//                }
+//            } catch (Exception e) {
+//            }
+//
+//            filterChain.doFilter(request, response);
+//        }
 
-            //httpOnly쿠키에서 access_token추출
-            Cookie[] cookies = request.getCookies();
-            String token = null;
-            try {
-                for (Cookie cookie : cookies) {
-                    if ("access_token".equals(cookie.getName())) {
-                        token = cookie.getValue();
-                        break;
-                    }
-                }
-            } catch (Exception e) {
-            }
-            final String jwt = token;
-            final String account;
-            try {
-                account = tokenService.extractMemberAccount(jwt);//jwt토큰에서 계정명 추출
-                //추출된 계정명인 null이 아니고 보안컨텍스트의 인증정보가 null인경우 추출된 계정명으로 사용자정보를 db에서 불러온다.
-                //보안컨텍스트에 인증정보가 존재하면 넘어간다.
-                //불러온 사용자정보를 UsernamePasswordAuthenticationToken에 넣고 보안컨텍스트에 등록한다.
-
-                if (account != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-                    CustomUserDetails userDetails = this.customUserDetailsService.loadUserByUsername(account);
-
-                    //토큰검증
-                    if (tokenService.isMemberTokenValid(jwt, userDetails)) {
-                        //UsernamePasswordAuthenticationToken은 추후 인증이 끝나고 SecurityContextHolder.getContext()에 등록될 Authentication 객체이다
-                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                                userDetails.getUsername(),
-                                userDetails.getPassword(),
-                                userDetails.getAuthorities()
-                        );
-                        authToken.setDetails(
-                                new WebAuthenticationDetailsSource().buildDetails(request)
-                        );
-                        SecurityContextHolder.getContext().setAuthentication(authToken);
-                    }
-                }
-            } catch (Exception e) {
-            }
-
-            filterChain.doFilter(request, response);
-        }
     }
 }

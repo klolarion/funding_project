@@ -2,15 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>create</title>
+    <title>Create Funding</title>
 </head>
 <style>
-    body{padding: 0 90px; margin: 150px auto; width: 500px}
+    body{padding: 0 90px; margin: 50px auto; width: 500px}
     #total-money {display: flex; justify-content: space-between; margin:30px 0; padding: 20px 0; border-top: 1px solid #cccccc
     }
-    button{width:100%; padding:15px; background-color: #E9E9FAFF; color: #4949CCFF; border:none; border-radius: 5px; font-size: 15px; font-weight: bold;}
+    h3{margin-top: 40px}
+    button{width:100%; padding:15px; background-color: #E9E9FAFF; color: #4444e6; border:none; border-radius: 5px; font-size: 15px; }
     .list {margin-bottom: 20px}
     #product-option {margin-bottom: 10px}
+    #product-list { border: 1px solid #CCCCCCFF; border-radius: 10px; padding: 10px 0; height: 200px; overflow: scroll}
+    #product-option button { background-color: white; color: black; font-weight: normal; border-radius: 0px}
+    #product-option button:hover {background-color: #E9E9FAFF}
     #target-price p {width: 100%; margin:10px 0; padding: 15px; box-sizing: border-box; border: 1px solid #cccccc; border-radius: 5px}
     #group-option span {font-size: small; color: #79797e}
 </style>
@@ -19,23 +23,31 @@
     <div>
         <h1>펀딩 만들기</h1>
         <div>
-            <form method="post" >
+            <form method="post" th:action="@{/f1/funding}">
                 <div class="list" id="product-option">
-                    <label>상품 선택</label><br>
-                    <input type="radio" name="option" value="option1"> Option 1<br>
-                    <input type="radio" name="option" value="option2"> Option 2<br>
-                    <input type="radio" name="option" value="option3"> Option 3<br>
+                    <h3>상품 선택</h3>
+                    <div id="product-list">
+                        <div th:each="product : ${productList}">
+
+                            <button type="button" th:name="${product.getProductId()} "
+                                    th:attr="data-price=${product.getPrice()}" th:text="${product.getProductName()}" onclick="setPriceAndInput(this)"></button>
+                        </div>
+                    </div>
                 </div>
                 <div class="list" id="target-price">
-                    <label>목표 금액</label><br>
+                    <h3>목표 금액</h3>
                     <p></p>
                 </div>
                 <div class="list" id="group-option">
-                    <label>그룹 선택 <span>   *옵션</span></label><br>
-                    <input type="radio" name="group" value="option1"> Option 1<br>
-                    <input type="radio" name="group" value="option2"> Option 2<br>
-                    <input type="radio" name="group" value="option3"> Option 3<br>
+                    <h3>그룹 선택 <span>   *옵션</span></h3>
+                    <div id="group-list">
+<!--                        <div th:each="product : ${productList}">-->
+<!--                            <button type="button" th:name="${product.getProductId()} "-->
+<!--                                    th:attr="data-price=${product.getPrice()}" th:text="${product.getProductName()}" onclick="setPrice(this)"></button>-->
+<!--                        </div>-->
+                    </div>
                 </div>
+                <input type="hidden" id="selectedProductId" name="productId">
                 <button>펀딩 만들기</button>
             </form>
 
@@ -44,4 +56,18 @@
     </div>
 </div>
 </body>
+<script>
+    function setPriceAndInput(button) {
+        const price = button.getAttribute('data-price');  // 버튼의 data-price 속성에서 가격 가져오기
+        const productId = button.getAttribute('name');
+
+        //목표 금액
+        const targetPriceElement = document.querySelector('#target-price p');  // 목표 금액 p 태그 선택
+        targetPriceElement.textContent = `${price}원`;
+
+        //가격 설정
+        document.getElementById('selectedProductId').value = productId;
+
+    }
+</script>
 </html>

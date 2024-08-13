@@ -1,6 +1,11 @@
 package com.klolarion.funding_project.controller;
 
+import com.klolarion.funding_project.domain.entity.Member;
+import com.klolarion.funding_project.repository.FundingRepository;
 import com.klolarion.funding_project.service.FundingServiceImpl;
+import com.klolarion.funding_project.service.MemberServiceImpl;
+import com.klolarion.funding_project.service.ProductServiceImpl;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -9,22 +14,25 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/create")
+@RequestMapping("/f1/funding")
 @Slf4j
 public class CreateFundingController {
     private final FundingServiceImpl fundingServiceImpl;
+    private final ProductServiceImpl productServiceImpl;
+    private final MemberServiceImpl memberServiceImpl;
 
     @GetMapping
-    public String createFunding(Model model) {
-//        model.addAttribute("funding", fundingServiceImpl.createFunding(1L, null,null) );
+    public String funding(Model model) {
+        model.addAttribute("productList",productServiceImpl.allProducts());
+
         return "createFunding";
     }
 
-//    @PostMapping
-//    public String createFunding(@RequestParam String productId, @RequestParam String groupId) {
-//
-////        log.debug(productId + groupId);
-////        return "redirect:/createFunding";
-//
-//    }
+    @PostMapping
+    public String createFunding(@RequestParam Long productId, @RequestParam(required = false) Long groupId, HttpSession session) {
+        Member member = (Member) session.getAttribute("member");
+
+        fundingServiceImpl.createFunding(member.getMemberId(), productId, groupId);
+        return "redirect:/f1";
+    }
 }
