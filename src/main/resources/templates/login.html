@@ -54,10 +54,12 @@
                 } else {
                     console.log(JSON.stringify(data))
                     throw new Error('Authentication failed');
+
                 }
             })
             .then(result => {
                 console.log('Authentication successful:', result);
+                window.location.href = '/f1/otp';
                 // 인증이 성공하면 원하는 작업을 수행 (예: 리다이렉트)
             })
             .catch((error) => {

@@ -36,7 +36,7 @@ public class LoginController {
         System.out.println("------- Otp get-----");
         System.out.println(account);
 
-        return "login";
+        return "otp";
     }
 
     @PostMapping("/loginPost")
