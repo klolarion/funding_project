@@ -36,6 +36,9 @@ public class LoginController {
         // 외부 서버로 요청을 보내기 위해 RestTemplate 사용
         RestTemplate restTemplate = new RestTemplate();
 
+        System.out.println("--------Login--------");
+        System.out.println(loginDto.getAccount() +", " + loginDto.getPassword());
+
         // 외부 서버의 URL
         String externalUrl = "https://almagest-auth.com/api/v1/auth";
 
@@ -57,12 +60,14 @@ public class LoginController {
     @PostMapping("/otpPost")
     public String otpPost(@ModelAttribute OtpDto otpDto) {
 
+        System.out.println("------- Otp -----");
+        System.out.println(otpDto.getAccount() + ", " + otpDto.getCode());
 
         // 외부 서버로 요청을 보내기 위해 RestTemplate 사용
         RestTemplate restTemplate = new RestTemplate();
 
         // 외부 서버의 URL
-        String externalUrl = "https://almagest-auth.com/api/v1/auth";
+        String externalUrl = "https://almagest-auth.com/api/v1/req";
 
         // 요청 헤더 설정 (필요한 경우)
         HttpHeaders headers = new HttpHeaders();
