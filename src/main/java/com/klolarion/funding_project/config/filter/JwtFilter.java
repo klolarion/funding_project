@@ -107,21 +107,21 @@ public class JwtFilter extends OncePerRequestFilter {
         else {
 
             //csrf토큰추출
-            final String csrfToken = request.getHeader("csrf");
-
-            //헤더에 csrf토큰이 없으면 거부
-            if (csrfToken == null) {
-                filterChain.doFilter(request, response);
-                return;
-            }
+//            final String csrfToken = request.getHeader("csrf");
+//
+//            //헤더에 csrf토큰이 없으면 거부
+//            if (csrfToken == null) {
+//                filterChain.doFilter(request, response);
+//                return;
+//            }
 
             //csrf토큰이 redis에 저장된 토큰과 같은지 확인
-            try {
-                tokenService.isMemberCsrfTokenValid(csrfToken);
-            } catch (Exception e) {
-                filterChain.doFilter(request, response);
-                return;
-            }
+//            try {
+//                tokenService.isMemberCsrfTokenValid(csrfToken);
+//            } catch (Exception e) {
+//                filterChain.doFilter(request, response);
+//                return;
+//            }
 
             //httpOnly쿠키에서 access_token추출
             Cookie[] cookies = request.getCookies();
