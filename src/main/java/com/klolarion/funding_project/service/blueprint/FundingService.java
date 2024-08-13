@@ -16,6 +16,9 @@ public interface FundingService {
     /*내 펀딩 리스트 조회*/
     List<FundingListDto> myFundingList();
 
+    /*펀딩 조회*/
+    FundingListDto fundingDetail(Long fundingID);
+
     /*내 그룹별 펀딩 리스트 조회*/
     Map<String, List<FundingListDto>> allFundingListByGroup(Long groupId);
 

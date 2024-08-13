@@ -102,6 +102,39 @@ public class FundingServiceImpl implements FundingService {
         return myFundingListDtos;
     }
 
+    public FundingListDto fundingDetail(Long fundingId){
+        QFunding qFunding = QFunding.funding;
+
+        FundingListDto fundingListDto = query.select(Projections.constructor(FundingListDto.class,
+                        qFunding.fundingId,
+                        qFunding.member.memberId,
+                        qFunding.group.groupId,
+                        qFunding.group.groupName,
+                        qFunding.member.memberName,
+                        qFunding.product.productId,
+                        qFunding.product.productName,
+                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+                        qFunding.totalFundingAmount,
+                        qFunding.currentFundingAmount,
+                        qFunding.fundingAccount,
+                        new CaseBuilder()
+                                .when(qFunding.deleted.isTrue())
+                                .then("삭제")
+                                .when(qFunding.completed.isTrue())
+                                .then("완료")
+                                .when(qFunding.closed.isTrue())
+                                .then("중단")
+                                .otherwise("펀딩중").as("status")
+                ))
+                .from(qFunding)
+                .where(qFunding.fundingId.eq(fundingId))  // 특정 fundingId에 해당하는 펀딩 조회
+                .fetchOne();
+        em.flush();
+        em.clear();
+        return fundingListDto;
+
+    }
+
 
     /*내가속한 그룹별 펀딩리스트*/
     @Override

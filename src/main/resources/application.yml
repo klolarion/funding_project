@@ -19,7 +19,7 @@ spring:
       mode: always # h2같은 임베디드 데이터베이스 외 mysql같은 db에 data.sql로 초기화 하기 위함
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     defer-datasource-initialization: true # data.sql으로 스프링부트실행시 데이터삽입
     show-sql: true
     properties:
@@ -32,8 +32,8 @@ spring:
   #Redis
   data:
     redis:
-#      host: redis
-      host: localhost
+      host: redis
+#      host: localhost
       port: 6379
 
 springdoc:
