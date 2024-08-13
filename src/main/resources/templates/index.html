@@ -6,14 +6,14 @@
 
 </head>
 <style>
-  header {display: flex; justify-content: space-between; padding: 0px}
-  #header-right{ margin: 20px 20px}
-  header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
-  header a{text-decoration: none; padding: 10px 20px; color: black}
-
+    header {display: flex; justify-content: space-between; }
+    #header-right{ margin: 20px 20px}
+    header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
+    #header-right a{text-decoration: none; padding: 10px 20px; color: black}
+  a{text-decoration: none; color: black}
   body{text-decoration: none; padding: 0 180px}
   .funding-list{display: flex;  flex-wrap: wrap; }
-  .list-items{width:280px; height: 110px; margin-bottom: 40px;  border: 1px solid #bfbfbf; margin-right: 20px; padding: 10px;  border-radius: 10px;flex-shrink: 0;}
+  .list-items{width:200px; height: 110px; margin-bottom: 40px;  border: 1px solid #bfbfbf; margin-right: 20px; padding: 10px;  border-radius: 10px; flex-shrink: 0; text-align: center}
   .funding-progress {color: #4b85ff; font-weight: bolder}
 
 </style>
@@ -21,24 +21,28 @@
 <body>
     <h3>전체 펀딩</h3>
     <div class="funding-list" >
-      <div class="list-items" th:each="funding : ${allFundingList}">
-        <p class="funding-progress"  th:text="${funding.getProgress()} + '%'">펀딩진행률</p>
-        <p th:text="${funding.getProductName()}">상품 이름</p>
-        <p th:text="${funding.getCurrentFundingAmount()}">상품 이름</p>
+      <div class="list-items" th:each="funding : ${allFundingList}" >
+          <a th:href="@{/f1/detail(fundingId=${funding.getFundingId()})}">
+          <div >
+              <p class="funding-progress"  th:text="${funding.getProgress()} + '%'">펀딩진행률</p>
+              <p th:text="${funding.getProductName()}">상품 이름</p>
+              <p th:text="${funding.getCurrentFundingAmount()} +'원 / ' + ${funding.totalFundingAmount} + '원'">현재 모금액</p>
+          </div>
+          </a>
       </div>
     </div>
-    <h3>그룹 펀딩</h3>
-    <div class="funding-list">
-      <div class="list-items">
-        <p>상품 이미지</p>
-        <p>펀딩진행률</p>
-        <p>상품 이름</p>
-      </div>
-      <div class="list-items">
-        <p>상품 이미지</p>
-        <p>펀딩진행률</p>
-        <p>상품 이름</p>
-      </div>
-    </div>
+<!--    <h3>그룹 펀딩</h3>-->
+<!--    <div class="funding-list">-->
+<!--      <div class="list-items">-->
+<!--        <p>상품 이미지</p>-->
+<!--        <p>펀딩진행률</p>-->
+<!--        <p>상품 이름</p>-->
+<!--      </div>-->
+<!--      <div class="list-items">-->
+<!--        <p>상품 이미지</p>-->
+<!--        <p>펀딩진행률</p>-->
+<!--        <p>상품 이름</p>-->
+<!--      </div>-->
+<!--    </div>-->
 </body>
 </html>

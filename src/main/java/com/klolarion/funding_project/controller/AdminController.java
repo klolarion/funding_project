@@ -30,7 +30,7 @@ public class AdminController {
     public String admin(Model model){
         model.addAttribute("products",productServiceImpl.allProducts() );
         model.addAttribute("codeList", adminServiceImpl.getCodes());
-//        model.addAttribute("paymentMethodList", adminServiceImpl());
+        model.addAttribute("paymentMethodList", adminServiceImpl.paymentMethodList());
         return "admin";
     }
 
@@ -114,9 +114,9 @@ public class AdminController {
         return "redirect:/f1/admin";
     }
 
-    @GetMapping("/paymentMethod")
-    public String deletePaymentMethod(@RequestParam Long paymentMethodId) {
-        adminServiceImpl.deletePaymentMethod(paymentMethodId);
-        return "redirect:/f1/admin";
-    }
+//    @GetMapping("/paymentMethod")
+//    public String deletePaymentMethod(@RequestParam Long paymentMethodId) {
+//        adminServiceImpl.deletePaymentMethod(paymentMethodId);
+//        return "redirect:/f1/admin";
+//    }
 }
