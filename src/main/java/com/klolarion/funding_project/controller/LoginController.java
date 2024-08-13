@@ -30,11 +30,6 @@ public class LoginController {
     public String otp(Model model) {
         String account = (String) model.getAttribute("account");
         model.addAttribute("account", account);
-
-
-        System.out.println("------- Otp get-----");
-        System.out.println(account);
-
         return "otp";
     }
 
