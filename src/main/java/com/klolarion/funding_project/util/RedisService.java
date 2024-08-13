@@ -12,6 +12,10 @@ import java.util.concurrent.TimeUnit;
 public class RedisService {
     private final StringRedisTemplate redisTemplate;
 
+    public void saveCsrfToken(String key, String value){
+        redisTemplate.opsForValue().set(key, value);
+    }
+
     //redis 데이터 저장
     public void setData(String key, String value, long time, TimeUnit timeUnit){
         redisTemplate.opsForValue().set(key, value, time, timeUnit);
