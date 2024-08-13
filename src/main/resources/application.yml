@@ -4,7 +4,7 @@ spring:
   #DB connection
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mysql://almagest-auth-server-db.c6xfdqe0sq9a.ap-northeast-2.rds.amazonaws.com/funding_db
+    url: jdbc:mariadb://almagest-auth-server-db.c6xfdqe0sq9a.ap-northeast-2.rds.amazonaws.com:3306/funding_db
     username: {$DB_USERNAME}
     password: {$DB_PASSWORD}
 
