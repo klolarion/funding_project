@@ -21,6 +21,9 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login() {
+
+        System.out.println("------- Login get -----");
+
         return "login";
     }
 
@@ -28,6 +31,11 @@ public class LoginController {
     public String otp(@ModelAttribute Model model) {
         String account = (String) model.getAttribute("account");
         model.addAttribute("account", account);
+
+
+        System.out.println("------- Otp get-----");
+        System.out.println(account);
+
         return "login";
     }
 

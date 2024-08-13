@@ -36,6 +36,10 @@
             password: document.getElementById('password').value
         };
 
+        console.log(data.account);
+        console.log(data.password);
+
+
         fetch('https://almagest-auth.com/api/v1/auth', {
             method: 'POST',
             headers: {
