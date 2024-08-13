@@ -29,7 +29,7 @@
 <script>
     function submitForm(event) {
         // 기본 폼 제출 동작 방지
-        // event.preventDefault();
+        event.preventDefault();
 
         const data = {
             id : null,
@@ -38,14 +38,13 @@
             firebaseToken : null
         };
 
-        console.log(data.account);
-        console.log(data.password);
+        console.log(JSON.stringify(data));
 
 
         fetch('https://almagest-auth.com/api/v1/auth/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })

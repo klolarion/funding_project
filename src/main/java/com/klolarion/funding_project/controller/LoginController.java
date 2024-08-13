@@ -52,7 +52,7 @@ public class LoginController {
 
         // 요청 헤더 설정 (필요한 경우)
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/x-www-form-urlencoded");
+        headers.set("Content-Type", "application/json");
 
         redirectAttributes.addFlashAttribute("account", loginDto.getAccount());
 
