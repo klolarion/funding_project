@@ -80,7 +80,7 @@ public class AdminController {
 
     @PostMapping("/addPaymentMethod")
     public String addPaymentMethod(@RequestParam int code, @RequestParam String paymentName, @RequestParam String accountNumber, @RequestParam Long availableAmount, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("paymentList", adminServiceImpl.addPaymentMethod(code, paymentName, accountNumber, availableAmount));
+//        redirectAttributes.addFlashAttribute("paymentList", adminServiceImpl.addPaymentMethod(code, paymentName, accountNumber, availableAmount));
         return "redirect:/admin";
     }
 

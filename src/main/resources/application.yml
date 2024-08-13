@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/test_db
     username: root
-    password: Yun422537265!
+    password: 1234
   thymeleaf:
     cache: false
     prefix: classpath:/templates/
@@ -41,10 +41,10 @@ springdoc:
 application:
   security:
     jwt:
-      sensitive-key : {}
-      private-key : {}
-      access-expiration: 600000 # 10 mins
-      refresh-expiration: 2067600000 # 24 days
+      sensitive-key : awefawef
+      secret-key: awef
+      private-key : awef
+      expiration: 6000000 # 100 mins
 
 server:
   port: 8081
