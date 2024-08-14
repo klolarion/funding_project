@@ -27,8 +27,8 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> allProducts() {
         QProduct qProduct = QProduct.product;
         List<Product> products = query.selectFrom(qProduct).fetch();
-        em.flush();
-        em.clear();
+//        em.flush();
+//        em.clear();
         return products;
     }
 

@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/f1/admin")
+@RequestMapping("/f0/admin")
 @Slf4j
 public class AdminController {
     private final AdminServiceImpl adminServiceImpl;
@@ -38,70 +38,70 @@ public class AdminController {
     public String addProduct(@RequestParam String productName, @RequestParam Long price, @RequestParam int stock) {
         adminServiceImpl.addProduct(productName, price, stock);
         log.debug("상품 추가 성공");
-        return "redirect:/f1/admin";
+        return "redirect:/f0/admin";
     }
 
     @PostMapping("/stock")
     public String addStock(@RequestParam Long productId, @RequestParam int stock) {
         adminServiceImpl.addStock(productId, stock);
-        return "redirect:/f1/admin";
+        return "redirect:/f0/admin";
     }
 
     @PostMapping("/restock")
     public  String restock(@RequestParam Long productId) {
         adminServiceImpl.setRestock(productId);
-        return "redirect:/f1/admin";
+        return "redirect:/f0/admin";
     }
 
     @PostMapping("/saleFinished")
     public String saleFinished(@RequestParam Long productId) {
         adminServiceImpl.setSellFinished(productId);
-        return "redirect:/f1/admin";
+        return "redirect:/f0/admin";
     }
 
     //검색
     @GetMapping("/product")
     public String productSearch(@RequestParam Long productId, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("foundProduct", productServiceImpl.getProduct(productId));
-        return "redirect:/f1/admin";
+        return "redirect:/f0/admin";
     }
 
     @GetMapping("/funding")
     public String fundingSearch(@RequestParam Long fundingId, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("foundFunding", adminServiceImpl.searchFunding(fundingId));
-        return "redirect:/f1/admin";
+        return "redirect:/f0/admin";
     }
 
     @GetMapping("/member")
     public String memberSearch(@RequestParam Long memberId, RedirectAttributes redirectAttributes){
         redirectAttributes.addFlashAttribute("foundMember", adminServiceImpl.searchMember(memberId));
-        return "redirect:/f1/admin";
+        return "redirect:/f0/admin";
     }
 
     //펀딩
     @PostMapping("/funding/closed")
     public String closeFunding(@RequestParam Long fundingId, RedirectAttributes redirectAttributes) {
         adminServiceImpl.closeFunding(fundingId);
-        return "redirect:/f1/admin";
+        return "redirect:/f0/admin";
     }
 
     @PostMapping("/funding/delete")
     public String deleteFunding(@RequestParam Long fundingId, RedirectAttributes redirectAttributes) {
         adminServiceImpl.deleteFunding(fundingId);
-        return "redirect:/f1/admin";
+        return "redirect:/f0/admin";
     }
 
     //코드
     @PostMapping("/code")
     public  String addCode(@RequestParam int code, @RequestParam String description, @RequestParam String reference, RedirectAttributes redirectAttributes) {
         adminServiceImpl.addCode(code, description, reference);
-        return "redirect:/f1/admin";
+        return "redirect:/f0/admin";
     }
 
     @GetMapping("/code")
     public String deleteCode(@RequestParam Long codeId, RedirectAttributes redirectAttributes) {
         adminServiceImpl.deleteCode(codeId);
-        return "redirect:/f1/admin";
+        return "redirect:/f0/admin";
     }
 
     //결제 수단
@@ -111,7 +111,7 @@ public class AdminController {
 //        System.out.println(adminServiceImpl.getCode(codeId).getDescription());
         PaymentMethodDto paymentMethodDto = new PaymentMethodDto(adminServiceImpl.getCode(codeId), accountNumber, availableAmount);
         adminServiceImpl.addPaymentMethod(paymentMethodDto);
-        return "redirect:/f1/admin";
+        return "redirect:/f0/admin";
     }
 
 //    @GetMapping("/paymentMethod")

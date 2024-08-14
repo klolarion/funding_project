@@ -36,6 +36,7 @@ public class DetailController {
         joinFundingDto.setAmount(amount);
         joinFundingDto.setFundingId(fundingId);
         joinFundingDto.setMemberId(member.getMemberId());
+        System.out.println(joinFundingDto);
         fundingServiceImpl.joinFunding(joinFundingDto);
         return "redirect:/f1";
     }

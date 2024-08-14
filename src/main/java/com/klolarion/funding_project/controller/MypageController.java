@@ -1,6 +1,8 @@
 package com.klolarion.funding_project.controller;
 
 import com.klolarion.funding_project.service.FundingServiceImpl;
+import com.klolarion.funding_project.service.GroupServiceImpl;
+import com.klolarion.funding_project.service.MemberServiceImpl;
 import com.klolarion.funding_project.service.PaymentServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,11 +21,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MypageController {
 //    private final PaymentServiceImpl paymentServiceImpl;
     private final FundingServiceImpl fundingServiceImpl;
+    private final GroupServiceImpl groupServiceImpl;
+    private final MemberServiceImpl memberServiceImpl;
 
     @GetMapping
     public String myPage(HttpSession session, Model model) {
         model.addAttribute("member", session.getAttribute("member") );
         model.addAttribute("myFundingList", fundingServiceImpl.myFundingList());
+        model.addAttribute("myLeaderGroup", groupServiceImpl.myLeaderGroups());
+        model.addAttribute("myMainPayment", memberServiceImpl.getMainPaymentMethod());
+        model.addAttribute("myGroup", groupServiceImpl.myGroups());
+//        model.addAttribute("groupList", groupServiceImpl)
         return "myPage";
     }
 

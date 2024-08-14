@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Group</title>
+</head>
+<style>
+    body{padding: 0 90px; margin: 100px auto; width: 500px}
+    h3{margin-top: 30px}
+    a{text-decoration: none; color: black}
+    ul{border: 1px solid gray; height: 150px; border-radius: 10px; overflow: scroll}
+    li{padding: 10px}
+    a:hover {color: #7171DFFF}
+    button{width:100%; margin:30px 0; padding:15px; background-color: #E9E9FAFF; color: #4949CCFF; border:none; border-radius: 5px; }
+    #create-group input{width: 100%; padding: 10px; box-sizing: border-box; border:1px solid gray; border-radius: 5px}
+
+</style>
+<body>
+<div>
+    <h2>그룹 관리</h2>
+    <div id="create-group">
+        <h3>그룹 생성하기</h3>
+        <form method="post" th:action="@{/f1/group}">
+            <input name="groupName" placeholder="그룹 이름을 입력하세요.">
+            <button>생성하기</button>
+        </form>
+    </div>
+    <div>
+        <h3>내가 만든 그룹</h3>
+        <ul th:if="${myLeaderGroup}">
+            <li th:each="group : ${myLeaderGroup}" >
+                <a th:href="@{/f1/group/detail(groupId=${group.getGroupId()})}" th:text="${group.getGroupName()}">그룹 이름</a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

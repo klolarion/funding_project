@@ -115,8 +115,8 @@ public class AdminServiceImpl implements AdminService {
     public Funding searchFunding(Long fundingId) {
         QFunding qFunding = QFunding.funding;
         Funding funding = query.selectFrom(qFunding).where(qFunding.fundingId.eq(fundingId)).fetchOne();
-        em.flush();
-        em.clear();
+//        em.flush();
+//        em.clear();
         return funding;
     }
 
@@ -179,8 +179,7 @@ public class AdminServiceImpl implements AdminService {
     public List<PaymentMethod> paymentMethodList() {
         QPaymentMethod qPaymentMethod = QPaymentMethod.paymentMethod;
         List<PaymentMethod> fetched = query.selectFrom(qPaymentMethod).fetch();
-        em.flush();
-        em.clear();
+
         return fetched;
     }
 
@@ -190,8 +189,8 @@ public class AdminServiceImpl implements AdminService {
     public List<CodeMaster> getCodes() {
         QCodeMaster qCodeMaster = QCodeMaster.codeMaster;
         List<CodeMaster> codes = query.selectFrom(qCodeMaster).fetch();
-        em.flush();
-        em.clear();
+//        em.flush();
+//        em.clear();
         return codes;
     }
 

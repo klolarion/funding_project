@@ -21,4 +21,13 @@ public class GroupDto {
     private String groupName;
     private Long groupMemberCount;
     private List<Funding> groupFunding;
+
+    public GroupDto(Long groupId, Long groupLeaderId, String groupLeaderName, String groupName, Long groupMemberCount) {
+        this.groupId = groupId;
+        this.groupLeaderId = groupLeaderId;
+        this.groupLeaderName = groupLeaderName;
+        this.groupName = groupName;
+        this.groupMemberCount = groupMemberCount;
+    }
+
 }

@@ -1,8 +1,8 @@
 package com.klolarion.funding_project.controller;
 
 import com.klolarion.funding_project.domain.entity.Member;
-import com.klolarion.funding_project.repository.FundingRepository;
 import com.klolarion.funding_project.service.FundingServiceImpl;
+import com.klolarion.funding_project.service.GroupServiceImpl;
 import com.klolarion.funding_project.service.MemberServiceImpl;
 import com.klolarion.funding_project.service.ProductServiceImpl;
 import jakarta.servlet.http.HttpSession;
@@ -16,15 +16,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/f1/funding")
 @Slf4j
-public class CreateFundingController {
+public class fundingController {
     private final FundingServiceImpl fundingServiceImpl;
     private final ProductServiceImpl productServiceImpl;
     private final MemberServiceImpl memberServiceImpl;
+    private final GroupServiceImpl groupServiceImpl;
 
     @GetMapping
     public String funding(Model model) {
         model.addAttribute("productList",productServiceImpl.allProducts());
-
+        model.addAttribute("myLeaderGroups", groupServiceImpl.myLeaderGroups());
         return "createFunding";
     }
 

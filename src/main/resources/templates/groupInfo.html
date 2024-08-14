@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Group detail</title>
+</head>
+<style>
+    body{padding: 0 90px; margin: 60px auto; width: 500px}
+    h3{margin-top: 30px}
+    a{text-decoration: none; color: black}
+    ul{border: 1px solid gray; height: 100px; border-radius: 10px; overflow: scroll}
+    li{padding: 10px; margin-bottom: 10px}
+    a:hover {color: #7171DFFF}
+    /*button{width:100%; margin:30px 0; padding:15px; background-color: #E9E9FAFF; color: #4949CCFF; border:none; border-radius: 5px; }*/
+    span button {width: 80px; height: 20px ; margin:0 10px;padding: 0; background-color: #E9E9FAFF; color: #4949CCFF; border:none; border-radius: 5px;}
+    #create-group li {display: flex}
+    #search input{width: 75%; height: 50px; padding: 10px; box-sizing: border-box; border:1px solid gray; border-radius: 5px}
+    #search {display: flex; justify-content: space-between}
+    #search button {width: 20%; background-color: #E9E9FAFF; color: #4949CCFF; border:none; border-radius: 5px;}
+    #requestId {display: flex;}
+</style>
+<body>
+<div>
+    <h2 th:text="${groupDetail.groupName}">그룹 이름</h2>
+    <div>
+        <h3>그룹 멤버</h3>
+        <ul th:if="${groupMembers}">
+            <li th:each="member : ${groupMembers}" >
+                <p th:text="${member.memberName}">그룹 이름</p>
+            </li>
+        </ul>
+    </div>
+    <div id="create-group">
+        <h3>그룹 참여하기</h3>
+        <form method="post" th:action="@{/f1/group/info/request}">
+            <input type="hidden" name="groupId" th:value="${groupDetail.getGroupId()}">
+            <button>신청</button>
+        </form>
+    </div>
+    <div>
+        <h3>그룹이 참여하고 있는 펀딩</h3>
+        <ul th:if="${fundingList}">
+            <li th:each="funding : ${fundingList}" >
+                <a th:href="@{/f1/detail(fundingId=${funding.fundingId})}" th:text="${funding.productName}">그룹 이름</a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>

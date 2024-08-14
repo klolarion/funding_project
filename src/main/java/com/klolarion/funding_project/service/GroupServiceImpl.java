@@ -202,7 +202,7 @@ public class GroupServiceImpl implements GroupService {
                 .join(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
                 .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
                 .leftJoin(qFunding).on(qFunding.group.groupId.eq(qGroup.groupId))
-                .where(qGroup.groupActive.isTrue())
+                .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
                 .groupBy(qGroup.groupId, qGroup.groupLeader.memberId, qMember.memberName, qGroup.groupName) // 필요한 필드들을 그룹화
                 .fetch();
 
