@@ -18,7 +18,7 @@ public class GroupController {
     @GetMapping
     public String group(Model model ) {
         model.addAttribute("myGroup", groupServiceImpl.myGroups());
-        System.out.println(groupServiceImpl.myGroups());
+//        System.out.println(groupServiceImpl.myGroups());
         return "group";
     }
 
@@ -30,6 +30,7 @@ public class GroupController {
 
     @GetMapping("/detail")
     public String detail(@RequestParam Long groupId, Model model) {
+//        System.out.println(groupId);
         model.addAttribute("groupDetail", groupServiceImpl.groupDetail(groupId));
         return "groupDetail";
     }
