@@ -30,7 +30,7 @@ public class SpringSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 안 함
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/f1/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll() // 특정 경로는 모든 사용자에게 허용
+                        .requestMatchers("/login", "/opt", "/v3/api-docs/**", "/swagger-ui/**").permitAll() // 특정 경로는 모든 사용자에게 허용
                         .requestMatchers("/f0").hasRole("ADMIN")
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
