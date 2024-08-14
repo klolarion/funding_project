@@ -13,6 +13,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
     private final GroupStatusRepository groupStatusRepository;
@@ -246,6 +248,7 @@ public class GroupServiceImpl implements GroupService {
         return result == 1L;
     }
 
+
     @Override
     public GroupStatus requestToGroup(Long groupId) {
         Member member = currentMember.getMember();
@@ -267,13 +270,17 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean acceptMemberRequest(Long groupStatusId, Long memberId) {
+    public boolean acceptMemberRequest(Long groupId, Long memberId) {
         QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
 
         long result = query.update(qGroupStatus)
                 .set(qGroupStatus.accepted, true)
-                .where(qGroupStatus.groupStatusId.eq(groupStatusId)
-                        .and(qGroupStatus.groupMember.memberId.eq(memberId))).execute();
+                .where(qGroupStatus.group.groupId.eq(groupId)
+                        .and(qGroupStatus.groupMember.memberId.eq(memberId)
+                                .and(qGroupStatus.accepted.isFalse())
+                                .and(qGroupStatus.requested.isTrue())
+                                .and(qGroupStatus.exited.isFalse())
+                                .and(qGroupStatus.banned.isFalse()))).execute();
         em.flush();
         em.clear();
         return result == 1L;
