@@ -30,6 +30,48 @@ public class GroupServiceImpl implements GroupService {
     private final JPAQueryFactory query;
     private final EntityManager em;
 
+    // 내가 그룹장인 그룹에서 초대를 보낸 멤버 리스트
+    // 내 그룹으로 가입요청한 멤버 리스트
+
+    @Override
+    public List<Member> invitedMembersToMyGroup(Long groupId){
+        QMember qMember = QMember.member;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+
+        List<Member> members = query.selectFrom(qMember)
+                .join(qMember).on(qGroupStatus.groupMember.memberId.eq(qMember.memberId))
+                .where(qGroupStatus.group.groupId.eq(groupId)
+                        .and(qGroupStatus.invited.isTrue())
+                        .and(qGroupStatus.requested.isFalse())
+                        .and(qGroupStatus.accepted.isFalse()) // 그룹 상태에서 accepted가 true
+                        .and(qGroupStatus.exited.isFalse()) // 그룹 상태에서 exited가 false
+                        .and(qGroupStatus.banned.isFalse())) // 그룹 상태에서 banned가 false)
+                .fetch();
+        em.flush();
+        em.clear();
+        return members;
+
+    }
+
+    @Override
+    public List<Member> requestedMembersToMyGroup(Long groupId){
+        QMember qMember = QMember.member;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+
+        List<Member> members = query.selectFrom(qMember)
+                .join(qMember).on(qGroupStatus.groupMember.memberId.eq(qMember.memberId))
+                .where(qGroupStatus.group.groupId.eq(groupId)
+                        .and(qGroupStatus.requested.isTrue())
+                        .and(qGroupStatus.invited.isFalse())
+                        .and(qGroupStatus.accepted.isFalse()) // 그룹 상태에서 accepted가 true
+                        .and(qGroupStatus.exited.isFalse()) // 그룹 상태에서 exited가 false
+                        .and(qGroupStatus.banned.isFalse())) // 그룹 상태에서 banned가 false)
+                .fetch();
+        em.flush();
+        em.clear();
+        return members;
+    }
+
 
     /*내가 그룹장인 그룹 전부 조회*/
     @Override
@@ -170,7 +212,7 @@ public class GroupServiceImpl implements GroupService {
         Member member = currentMember.getMember();
         Group group = new Group(member, groupName);
         GroupStatus groupStatus = new GroupStatus(
-                group, member, member
+                group, member, member, false, false
         );
         groupStatusRepository.save(groupStatus);
         return groupRepository.save(group);
@@ -186,7 +228,7 @@ public class GroupServiceImpl implements GroupService {
         Member member = query.selectFrom(qMember).where(qMember.memberId.eq(memberId)).fetchOne();
 
         GroupStatus groupStatus = new GroupStatus(
-                group, groupLeader, member
+                group, groupLeader, member, true, false
         );
         return groupStatusRepository.save(groupStatus);
     }
@@ -216,7 +258,9 @@ public class GroupServiceImpl implements GroupService {
         GroupStatus groupStatus = new GroupStatus(
                 group,
                 groupLeader,
-                member
+                member,
+                false,
+                true
         );
         return groupStatusRepository.save(groupStatus);
 

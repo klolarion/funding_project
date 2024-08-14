@@ -9,6 +9,10 @@ import java.util.List;
 
 public interface GroupService {
 
+    List<Member> invitedMembersToMyGroup(Long groupId);
+
+    List<Member> requestedMembersToMyGroup(Long groupId);
+
     /*내가 그룹장인 그룹 목록 */
     List<GroupDto> myLeaderGroups();
     /*내가 참여중인 그룹 목록*/

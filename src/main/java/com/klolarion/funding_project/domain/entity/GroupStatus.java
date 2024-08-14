@@ -27,14 +27,19 @@ public class GroupStatus {
     @JoinColumn(name = "group_member_id")
     private Member groupMember;
 
+    private boolean invited;
+    private boolean requested;
+
     private boolean accepted;
     private boolean exited;
     private boolean banned;
 
-    public GroupStatus(Group group, Member groupLeader, Member groupMember) {
+    public GroupStatus(Group group, Member groupLeader, Member groupMember, boolean invited, boolean requested) {
         this.group = group;
         this.groupLeader = groupLeader;
         this.groupMember = groupMember;
+        this.invited = invited;
+        this.requested = requested;
         this.accepted = false;
         this.exited = false;
         this.banned = false;
