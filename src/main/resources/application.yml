@@ -3,10 +3,10 @@ spring:
     name: funding_project
   #DB connection
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://almagest-auth-server-db.c6xfdqe0sq9a.ap-northeast-2.rds.amazonaws.com:3306/funding_db
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test_db
+    username: root
+    password: Yun422537265!
 
   thymeleaf:
     cache: false
@@ -32,8 +32,8 @@ spring:
   #Redis
   data:
     redis:
-      host: redis
-#      host: localhost
+#      host: redis
+      host: localhost
       port: 6379
 
 springdoc:
@@ -48,4 +48,4 @@ application:
       expiration: 6000000 # 100 mins
 
 server:
-  port: 9091
+  port: 8081
