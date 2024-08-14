@@ -8,8 +8,11 @@ import java.util.List;
 
 public interface GroupService {
 
-    /*내 그룹 목록 */
+    /*내가 그룹장인 그룹 목록 */
+    List<GroupDto> myLeaderGroups();
+    /*내가 참여중인 그룹 목록*/
     List<GroupDto> myGroups();
+
     /*그룹 정보 조회 */
     GroupDto groupDetail(Long groupId);
     /*그룹 생성*/
