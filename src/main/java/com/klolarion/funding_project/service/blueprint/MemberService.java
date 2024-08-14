@@ -11,6 +11,9 @@ public interface MemberService {
     /*멤버정보 캐시등록*/
     Member getMemberCache() throws JsonProcessingException;
 
+    /*이름으로 사용자 검색*/
+    List<Member>  searchMember(String memberName);
+
     /*캐시에서 멤버정보 조회 => 실패시 DB에서 조회 후 리턴*/
     void setMemberCache(Member member);
 
