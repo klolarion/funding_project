@@ -86,6 +86,29 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public List<Member> groupMembers(Long groupId){
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+        QGroup qGroup = QGroup.group;
+        QMember qMember = QMember.member;
+
+//        그룹아이디에맞는 그룹 검색
+//        그룹아이디로 그룹상태 조인
+//        그룹상태에서 조건필터링된 멤버 조회
+
+        List<Member> groupMembers = query.selectFrom(qMember)
+                .join(qGroupStatus).on(qGroupStatus.groupMember.memberId.eq(qMember.memberId)) // 그룹 상태와 멤버를 조인
+                .join(qGroup).on(qGroup.groupId.eq(qGroupStatus.group.groupId)) // 그룹 상태와 그룹을 조인
+                .where(qGroup.groupId.eq(groupId) // 그룹 아이디가 일치하는지 확인
+                        .and(qGroupStatus.accepted.isTrue()) // 그룹 상태에서 accepted가 true
+                        .and(qGroupStatus.exited.isFalse()) // 그룹 상태에서 exited가 false
+                        .and(qGroupStatus.banned.isFalse())) // 그룹 상태에서 banned가 false
+                .fetch();
+        em.flush();
+        em.clear();
+        return groupMembers;
+    }
+
+    @Override
     public GroupDto groupDetail(Long groupId) {
         Long groupIdTmp = 0L;
         Member member = currentMember.getMember();
