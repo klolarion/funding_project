@@ -25,7 +25,7 @@ public class PaymentMethodController {
         Member member = (Member) session.getAttribute("member");
         model.addAttribute("myPaymentList", memberServiceImpl.myPaymentLists(member.getMemberId()));
         model.addAttribute("paymentMethodList", adminServiceImpl.paymentMethodList());
-//        model.addAttribute("mainPaymentMethod", memberServiceImpl.);
+        model.addAttribute("mainPaymentMethod", memberServiceImpl.getMainPaymentMethod());
         return "paymentMethod";
     }
 

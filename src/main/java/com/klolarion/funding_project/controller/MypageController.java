@@ -28,6 +28,7 @@ public class MypageController {
         model.addAttribute("myFundingList", fundingServiceImpl.myFundingList());
         model.addAttribute("myLeaderGroup", groupServiceImpl.myLeaderGroups());
         model.addAttribute("myMainPayment", memberServiceImpl.getMainPaymentMethod());
+        model.addAttribute("myGroup", groupServiceImpl.myGroups());
 //        model.addAttribute("groupList", groupServiceImpl)
         return "myPage";
     }

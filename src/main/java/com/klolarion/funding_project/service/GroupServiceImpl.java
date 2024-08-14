@@ -39,7 +39,7 @@ public class GroupServiceImpl implements GroupService {
         QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
 
         List<Member> members = query.selectFrom(qMember)
-                .join(qMember).on(qGroupStatus.groupMember.memberId.eq(qMember.memberId))
+                .join(qGroupStatus).on(qGroupStatus.groupMember.memberId.eq(qMember.memberId))
                 .where(qGroupStatus.group.groupId.eq(groupId)
                         .and(qGroupStatus.invited.isTrue())
                         .and(qGroupStatus.requested.isFalse())
@@ -59,7 +59,7 @@ public class GroupServiceImpl implements GroupService {
         QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
 
         List<Member> members = query.selectFrom(qMember)
-                .join(qMember).on(qGroupStatus.groupMember.memberId.eq(qMember.memberId))
+                .join(qGroupStatus).on(qGroupStatus.groupMember.memberId.eq(qMember.memberId))
                 .where(qGroupStatus.group.groupId.eq(groupId)
                         .and(qGroupStatus.requested.isTrue())
                         .and(qGroupStatus.invited.isFalse())

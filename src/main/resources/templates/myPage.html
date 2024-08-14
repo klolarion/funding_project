@@ -82,6 +82,28 @@
                     </li>
                 </ul>
             </div>
+
+            <div class="mypage-bottom-list">
+                <h3>참여하고 있는 그룹</h3>
+                <ul>
+                    <li th:each="group: ${myGroup}" th:text="${group.getGroupName()}">
+                    </li>
+                </ul>
+            </div>
+<!--            <div class="mypage-bottom-list">-->
+<!--                <h3>나의 구매 내역</h3>-->
+<!--                <ul>-->
+<!--                    <li th:each="myFunding: ${myFundingList}">-->
+<!--                        <a th:href="@{/f1/detail(fundingId=${myFunding.getFundingId()})}">-->
+<!--                            <span th:text="${myFunding.productName}"></span>-->
+<!--                            <span th:text="${myFunding.progress} +'%'"></span>-->
+<!--                            <span th:text="${myFunding.totalFundingAmount} +'원'"></span>-->
+<!--                            <span id="funding-status" th:text="${myFunding.status}"></span>-->
+<!--                        </a>-->
+
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
 <!--            <div class="mypage-bottom-list">-->
 <!--                <h3>구매 내역</h3>-->
 <!--                <ul>-->

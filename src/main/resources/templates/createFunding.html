@@ -12,11 +12,12 @@
     button{width:100%; padding:15px; background-color: #E9E9FAFF; color: #4444e6; border:none; border-radius: 5px; font-size: 15px; }
     .list {margin-bottom: 20px}
     #product-option {margin-bottom: 10px}
-    #product-list { border: 1px solid #CCCCCCFF; border-radius: 10px; padding: 10px 0; height: 200px; overflow: scroll}
-    #product-option button { background-color: white; color: black; font-weight: normal; border-radius: 0px}
-    #product-option button:hover {background-color: #E9E9FAFF}
+    .product-list { border: 1px solid #CCCCCCFF; border-radius: 10px; padding: 10px 0; height: 200px; overflow: scroll}
+    .list button { background-color: white; color: black; font-weight: normal; border-radius: 0px}
+    .list button:hover {background-color: #E9E9FAFF}
     #target-price p {width: 100%; margin:10px 0; padding: 15px; box-sizing: border-box; border: 1px solid #cccccc; border-radius: 5px}
     #group-option span {font-size: small; color: #79797e}
+    #selected {background-color:#E9E9FAFF }
 </style>
 <body>
 <div>
@@ -26,7 +27,7 @@
             <form method="post" th:action="@{/f1/funding}">
                 <div class="list" id="product-option">
                     <h3>상품 선택</h3>
-                    <div id="product-list">
+                    <div class="product-list">
                         <div th:each="product : ${productList}">
 
                             <button type="button" th:name="${product.getProductId()} "
@@ -40,14 +41,15 @@
                 </div>
                 <div class="list" id="group-option">
                     <h3>그룹 선택 <span>   *옵션</span></h3>
-                    <div id="group-list">
-<!--                        <div th:each="product : ${productList}">-->
-<!--                            <button type="button" th:name="${product.getProductId()} "-->
-<!--                                    th:attr="data-price=${product.getPrice()}" th:text="${product.getProductName()}" onclick="setPrice(this)"></button>-->
-<!--                        </div>-->
+                    <div class="product-list">
+                        <div th:each="group : ${myLeaderGroups}">
+                            <button type="button" th:name="${group.getGroupId()} "
+                                     th:text="${group.getGroupName()}" onclick="setGroupId(this)"></button>
+                        </div>
                     </div>
                 </div>
                 <input type="hidden" id="selectedProductId" name="productId">
+                <input type="hidden" id="groupId" name="groupId">
                 <button>펀딩 만들기</button>
             </form>
 
@@ -58,6 +60,7 @@
 </body>
 <script>
     function setPriceAndInput(button) {
+        document.querySelectorAll('.list button').forEach(btn => btn.removeAttribute('id'));
         const price = button.getAttribute('data-price');  // 버튼의 data-price 속성에서 가격 가져오기
         const productId = button.getAttribute('name');
 
@@ -67,7 +70,17 @@
 
         //가격 설정
         document.getElementById('selectedProductId').value = productId;
+        button.id = 'selected';
 
+    }
+
+    function  setGroupId(button){
+        document.querySelectorAll('.list button').forEach(btn => btn.removeAttribute('id'));
+        const id = button.getAttribute('name');
+
+        document.getElementById("groupId").value = id;
+        button.id = 'selected';
+        // console.log(document.getElementById("groupId").value);
     }
 </script>
 </html>

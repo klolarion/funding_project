@@ -31,18 +31,13 @@
           </a>
       </div>
     </div>
-<!--    <h3>그룹 펀딩</h3>-->
-<!--    <div class="funding-list">-->
-<!--      <div class="list-items">-->
-<!--        <p>상품 이미지</p>-->
-<!--        <p>펀딩진행률</p>-->
-<!--        <p>상품 이름</p>-->
-<!--      </div>-->
-<!--      <div class="list-items">-->
-<!--        <p>상품 이미지</p>-->
-<!--        <p>펀딩진행률</p>-->
-<!--        <p>상품 이름</p>-->
-<!--      </div>-->
-<!--    </div>-->
+    <h3>그룹</h3>
+    <div class="funding-list">
+      <div class="list-items" th:each="group : ${allGroupList}">
+        <p>상품 이미지</p>
+        <p>펀딩진행률</p>
+        <p>상품 이름</p>
+      </div>
+    </div>
 </body>
 </html>
