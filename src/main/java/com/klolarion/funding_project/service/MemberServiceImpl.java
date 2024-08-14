@@ -53,6 +53,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public List<Member>  searchMember(String memberName){
+        QMember qMember = QMember.member;
+        List<Member> fetch = query.selectFrom(qMember).where(qMember.memberName.contains(memberName)).fetch();
+        em.flush();
+        em.clear();
+        return fetch;
+    }
+
+    @Override
     public void setMemberCache(Member member){
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
