@@ -18,6 +18,8 @@ public interface GroupService {
     /*내가 참여중인 그룹 목록*/
     List<GroupDto> myGroups();
 
+    List<GroupDto> allGroupExceptMy();
+
     /*그룹 멤버 조회*/
     List<Member> groupMembers(Long groupId);
 

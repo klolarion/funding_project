@@ -32,8 +32,7 @@ public class GroupServiceImpl implements GroupService {
     private final JPAQueryFactory query;
     private final EntityManager em;
 
-    // 내가 그룹장인 그룹에서 초대를 보낸 멤버 리스트
-    // 내 그룹으로 가입요청한 멤버 리스트
+    // 내가 속하지않은 모든 그룹
 
     @Override
     public List<Member> invitedMembersToMyGroup(Long groupId){
@@ -103,6 +102,8 @@ public class GroupServiceImpl implements GroupService {
         return groups;
     }
 
+
+    //illigal argument excep
     @Override
     public List<GroupDto> myGroups() {
         Member member = currentMember.getMember();
@@ -122,6 +123,32 @@ public class GroupServiceImpl implements GroupService {
                 .from(qGroup)
                 .leftJoin(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
                 .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
+                .fetch();
+
+        em.flush();
+        em.clear();
+        return groups;
+    }
+
+    @Override
+    public List<GroupDto> allGroupExceptMy(){
+        Member member = currentMember.getMember();
+        QGroup qGroup = QGroup.group;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+        QMember qMember = QMember.member;
+
+        List<GroupDto> groups = query.select(Projections.constructor(GroupDto.class,
+                        qGroup.groupId,
+                        qGroup.groupLeader.memberId,
+                        qMember.memberName.as("groupLeaderName"),
+                        qGroup.groupName,
+                        JPAExpressions.select(qGroupStatus.countDistinct())
+                                .from(qGroupStatus)
+                                .where(qGroupStatus.group.groupId.eq(qGroup.groupId))
+                ))
+                .from(qGroup)
+                .leftJoin(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
+                .where(qGroupStatus.groupMember.memberId.notIn(member.getMemberId()))
                 .fetch();
 
         em.flush();
