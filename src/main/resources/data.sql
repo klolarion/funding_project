@@ -158,31 +158,8 @@ values (9, 4, 3, 3, false, false, true, false, false);
 --friendStatus
 
 --funding
-insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, funding_account, completed, closed, deleted)
-values (1, 1, 6, null, 300, 0, '123-12345-12', false, false, false);
-insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, funding_account, completed, closed, deleted)
-values (2, 1, 2, 1, 8000, 1700, '118-14215-00', false, false, false);
-insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, funding_account, completed, closed, deleted)
-values (3, 1, 3, 1, 4200, 3984, '421-15745-62', false, true, false);
-insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, funding_account, completed, closed, deleted)
-values (4, 1, 4, 1, 1500, 0, '439-16545-11', false, false, false);
-insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, funding_account, completed, closed, deleted)
-values (5, 1, 4, null, 1500, 706, '349-42144-22', false, false, false);
-insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, funding_account, completed, closed, deleted)
-values (6, 2, 5, 3, 15000, 15000, '243-34776-32', true, false, false);
-insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, funding_account, completed, closed, deleted)
-values (7, 2, 1, 1, 5000, 5, '133-14142-13', false, true, false);
-insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, funding_account, completed, closed, deleted)
-values (8, 3, 1, null, 5000, 50, '723-88743-52', false, false, false);
-insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, funding_account, completed, closed, deleted)
-values (9, 4, 1, 2, 5000, 300, '142-74574-15', false, false, false);
-insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, funding_account, completed, closed, deleted)
-values (10, 5, 2, null, 8000, 0, '103-71263-42', false, false, true);
-insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, funding_account, completed, closed, deleted)
-values (11, 5, 3, null, 4200, 882, '992-13543-17', false, false, true);
+
 
 --orderList
-insert into order_list(order_id, funding_id, product_id, member_id, group_id, order_price, success)
-values(1, 6, 5, 2, 3, 15000, true );
 
 --payment
