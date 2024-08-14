@@ -1,6 +1,7 @@
 package com.klolarion.funding_project.service.blueprint;
 
 import com.klolarion.funding_project.domain.entity.GroupStatus;
+import com.klolarion.funding_project.domain.entity.Member;
 import com.klolarion.funding_project.dto.GroupDto;
 import com.klolarion.funding_project.domain.entity.Group;
 
@@ -8,10 +9,17 @@ import java.util.List;
 
 public interface GroupService {
 
+    List<Member> invitedMembersToMyGroup(Long groupId);
+
+    List<Member> requestedMembersToMyGroup(Long groupId);
+
     /*내가 그룹장인 그룹 목록 */
     List<GroupDto> myLeaderGroups();
     /*내가 참여중인 그룹 목록*/
     List<GroupDto> myGroups();
+
+    /*그룹 멤버 조회*/
+    List<Member> groupMembers(Long groupId);
 
     /*그룹 정보 조회 */
     GroupDto groupDetail(Long groupId);

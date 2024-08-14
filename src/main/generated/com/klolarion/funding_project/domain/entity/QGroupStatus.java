@@ -36,6 +36,10 @@ public class QGroupStatus extends EntityPathBase<GroupStatus> {
 
     public final NumberPath<Long> groupStatusId = createNumber("groupStatusId", Long.class);
 
+    public final BooleanPath invited = createBoolean("invited");
+
+    public final BooleanPath requested = createBoolean("requested");
+
     public QGroupStatus(String variable) {
         this(GroupStatus.class, forVariable(variable), INITS);
     }

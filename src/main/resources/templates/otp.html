@@ -53,7 +53,21 @@
             })
             .then(result => {
                 console.log('Authentication successful:', result);
-                localStorage.setItem('almagest_csrf', result.headers['csrf'])
+                const accessToken = result.headers.get('access');
+                const csrfToken = result.headers.get('csrf');
+
+                // 로컬 스토리지에 저장
+                if (accessToken) {
+                    localStorage.setItem('almagest_access', accessToken);
+                } else {
+                    console.error('Access token not found in the response headers');
+                }
+
+                if (csrfToken) {
+                    localStorage.setItem('almagest_csrf', csrfToken);
+                } else {
+                    console.error('CSRF token not found in the response headers');
+                }
                 window.location.href = '/f1';
                 // 인증이 성공하면 원하는 작업을 수행 (예: 리다이렉트)
             })
