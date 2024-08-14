@@ -9,7 +9,8 @@ import java.util.List;
 public interface MemberService {
 
     /*멤버정보 캐시등록*/
-    Member getMember() throws JsonProcessingException;
+    Member getMemberCache() throws JsonProcessingException;
+
     /*캐시에서 멤버정보 조회 => 실패시 DB에서 조회 후 리턴*/
     void setMemberCache(Member member);
 
@@ -24,6 +25,9 @@ public interface MemberService {
 
     /*주 결제수단으로 등록*/
     boolean makeMainPayment(Long paymentMethodListId);
+
+    /*주 결제수단 조회*/
+    PaymentMethodList getMainPaymentMethod();
 
     /*내 결제수단 삭제*/
     boolean removePayment(Long paymentMethodListId);

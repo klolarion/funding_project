@@ -123,7 +123,8 @@ public class AdminServiceImpl implements AdminService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean closeFunding(Long fundingId) {
         QFunding qFunding = QFunding.funding;
-        long result = query.update(qFunding).set(qFunding.closed, true).execute();
+        long result = query.update(qFunding).set(qFunding.closed, true)
+                .where(qFunding.fundingId.eq(fundingId)).execute();
         em.flush();
         em.clear();
         return result == 1L;
@@ -134,7 +135,8 @@ public class AdminServiceImpl implements AdminService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean deleteFunding(Long fundingId) {
         QFunding qFunding = QFunding.funding;
-        long result = query.update(qFunding).set(qFunding.deleted, true).execute();
+        long result = query.update(qFunding).set(qFunding.deleted, true)
+                .where(qFunding.fundingId.eq(fundingId)).execute();
         em.flush();
         em.clear();
         return result == 1L;
