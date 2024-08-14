@@ -46,18 +46,18 @@
         <div id="mypage-right">
             <div id="mypage-top">
                 <div class="mypage-top-list" >
-                    <h3>친구 관리</h3>
+                    <h3>요청 관리</h3>
                     <ul>
                         <li>친구 이름</li>
                     </ul>
-                    <a th:href="@{/friend}"><button>친구 관리</button></a>
+                    <a th:href="@{/friend}"><button>요청 관리</button></a>
                 </div>
                 <div class="mypage-top-list" >
-                    <h3>그룹 리스트</h3>
+                    <h3>내가 만든 그룹</h3>
                     <ul>
                         <li>친구 이름</li>
                     </ul>
-                    <a th:href="@{/f1/group}"><button>그룹 추가</button></a>
+                    <a th:href="@{/f1/group}"><button>내가 만든 그룹 관리</button></a>
                 </div>
                 <div class="mypage-top-list">
                     <h3>결제 수단</h3>
@@ -66,7 +66,7 @@
                 </div>
             </div>
             <div class="mypage-bottom-list">
-                <h3>펀딩 내역</h3>
+                <h3>나의 펀딩 내역</h3>
                 <ul>
                     <li th:each="myFunding: ${myFundingList}">
                         <a th:href="@{/f1/detail(fundingId=${myFunding.getFundingId()})}">
