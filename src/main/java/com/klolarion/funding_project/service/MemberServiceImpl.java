@@ -37,7 +37,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public Member getMember() throws JsonProcessingException {
+    public Member getMemberCache() throws JsonProcessingException {
 //        memberRepository.findByAccount("account", LockModeType.PESSIMISTIC_READ);
         Member memberCache = null;
         String mString = redisService.getData("account" + "_funding_cache");
