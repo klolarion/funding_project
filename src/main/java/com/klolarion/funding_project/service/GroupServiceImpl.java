@@ -30,8 +30,10 @@ public class GroupServiceImpl implements GroupService {
     private final JPAQueryFactory query;
     private final EntityManager em;
 
+
+    /*내가 그룹장인 그룹 전부 조회*/
     @Override
-    public List<GroupDto> myGroups() {
+    public List<GroupDto> myLeaderGroups() {
         Member member = currentMember.getMember();
         QGroup qGroup = QGroup.group;
         QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
@@ -49,6 +51,32 @@ public class GroupServiceImpl implements GroupService {
                 .from(qGroup)
                 .join(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
                 .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
+                .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
+                .fetch();
+
+        em.flush();
+        em.clear();
+        return groups;
+    }
+
+    @Override
+    public List<GroupDto> myGroups() {
+        Member member = currentMember.getMember();
+        QGroup qGroup = QGroup.group;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+        QMember qMember = QMember.member;
+
+        List<GroupDto> groups = query.select(Projections.constructor(GroupDto.class,
+                        qGroup.groupId,
+                        qGroup.groupLeader.memberId,
+                        qMember.memberName.as("groupLeaderName"),
+                        qGroup.groupName,
+                        JPAExpressions.select(qGroupStatus.countDistinct())
+                                .from(qGroupStatus)
+                                .where(qGroupStatus.group.groupId.eq(qGroup.groupId))
+                ))
+                .from(qGroup)
+                .leftJoin(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
                 .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
                 .fetch();
 
@@ -79,6 +107,7 @@ public class GroupServiceImpl implements GroupService {
                 .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
                 .leftJoin(qFunding).on(qFunding.group.groupId.eq(qGroup.groupId))
                 .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
+                .groupBy(qGroup.groupId, qGroup.groupLeader.memberId, qMember.memberName, qGroup.groupName) // 필요한 필드들을 그룹화
                 .fetch();
 
         Map<Long, GroupDto> groupDtoMap = new HashMap<>();
