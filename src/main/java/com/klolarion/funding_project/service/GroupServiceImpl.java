@@ -13,6 +13,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
     private final GroupStatusRepository groupStatusRepository;
@@ -30,8 +32,7 @@ public class GroupServiceImpl implements GroupService {
     private final JPAQueryFactory query;
     private final EntityManager em;
 
-    // 내가 그룹장인 그룹에서 초대를 보낸 멤버 리스트
-    // 내 그룹으로 가입요청한 멤버 리스트
+    // 내가 속하지않은 모든 그룹
 
     @Override
     public List<Member> invitedMembersToMyGroup(Long groupId){
@@ -101,6 +102,8 @@ public class GroupServiceImpl implements GroupService {
         return groups;
     }
 
+
+    //illigal argument excep
     @Override
     public List<GroupDto> myGroups() {
         Member member = currentMember.getMember();
@@ -120,6 +123,32 @@ public class GroupServiceImpl implements GroupService {
                 .from(qGroup)
                 .leftJoin(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
                 .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
+                .fetch();
+
+        em.flush();
+        em.clear();
+        return groups;
+    }
+
+    @Override
+    public List<GroupDto> allGroupExceptMy(){
+        Member member = currentMember.getMember();
+        QGroup qGroup = QGroup.group;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+        QMember qMember = QMember.member;
+
+        List<GroupDto> groups = query.select(Projections.constructor(GroupDto.class,
+                        qGroup.groupId,
+                        qGroup.groupLeader.memberId,
+                        qMember.memberName.as("groupLeaderName"),
+                        qGroup.groupName,
+                        JPAExpressions.select(qGroupStatus.countDistinct())
+                                .from(qGroupStatus)
+                                .where(qGroupStatus.group.groupId.eq(qGroup.groupId))
+                ))
+                .from(qGroup)
+                .leftJoin(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
+                .where(qGroupStatus.groupMember.memberId.notIn(member.getMemberId()))
                 .fetch();
 
         em.flush();
@@ -246,6 +275,7 @@ public class GroupServiceImpl implements GroupService {
         return result == 1L;
     }
 
+
     @Override
     public GroupStatus requestToGroup(Long groupId) {
         Member member = currentMember.getMember();
@@ -267,13 +297,17 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean acceptMemberRequest(Long groupStatusId, Long memberId) {
+    public boolean acceptMemberRequest(Long groupId, Long memberId) {
         QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
 
         long result = query.update(qGroupStatus)
                 .set(qGroupStatus.accepted, true)
-                .where(qGroupStatus.groupStatusId.eq(groupStatusId)
-                        .and(qGroupStatus.groupMember.memberId.eq(memberId))).execute();
+                .where(qGroupStatus.group.groupId.eq(groupId)
+                        .and(qGroupStatus.groupMember.memberId.eq(memberId)
+                                .and(qGroupStatus.accepted.isFalse())
+                                .and(qGroupStatus.requested.isTrue())
+                                .and(qGroupStatus.exited.isFalse())
+                                .and(qGroupStatus.banned.isFalse()))).execute();
         em.flush();
         em.clear();
         return result == 1L;
