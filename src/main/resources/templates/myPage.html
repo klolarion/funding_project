@@ -28,7 +28,9 @@
     a{text-decoration: none; color: black}
     span {margin-right: 5px}
     #funding-status{border-radius: 20px; background-color: #E9E9FAFF; color:#7171DFFF; font-size: small; padding: 5px 10px}
-
+    p{height: 40px; align-content: center}
+    ul{height: 40px; overflow: scroll}
+    #no-group{color: gray; font-size: small}
 </style>
 <div th:insert="fragments/header :: header"></div>
 <body>
@@ -46,22 +48,23 @@
         <div id="mypage-right">
             <div id="mypage-top">
                 <div class="mypage-top-list" >
-                    <h3>요청 관리</h3>
+                    <h3>친구</h3>
                     <ul>
                         <li>친구 이름</li>
                     </ul>
-                    <a th:href="@{/friend}"><button>요청 관리</button></a>
+                    <a th:href="@{/friend}"><button>친구 관리</button></a>
                 </div>
                 <div class="mypage-top-list" >
                     <h3>내가 만든 그룹</h3>
-                    <ul>
-                        <li>친구 이름</li>
+                    <ul th:if="${myLeaderGroup.size() > 0}">
+                        <li th:each="myGroup : ${myLeaderGroup}" th:text="${myGroup.groupName}">친구 이름</li>
                     </ul>
+                    <p id="no-group" th:unless="${myLeaderGroup.size() > 0}">그룹을 만들어 보세요.</p>
                     <a th:href="@{/f1/group}"><button>내가 만든 그룹 관리</button></a>
                 </div>
                 <div class="mypage-top-list">
                     <h3>결제 수단</h3>
-                    <p>내 대표 결제 수단</p>
+                    <p th:text="${myMainPayment.paymentMethod.paymentName} + ' '+ ${myMainPayment.paymentMethod.accountNumber}"></p>
                     <a th:href="@{/f1/paymentMethod}"><button>결제 수단 관리</button></a>
                 </div>
             </div>

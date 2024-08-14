@@ -25,7 +25,7 @@ public class fundingController {
     @GetMapping
     public String funding(Model model) {
         model.addAttribute("productList",productServiceImpl.allProducts());
-        model.addAttribute("myLeaderGroups", groupServiceImpl.myGroups());
+        model.addAttribute("myLeaderGroups", groupServiceImpl.myLeaderGroups());
         return "createFunding";
     }
 

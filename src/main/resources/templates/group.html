@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Friend</title>
+    <title>Group</title>
 </head>
 <style>
     body{padding: 0 90px; margin: 100px auto; width: 500px}
@@ -26,9 +26,9 @@
         </form>
     </div>
     <div>
-        <h3>내 그룹</h3>
-        <ul th:if="${myGroup}">
-            <li th:each="group : ${myGroup}" >
+        <h3>내가 만든 그룹</h3>
+        <ul th:if="${myLeaderGroup}">
+            <li th:each="group : ${myLeaderGroup}" >
                 <a th:href="@{/f1/group/detail(groupId=${group.getGroupId()})}" th:text="${group.getGroupName()}">그룹 이름</a>
             </li>
         </ul>
