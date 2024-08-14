@@ -53,8 +53,8 @@
             })
             .then(result => {
                 console.log('Authentication successful:', result);
-
-                window.location.href = '/';
+                localStorage.setItem('almagest_csrf', result.headers['csrf'])
+                window.location.href = '/f1';
                 // 인증이 성공하면 원하는 작업을 수행 (예: 리다이렉트)
             })
             .catch((error) => {
