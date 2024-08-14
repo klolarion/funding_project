@@ -34,13 +34,13 @@ public class GroupStatus {
     private boolean exited;
     private boolean banned;
 
-    public GroupStatus(Group group, Member groupLeader, Member groupMember, boolean invited, boolean requested) {
+    public GroupStatus(Group group, Member groupLeader, Member groupMember, boolean invited, boolean requested, boolean accepted) {
         this.group = group;
         this.groupLeader = groupLeader;
         this.groupMember = groupMember;
         this.invited = invited;
         this.requested = requested;
-        this.accepted = false;
+        this.accepted = accepted;
         this.exited = false;
         this.banned = false;
     }
