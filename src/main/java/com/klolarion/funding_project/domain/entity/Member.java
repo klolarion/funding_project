@@ -63,6 +63,14 @@ public class Member extends BaseTime{
         this.offCd = false;
     }
 
+    public Member(String account, String name, String email, String tel, Role role) {
+        this.account = account;
+        this.memberName = name;
+        this.email = email;
+        this.tel = tel;
+        this.role = role;
+    }
+
     //userDetails 로 변환
     public CustomUserDetails memberToCustom() {
         return new CustomUserDetails(

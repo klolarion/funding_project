@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.klolarion.funding_project.domain.entity.*;
+import com.klolarion.funding_project.dto.RegisterDto;
 import com.klolarion.funding_project.repository.MemberRepository;
 import com.klolarion.funding_project.repository.PaymentMethodListRepository;
+import com.klolarion.funding_project.repository.RoleRepository;
 import com.klolarion.funding_project.service.blueprint.MemberService;
 import com.klolarion.funding_project.util.CurrentMember;
 import com.klolarion.funding_project.util.RedisService;
@@ -34,7 +36,27 @@ public class MemberServiceImpl implements MemberService {
     private final JPAQueryFactory query;
     private final CurrentMember currentMember;
     private final RedisService redisService;
+    private final RoleRepository roleRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Override
+    public boolean save(RegisterDto registerDto) {
+        Optional<Role> role = roleRepository.findById(2L);
+        Role defauleRole = role.orElseThrow(() -> new UsernameNotFoundException("Role not found"));
+        Member member = new Member(
+                registerDto.getAccount(),
+                registerDto.getName(),
+                registerDto.getEmail(),
+                registerDto.getTel(),
+                defauleRole
+        );
+        try {
+            memberRepository.save(member);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
 
 
     @Override

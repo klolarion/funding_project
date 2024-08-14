@@ -186,5 +186,3 @@ insert into order_list(order_id, funding_id, product_id, member_id, group_id, or
 values(1, 6, 5, 2, 3, 15000, true );
 
 --payment
-insert into payment()
-values ();
