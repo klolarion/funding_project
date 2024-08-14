@@ -47,8 +47,8 @@
             .then(response => {
                 if (response.ok) {
                     // 헤더에서 토큰 값을 읽어옵니다.
-                    const accessToken = response.headers.get('access');
-                    const csrfToken = response.headers.get('csrf');
+                    const accessToken = response.headers.get('Access');
+                    const csrfToken = response.headers.get('Csrf');
 
                     // 로컬 스토리지에 저장
                     if (accessToken) {
@@ -70,7 +70,7 @@
             })
             .then(result => {
                 console.log('Authentication successful:', result);
-                window.location.href = '/f1';
+                // window.location.href = '/f1';
                 // 인증이 성공하면 원하는 작업을 수행 (예: 리다이렉트)
             })
             .catch((error) => {
