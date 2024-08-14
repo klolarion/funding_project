@@ -117,6 +117,10 @@ public class GroupServiceImpl implements GroupService {
     public Group startGroup(String groupName) {
         Member member = currentMember.getMember();
         Group group = new Group(member, groupName);
+        GroupStatus groupStatus = new GroupStatus(
+                group, member, member
+        );
+        groupStatusRepository.save(groupStatus);
         return groupRepository.save(group);
     }
 
