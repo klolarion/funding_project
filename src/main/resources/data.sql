@@ -5,7 +5,7 @@ insert into role(role_id, role_name) values (2, 'ROLE_USER');
 --member
 
 insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (1, 1, 'admin', 'admin@admin.com', '010-0000-1111', 'Admin',  '1234', true, false, false);
+values (1, 2, 'admin', 'admin@admin.com', '010-0000-1111', 'Tester',  '1234', true, false, false);
 
 insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
 values (2, 2, 'tester1', 'tester1@user.com', '010-1234-1234', 'Tester1',  '1234', true, false, false);
@@ -15,6 +15,18 @@ values (3, 2, 'tester2', 'tester2@user.com', '010-9911-3344', 'Tester2',  '1234'
 
 insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
 values (4, 2, 'tester3', 'tester3@user.com', '010-5932-1927', 'Tester3',  '1234', true, false, true);
+
+insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
+values (5, 2, 'tester4', 'tester4@user.com', '010-5122-1727', 'Tester4',  '1234', true, false, false);
+
+insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
+values (6, 2, 'tester5', 'tester5@user.com', '010-5932-1527', 'Tester5',  '1234', true, false, false);
+
+insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
+values (7, 2, 'tester6', 'tester6@user.com', '010-3232-1447', 'Tester6',  '1234', true, false, false);
+
+insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
+values (8, 2, 'tester7', 'tester7@user.com', '010-5442-1127', 'Tester7',  '1234', true, false, false);
 
 --product
 
@@ -98,16 +110,81 @@ insert into payment_method_list(payment_method_list_id, payment_method_id, membe
 values (8, 3, 4, false, false);
 
 --member_groups(group)
+insert into member_groups(group_id, group_leader_id, group_name, group_active)
+values (1, 1, '하리보맨', true);
+
+insert into member_groups(group_id, group_leader_id, group_name, group_active)
+values (2, 1, '나는 오예스가 먹고싶다', true);
+
+insert into member_groups(group_id, group_leader_id, group_name, group_active)
+values (3, 1, '오예스그룹', true);
+
+insert into member_groups(group_id, group_leader_id, group_name, group_active)
+values (4, 1, '점심그룹', false);
+
+insert into member_groups(group_id, group_leader_id, group_name, group_active)
+values (5, 2, '쌀과자 사주세요', true);
+
+insert into member_groups(group_id, group_leader_id, group_name, group_active)
+values (6, 3, '빵먹자', false);
+
+insert into member_groups(group_id, group_leader_id, group_name, group_active)
+values (7, 4, '저녁그룹', false);
 
 
 --groupStatus
+insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
+values (1, 1, 1, 1, false, false, true, false, false);
+insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
+values (2, 1, 1, 2, true, false, true, false, false);
+insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
+values (3, 1, 1, 2, true, false, true, true, false);
+insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
+values (4, 1, 1, 3, false, true, false, false, true);
+insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
+values (5, 1, 1, 4, false, true, false, false, false);
+insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
+values (6, 2, 1, 1, false, true, true, false, false);
+insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
+values (7, 2, 1, 2, true, false, false, false, false);
+insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
+values (8, 3, 2, 2, false, false, true, false, false);
+insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
+values (9, 4, 3, 3, false, false, true, false, false);
+
 
 --friend
 
 --friendStatus
 
 --funding
+insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, closed, funding_account, completed, closed, deleted)
+values (1, 1, 6, null, 300, 0, '123-12345-12', false, false, false);
+insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, closed, funding_account, completed, closed, deleted)
+values (2, 1, 2, 1, 8000, 1700, '118-14215-00', false, false, false);
+insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, closed, funding_account, completed, closed, deleted)
+values (3, 1, 3, 1, 4200, 3984, '421-15745-62', false, true, false);
+insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, closed, funding_account, completed, closed, deleted)
+values (4, 1, 4, 1, 1500, 0, '439-16545-11', false, false, false);
+insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, closed, funding_account, completed, closed, deleted)
+values (5, 1, 4, null, 1500, 706, '349-42144-22', false, false, false);
+insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, closed, funding_account, completed, closed, deleted)
+values (6, 2, 5, 3, 15000, 15000, '243-34776-32', true, false, false);
+insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, closed, funding_account, completed, closed, deleted)
+values (7, 2, 1, 1, 5000, 5, '133-14142-13', false, true, false);
+insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, closed, funding_account, completed, closed, deleted)
+values (8, 3, 1, null, 5000, 50, '723-88743-52', false, false, false);
+insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, closed, funding_account, completed, closed, deleted)
+values (9, 4, 1, 2, 5000, 300, '142-74574-15', false, false, false);
+insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, closed, funding_account, completed, closed, deleted)
+values (10, 5, 2, null, 8000, 0, '103-71263-42', false, false, true);
+insert into funding(funding_id, member_id, product_id, group_id, total_funding_amount, closed, funding_account, completed, closed, deleted)
+values (11, 5, 3, null, 4200, 882, '992-13543-17', false, false, true);
 
 --orderList
+insert into order_list(order_id, funding_id, product_id, member_id, group_id, order_price, success)
+values(1, 6, 5, 2, 3, 15000, true );
 
 --payment
+insert into payment()
+values ();

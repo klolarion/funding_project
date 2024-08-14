@@ -202,8 +202,8 @@ public class GroupServiceImpl implements GroupService {
                 .join(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
                 .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
                 .leftJoin(qFunding).on(qFunding.group.groupId.eq(qGroup.groupId))
-                .where(qGroup.groupActive.isTrue())
-                .groupBy(qGroup.groupId, qGroup.groupLeader.memberId, qMember.memberName, qGroup.groupName, qFunding.fundingId) // 필요한 필드들을 그룹화
+                .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
+                .groupBy(qGroup.groupId, qGroup.groupLeader.memberId, qMember.memberName, qGroup.groupName) // 필요한 필드들을 그룹화
                 .fetch();
 
         Map<Long, GroupDto> groupDtoMap = new HashMap<>();
@@ -243,7 +243,7 @@ public class GroupServiceImpl implements GroupService {
         Member member = currentMember.getMember();
         Group group = new Group(member, groupName);
         GroupStatus groupStatus = new GroupStatus(
-                group, member, member, false, false
+                group, member, member, false, false, true
         );
         groupStatusRepository.save(groupStatus);
         return groupRepository.save(group);
@@ -259,7 +259,7 @@ public class GroupServiceImpl implements GroupService {
         Member member = query.selectFrom(qMember).where(qMember.memberId.eq(memberId)).fetchOne();
 
         GroupStatus groupStatus = new GroupStatus(
-                group, groupLeader, member, true, false
+                group, groupLeader, member, true, false, false
         );
         return groupStatusRepository.save(groupStatus);
     }
@@ -292,7 +292,8 @@ public class GroupServiceImpl implements GroupService {
                 groupLeader,
                 member,
                 false,
-                true
+                true,
+                false
         );
         return groupStatusRepository.save(groupStatus);
 
