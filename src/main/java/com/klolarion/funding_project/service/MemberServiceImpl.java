@@ -13,7 +13,6 @@ import com.klolarion.funding_project.util.RedisService;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -89,7 +88,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<PaymentMethodList> myPaymentLists(Long memberId) {
         QPaymentMethodList qPaymentMethodList = QPaymentMethodList.paymentMethodList;
-        List<PaymentMethodList> paymentMethodList = query.selectFrom(qPaymentMethodList).where(qPaymentMethodList.member.memberId.eq(memberId)).fetch();
+        List<PaymentMethodList> paymentMethodList = query.selectFrom(qPaymentMethodList)
+                .where(qPaymentMethodList.member.memberId.eq(memberId)
+                        .and(qPaymentMethodList.offCd.isFalse())).fetch();
         em.flush();
         em.clear();
         return paymentMethodList;
@@ -123,6 +124,21 @@ public class MemberServiceImpl implements MemberService {
         em.flush();
         em.clear();
         return result == 1L;
+    }
+
+    @Override
+    public PaymentMethodList getMainPaymentMethod(){
+        Member member = currentMember.getMember();
+        QPaymentMethodList qPaymentMethodList = QPaymentMethodList.paymentMethodList;
+
+        PaymentMethodList paymentMethodList = query.selectFrom(qPaymentMethodList).where(
+                qPaymentMethodList.member.memberId.eq(member.getMemberId())
+                        .and(qPaymentMethodList.mainPayment.isTrue())
+        ).fetchOne();
+
+        em.flush();
+        em.clear();
+        return paymentMethodList;
     }
 
     @Override
