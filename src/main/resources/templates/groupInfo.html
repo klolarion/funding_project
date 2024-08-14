@@ -41,7 +41,7 @@
         <h3>그룹이 참여하고 있는 펀딩</h3>
         <ul th:if="${fundingList}">
             <li th:each="funding : ${fundingList}" >
-                <a th:href="@{/f1/detail(fundingId=${funding.getFundingId()})}" th:text="${funding.productName}">그룹 이름</a>
+                <a th:href="@{/f1/detail(fundingId=${funding.fundingId})}" th:text="${funding.productName}">그룹 이름</a>
             </li>
         </ul>
     </div>

@@ -29,6 +29,7 @@ public class IndexController {
         Member member = memberService.myInfo();
         session.setAttribute("member", member);
         model.addAttribute("allFundingList", fundingServiceImpl.allFundingList());
+        model.addAttribute("allGroupList", groupServiceImpl.allGroupExceptMy());
         return "index";
     }
 

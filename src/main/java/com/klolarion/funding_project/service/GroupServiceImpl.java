@@ -122,6 +122,7 @@ public class GroupServiceImpl implements GroupService {
                 ))
                 .from(qGroup)
                 .leftJoin(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
+                .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
                 .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
                 .fetch();
 
@@ -148,6 +149,7 @@ public class GroupServiceImpl implements GroupService {
                 ))
                 .from(qGroup)
                 .leftJoin(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
+                .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
                 .where(qGroupStatus.groupMember.memberId.notIn(member.getMemberId()))
                 .fetch();
 
@@ -200,7 +202,7 @@ public class GroupServiceImpl implements GroupService {
                 .join(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
                 .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
                 .leftJoin(qFunding).on(qFunding.group.groupId.eq(qGroup.groupId))
-                .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
+                .where(qGroup.groupActive.isTrue())
                 .groupBy(qGroup.groupId, qGroup.groupLeader.memberId, qMember.memberName, qGroup.groupName, qFunding.fundingId) // 필요한 필드들을 그룹화
                 .fetch();
 

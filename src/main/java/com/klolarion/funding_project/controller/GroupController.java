@@ -1,5 +1,6 @@
 package com.klolarion.funding_project.controller;
 
+import com.klolarion.funding_project.dto.FundingListDto;
 import com.klolarion.funding_project.service.FundingServiceImpl;
 import com.klolarion.funding_project.service.GroupServiceImpl;
 import com.klolarion.funding_project.service.MemberServiceImpl;
@@ -12,6 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/f1/group")
@@ -65,17 +70,24 @@ public class GroupController {
 
     //group Info
     @GetMapping("/info")
-    public String info(@RequestParam(required = false) Long groupId, Model model) {
+    public String info(@RequestParam Long groupId, Model model) {
         model.addAttribute("groupDetail", groupServiceImpl.groupDetail(groupId));
         model.addAttribute("groupMembers", groupServiceImpl.groupMembers(groupId));
-        model.addAttribute("fundingList", fundingServiceImpl.fundingListByMyGroup(groupId));
+        Map<String, List<FundingListDto>> groupedMap = fundingServiceImpl.allFundingListByGroup(groupId);
+        List<FundingListDto> singleList = groupedMap.values()
+                .stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+//        System.out.println(singleList);
+        model.addAttribute("fundingList", singleList);
+
         return "groupInfo";
     }
 
     @PostMapping("/info/request")
-    public String requestGroup(@RequestParam Long groupId, HttpSession session){
+    public String requestGroup(@RequestParam Long groupId){
         groupServiceImpl.requestToGroup(groupId);
-        return "redirect:/group/info?groupId=" + groupId;
+        return "redirect:/f1/group/info?groupId=" + groupId;
     }
 
 }
