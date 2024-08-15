@@ -1,8 +1,7 @@
 package com.klolarion.funding_project.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.klolarion.funding_project.dto.LoginDto;
-import com.klolarion.funding_project.dto.OtpDto;
+import com.klolarion.funding_project.dto.auth.LoginDto;
+import com.klolarion.funding_project.dto.auth.OtpDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;

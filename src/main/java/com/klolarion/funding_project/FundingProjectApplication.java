@@ -1,5 +1,7 @@
 package com.klolarion.funding_project;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,6 +11,7 @@ import java.io.File;
 
 @SpringBootApplication
 @EnableJpaAuditing
+@OpenAPIDefinition(info = @Info(title = "펀딩 프로젝트", version = "1.0", description = "펀딩 프로젝트 API 목록"))
 public class FundingProjectApplication {
 
     @PostConstruct

@@ -1,9 +1,8 @@
 package com.klolarion.funding_project.service.blueprint;
 
 import com.klolarion.funding_project.domain.entity.Funding;
-import com.klolarion.funding_project.domain.entity.PaymentMethod;
-import com.klolarion.funding_project.dto.FundingListDto;
-import com.klolarion.funding_project.dto.JoinFundingDto;
+import com.klolarion.funding_project.dto.funding.FundingListDto;
+import com.klolarion.funding_project.dto.funding.JoinFundingDto;
 
 import java.util.List;
 import java.util.Map;
@@ -36,6 +35,8 @@ public interface FundingService {
 
     /*펀딩 시작*/
     Funding createFunding(Long memberId, Long productId, Long GroupId);
+
+    Funding createFundingApi(Long productId, Long groupId);
 
     /*펀딩 완료*/
     boolean completeFunding(Long fundingId);

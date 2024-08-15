@@ -1,10 +1,7 @@
 package com.klolarion.funding_project.repository;
 
-import com.klolarion.funding_project.dto.GroupDto;
 import com.klolarion.funding_project.domain.entity.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
 //

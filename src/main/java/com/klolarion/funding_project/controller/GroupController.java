@@ -1,10 +1,9 @@
 package com.klolarion.funding_project.controller;
 
-import com.klolarion.funding_project.dto.FundingListDto;
+import com.klolarion.funding_project.dto.funding.FundingListDto;
 import com.klolarion.funding_project.service.FundingServiceImpl;
 import com.klolarion.funding_project.service.GroupServiceImpl;
 import com.klolarion.funding_project.service.MemberServiceImpl;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

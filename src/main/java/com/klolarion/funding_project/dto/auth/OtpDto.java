@@ -1,4 +1,4 @@
-package com.klolarion.funding_project.dto;
+package com.klolarion.funding_project.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

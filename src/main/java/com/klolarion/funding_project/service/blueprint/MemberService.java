@@ -3,12 +3,13 @@ package com.klolarion.funding_project.service.blueprint;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.klolarion.funding_project.domain.entity.Member;
 import com.klolarion.funding_project.domain.entity.PaymentMethodList;
-import com.klolarion.funding_project.dto.RegisterDto;
+import com.klolarion.funding_project.dto.auth.RegisterDto;
 
 import java.util.List;
 
 public interface MemberService {
 
+    /*인증서버에서 받아온 가입정보로 사용자 생성*/
     boolean save(RegisterDto registerDto);
 
     /*멤버정보 캐시등록*/

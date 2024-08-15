@@ -1,4 +1,4 @@
-package com.klolarion.funding_project.dto;
+package com.klolarion.funding_project.dto.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,11 +11,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @NoArgsConstructor
-public class MemberCacheDto {
+public class CacheDto {
     private Long memberId;
+    private String account;
     private String email;
+    private String tel;
+    private LocalDateTime lastUpdate;
     private boolean enabled;
     private boolean banned;
     private String role;
-
 }

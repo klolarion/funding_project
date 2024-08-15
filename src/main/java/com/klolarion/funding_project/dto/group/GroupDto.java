@@ -1,4 +1,4 @@
-package com.klolarion.funding_project.dto;
+package com.klolarion.funding_project.dto.group;
 
 import com.klolarion.funding_project.domain.entity.Funding;
 import lombok.AllArgsConstructor;

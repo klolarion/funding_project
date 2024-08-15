@@ -1,6 +1,5 @@
-package com.klolarion.funding_project.dto;
+package com.klolarion.funding_project.dto.funding;
 
-import com.klolarion.funding_project.domain.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

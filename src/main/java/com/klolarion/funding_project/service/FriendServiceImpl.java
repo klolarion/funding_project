@@ -1,7 +1,7 @@
 package com.klolarion.funding_project.service;
 
 import com.klolarion.funding_project.domain.entity.*;
-import com.klolarion.funding_project.dto.FriendDto;
+import com.klolarion.funding_project.dto.friend.FriendDto;
 import com.klolarion.funding_project.repository.FriendRepository;
 import com.klolarion.funding_project.repository.FriendStatusRepository;
 import com.klolarion.funding_project.service.blueprint.FriendService;

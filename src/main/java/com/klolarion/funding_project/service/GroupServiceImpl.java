@@ -1,7 +1,7 @@
 package com.klolarion.funding_project.service;
 
 import com.klolarion.funding_project.domain.entity.*;
-import com.klolarion.funding_project.dto.GroupDto;
+import com.klolarion.funding_project.dto.group.GroupDto;
 import com.klolarion.funding_project.repository.GroupRepository;
 import com.klolarion.funding_project.repository.GroupStatusRepository;
 import com.klolarion.funding_project.service.blueprint.GroupService;

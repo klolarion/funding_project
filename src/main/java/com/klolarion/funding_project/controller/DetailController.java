@@ -1,9 +1,8 @@
 package com.klolarion.funding_project.controller;
 
 import com.klolarion.funding_project.domain.entity.Member;
-import com.klolarion.funding_project.dto.JoinFundingDto;
+import com.klolarion.funding_project.dto.funding.JoinFundingDto;
 import com.klolarion.funding_project.service.FundingServiceImpl;
-import com.klolarion.funding_project.service.blueprint.FundingService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +23,6 @@ public class DetailController {
     @GetMapping
     public String detail(@RequestParam Long fundingId, Model model) {
         model.addAttribute("funding",fundingServiceImpl.fundingDetail(fundingId));
-//        System.out.println(fundingId);
-//        System.out.println(fundingServiceImpl.fundingDetail(fundingId));
         return "detail";
     }
 
@@ -36,7 +33,6 @@ public class DetailController {
         joinFundingDto.setAmount(amount);
         joinFundingDto.setFundingId(fundingId);
         joinFundingDto.setMemberId(member.getMemberId());
-        System.out.println(joinFundingDto);
         fundingServiceImpl.joinFunding(joinFundingDto);
         return "redirect:/f1";
     }

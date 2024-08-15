@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.klolarion.funding_project.domain.entity.*;
-import com.klolarion.funding_project.dto.RegisterDto;
+import com.klolarion.funding_project.dto.auth.RegisterDto;
 import com.klolarion.funding_project.repository.MemberRepository;
 import com.klolarion.funding_project.repository.PaymentMethodListRepository;
 import com.klolarion.funding_project.repository.RoleRepository;

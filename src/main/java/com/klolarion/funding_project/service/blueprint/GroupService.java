@@ -2,7 +2,7 @@ package com.klolarion.funding_project.service.blueprint;
 
 import com.klolarion.funding_project.domain.entity.GroupStatus;
 import com.klolarion.funding_project.domain.entity.Member;
-import com.klolarion.funding_project.dto.GroupDto;
+import com.klolarion.funding_project.dto.group.GroupDto;
 import com.klolarion.funding_project.domain.entity.Group;
 
 import java.util.List;

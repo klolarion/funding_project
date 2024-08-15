@@ -46,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderList> groupOrderList(Long groupId) {
+    public List<OrderList> myOwnedGroupsOrderList(Long groupId) {
         Member member = currentMember.getMember();
         QOrderList qOrderList = QOrderList.orderList;
         QGroup qGroup = QGroup.group;

@@ -1,10 +1,7 @@
 package com.klolarion.funding_project.repository;
 
 import com.klolarion.funding_project.domain.entity.Funding;
-import com.klolarion.funding_project.dto.JoinFundingDto;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface FundingRepository extends JpaRepository<Funding, Long> {
 //

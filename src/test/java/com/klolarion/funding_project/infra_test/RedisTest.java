@@ -1,11 +1,11 @@
-package com.klolarion.funding_project;
+package com.klolarion.funding_project.infra_test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.klolarion.funding_project.domain.entity.Member;
-import com.klolarion.funding_project.dto.CacheDto;
+import com.klolarion.funding_project.dto.member.CacheDto;
 import com.klolarion.funding_project.repository.MemberRepository;
 import com.klolarion.funding_project.util.RedisService;
 import jakarta.transaction.Transactional;

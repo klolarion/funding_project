@@ -1,8 +1,8 @@
 package com.klolarion.funding_project.service;
 
 import com.klolarion.funding_project.domain.entity.*;
-import com.klolarion.funding_project.dto.FundingListDto;
-import com.klolarion.funding_project.dto.JoinFundingDto;
+import com.klolarion.funding_project.dto.funding.FundingListDto;
+import com.klolarion.funding_project.dto.funding.JoinFundingDto;
 import com.klolarion.funding_project.repository.FundingRepository;
 import com.klolarion.funding_project.repository.PaymentRepository;
 import com.klolarion.funding_project.service.blueprint.FundingService;
@@ -15,10 +15,11 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -396,6 +397,47 @@ public class FundingServiceImpl implements FundingService {
     }
 
     @Override
+    public Funding createFundingApi(Long productId, Long groupId) {
+        Member m = currentMember.getMember();
+        QMember qMember = QMember.member;
+        QProduct qProduct = QProduct.product;
+        QGroup qGroup = QGroup.group;
+        Tuple tuple = query.select(
+                        qMember,
+                        qProduct,
+                        qGroup
+                ).from(qMember)
+                .join(qProduct).on(qProduct.productId.eq(productId))
+                .leftJoin(qGroup).on((groupId != null ? qGroup.groupId.eq(groupId) : Expressions.TRUE))
+                .where(qMember.memberId.eq(m.getMemberId()))
+                .fetchOne();
+
+        Member member = tuple.get(qMember);
+        Product product = tuple.get(qProduct);
+        Group group = tuple.get(qGroup);
+
+        //상품 재고, 재입고여부, 판매종료여부 확인
+        if (product.getStock() > 0 || product.isRestock() || !product.isSaleFinished()) {
+
+            Funding funding = new Funding(
+                    member,
+                    product,
+                    group,
+                    product.getPrice(),
+                    randomAccountGenerator.generateRandomAccount()
+            );
+
+            Funding saved = fundingRepository.save(funding);
+            em.flush();
+            em.clear();
+            return saved;
+        }
+        em.flush();
+        em.clear();
+        return null;
+    }
+
+    @Override
     public boolean completeFunding(Long fundingId) {
         QFunding qFunding = QFunding.funding;
         long result = query.update(qFunding).set(qFunding.deleted, true).execute();
@@ -406,7 +448,8 @@ public class FundingServiceImpl implements FundingService {
 
     /*동시성제어 필요*/
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
+    @Lock(LockModeType.PESSIMISTIC_WRITE) //jpa 엔티티에 베타락 설정. 읽기/쓰기 차단
     public boolean joinFunding(JoinFundingDto joinFundingDto) {
 
         Long fundingId = joinFundingDto.getFundingId();
