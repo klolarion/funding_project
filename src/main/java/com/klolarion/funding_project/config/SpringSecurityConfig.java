@@ -33,6 +33,7 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                                 .anyRequest().permitAll()
 //                        .requestMatchers("/f1/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll() // 특정 경로는 모든 사용자에게 허용
+//                                .requestMatchers("/admin/**").hasRole("ADMIN")
 //                        .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
                 .authenticationProvider(customAuthenticationProvider) // 사용자 정의 인증 프로바이더 설정

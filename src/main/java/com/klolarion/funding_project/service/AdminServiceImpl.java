@@ -77,11 +77,10 @@ public class AdminServiceImpl implements AdminService {
     /*동시성제어 필요*/
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public Product addStock(Long productId, int stock){
+    public boolean addStock(Long productId, int stock){
         QProduct qProduct = QProduct.product;
-        query.update(qProduct).set(qProduct.stock, qProduct.stock.add(stock)).execute();
-
-        return null;
+        long result = query.update(qProduct).set(qProduct.stock, qProduct.stock.add(stock)).execute();
+        return result == 1L;
     }
 
     /*동시성제어 필요*/

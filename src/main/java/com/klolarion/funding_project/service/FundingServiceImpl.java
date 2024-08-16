@@ -7,7 +7,6 @@ import com.klolarion.funding_project.repository.FundingRepository;
 import com.klolarion.funding_project.repository.PaymentRepository;
 import com.klolarion.funding_project.service.blueprint.FundingService;
 import com.klolarion.funding_project.util.CurrentMember;
-import com.klolarion.funding_project.util.ProgressCalculator;
 import com.klolarion.funding_project.util.RandomAccountGenerator;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
@@ -37,7 +36,6 @@ public class FundingServiceImpl implements FundingService {
     private final RandomAccountGenerator randomAccountGenerator;
     private final FundingRepository fundingRepository;
     private final CurrentMember currentMember;
-    private final ProgressCalculator calculator;
 
     /*전체 펀딩 조회*/
     @Override
@@ -383,17 +381,20 @@ public class FundingServiceImpl implements FundingService {
     }
 
     @Override
-    public Funding createFunding(Long memberId, Long productId, Long groupId) {
+    public Funding createFunding(Long memberId, Long productId, Long groupId, int fundingCategoryCode) {
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
         QGroup qGroup = QGroup.group;
+        QCodeMaster qCodeMaster = QCodeMaster.codeMaster;
         //전달받은 id로 각 객체 조회
         Tuple tuple = query.select(
                         qMember,
                         qProduct,
-                        qGroup
+                        qGroup,
+                        qCodeMaster
                 ).from(qMember)
                 .join(qProduct).on(qProduct.productId.eq(productId))
+                .join(qCodeMaster).on(qCodeMaster.code.eq(fundingCategoryCode))
                 .leftJoin(qGroup).on(groupId != null ? qGroup.groupId.eq(groupId) : Expressions.FALSE.isTrue())
                 .where(qMember.memberId.eq(memberId))
                 .fetchOne();
@@ -401,6 +402,7 @@ public class FundingServiceImpl implements FundingService {
         Member member = tuple.get(qMember);
         Product product = tuple.get(qProduct);
         Group group = tuple.get(qGroup);
+        CodeMaster codeMaster = tuple.get(qCodeMaster);
 
         //상품 재고, 재입고여부, 판매종료여부 확인
         if (product.getStock() > 0 || product.isRestock() || !product.isSaleFinished()) {
@@ -410,7 +412,8 @@ public class FundingServiceImpl implements FundingService {
                     product,
                     group,
                     product.getPrice(),
-                    randomAccountGenerator.generateRandomAccount()
+                    randomAccountGenerator.generateRandomAccount(),
+                    codeMaster.getCode()
             );
 
             Funding saved = fundingRepository.save(funding);
@@ -424,17 +427,20 @@ public class FundingServiceImpl implements FundingService {
     }
 
     @Override
-    public Funding createFundingApi(Long productId, Long groupId) {
+    public Funding createFundingApi(Long productId, Long groupId, int fundingCategoryCode) {
         Member m = currentMember.getMember();
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
         QGroup qGroup = QGroup.group;
+        QCodeMaster qCodeMaster = QCodeMaster.codeMaster;
         Tuple tuple = query.select(
                         qMember,
                         qProduct,
-                        qGroup
+                        qGroup,
+                        qCodeMaster
                 ).from(qMember)
                 .join(qProduct).on(qProduct.productId.eq(productId))
+                .join(qCodeMaster).on(qCodeMaster.code.eq(fundingCategoryCode))
                 .leftJoin(qGroup).on((groupId != null ? qGroup.groupId.eq(groupId) : Expressions.TRUE))
                 .where(qMember.memberId.eq(m.getMemberId()))
                 .fetchOne();
@@ -442,6 +448,7 @@ public class FundingServiceImpl implements FundingService {
         Member member = tuple.get(qMember);
         Product product = tuple.get(qProduct);
         Group group = tuple.get(qGroup);
+        CodeMaster codeMaster = tuple.get(qCodeMaster);
 
         //상품 재고, 재입고여부, 판매종료여부 확인
         if (product.getStock() > 0 || product.isRestock() || !product.isSaleFinished()) {
@@ -451,7 +458,8 @@ public class FundingServiceImpl implements FundingService {
                     product,
                     group,
                     product.getPrice(),
-                    randomAccountGenerator.generateRandomAccount()
+                    randomAccountGenerator.generateRandomAccount(),
+                    codeMaster.getCode()
             );
 
             Funding saved = fundingRepository.save(funding);

@@ -21,9 +21,15 @@ public class Funding extends BaseTime{
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @OneToOne
+    @JoinColumn(name = "travel_id", nullable = true)
+    private Travel travel;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id")
     private Group group;
+
+
 
     @Column(nullable = false)
     private Long totalFundingAmount;
@@ -33,17 +39,21 @@ public class Funding extends BaseTime{
     @Column(nullable = false, unique = true)
     private String fundingAccount;
 
+    @Column(nullable = false)
+    private int fundingCategoryCode;
+
     private boolean completed;
     private boolean closed;
     private boolean deleted;
 
-    public Funding(Member member, Product product, Group group, Long totalFundingAmount, String fundingAccount) {
+    public Funding(Member member, Product product, Group group, Long totalFundingAmount, String fundingAccount, int fundingCategoryCode) {
         this.member = member;
         this.product = product;
         this.group = group;
         this.totalFundingAmount = totalFundingAmount;
         this.currentFundingAmount = 0L;
         this.fundingAccount = fundingAccount;
+        this.fundingCategoryCode = fundingCategoryCode;
         this.completed = false;
         this.closed = false;
         this.deleted = false;

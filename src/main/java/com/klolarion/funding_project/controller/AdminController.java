@@ -1,19 +1,16 @@
 package com.klolarion.funding_project.controller;
 
-import com.klolarion.funding_project.domain.entity.CodeMaster;
 import com.klolarion.funding_project.dto.PaymentMethodDto;
 import com.klolarion.funding_project.service.AdminServiceImpl;
-import com.klolarion.funding_project.service.FundingServiceImpl;
-import com.klolarion.funding_project.service.MemberServiceImpl;
 import com.klolarion.funding_project.service.ProductServiceImpl;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -23,8 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AdminController {
     private final AdminServiceImpl adminServiceImpl;
     private final ProductServiceImpl productServiceImpl;
-    private final FundingServiceImpl fundingServiceImpl;
-    private MemberServiceImpl memberServiceImpl;
 
     @GetMapping
     public String admin(Model model){
@@ -80,33 +75,33 @@ public class AdminController {
 
     //펀딩
     @PostMapping("/funding/closed")
-    public String closeFunding(@RequestParam Long fundingId, RedirectAttributes redirectAttributes) {
+    public String closeFunding(@RequestParam Long fundingId) {
         adminServiceImpl.closeFunding(fundingId);
         return "redirect:/f0/admin";
     }
 
     @PostMapping("/funding/delete")
-    public String deleteFunding(@RequestParam Long fundingId, RedirectAttributes redirectAttributes) {
+    public String deleteFunding(@RequestParam Long fundingId) {
         adminServiceImpl.deleteFunding(fundingId);
         return "redirect:/f0/admin";
     }
 
     //코드
     @PostMapping("/code")
-    public  String addCode(@RequestParam int code, @RequestParam String description, @RequestParam String reference, RedirectAttributes redirectAttributes) {
+    public  String addCode(@RequestParam int code, @RequestParam String description, @RequestParam String reference) {
         adminServiceImpl.addCode(code, description, reference);
         return "redirect:/f0/admin";
     }
 
     @GetMapping("/code")
-    public String deleteCode(@RequestParam Long codeId, RedirectAttributes redirectAttributes) {
+    public String deleteCode(@RequestParam Long codeId) {
         adminServiceImpl.deleteCode(codeId);
         return "redirect:/f0/admin";
     }
 
     //결제 수단
     @PostMapping("/paymentMethod")
-    public String addPaymentMethod(@RequestParam Long codeId, @RequestParam String accountNumber, @RequestParam Long availableAmount, RedirectAttributes redirectAttributes) {
+    public String addPaymentMethod(@RequestParam Long codeId, @RequestParam String accountNumber, @RequestParam Long availableAmount) {
 //        adminServiceImpl.getCode(codeId);
 //        System.out.println(adminServiceImpl.getCode(codeId).getDescription());
         PaymentMethodDto paymentMethodDto = new PaymentMethodDto(adminServiceImpl.getCode(codeId), accountNumber, availableAmount);

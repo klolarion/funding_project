@@ -31,10 +31,10 @@ public class fundingController {
     }
 
     @PostMapping
-    public String createFunding(@RequestParam Long productId, @RequestParam(required = false) Long groupId, HttpSession session) {
+    public String createFunding(@RequestParam Long productId, @RequestParam(required = false) Long groupId, @RequestParam int fundingCategoryCode, HttpSession session) {
         Member member = (Member) session.getAttribute("member");
 
-        fundingServiceImpl.createFunding(member.getMemberId(), productId, groupId);
+        fundingServiceImpl.createFunding(member.getMemberId(), productId, groupId, fundingCategoryCode);
         return "redirect:/f1";
     }
 }

@@ -37,6 +37,8 @@ public class QFunding extends EntityPathBase<Funding> {
 
     public final StringPath fundingAccount = createString("fundingAccount");
 
+    public final NumberPath<Integer> fundingCategoryCode = createNumber("fundingCategoryCode", Integer.class);
+
     public final NumberPath<Long> fundingId = createNumber("fundingId", Long.class);
 
     public final QGroup group;
@@ -49,6 +51,8 @@ public class QFunding extends EntityPathBase<Funding> {
     public final QProduct product;
 
     public final NumberPath<Long> totalFundingAmount = createNumber("totalFundingAmount", Long.class);
+
+    public final QTravel travel;
 
     public QFunding(String variable) {
         this(Funding.class, forVariable(variable), INITS);
@@ -71,6 +75,7 @@ public class QFunding extends EntityPathBase<Funding> {
         this.group = inits.isInitialized("group") ? new QGroup(forProperty("group"), inits.get("group")) : null;
         this.member = inits.isInitialized("member") ? new QMember(forProperty("member"), inits.get("member")) : null;
         this.product = inits.isInitialized("product") ? new QProduct(forProperty("product")) : null;
+        this.travel = inits.isInitialized("travel") ? new QTravel(forProperty("travel"), inits.get("travel")) : null;
     }
 
 }

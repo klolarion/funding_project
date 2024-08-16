@@ -1,6 +1,7 @@
 package com.klolarion.funding_project.util.initChecker;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class DatabaseConnectionChecker implements CommandLineRunner {
 
     private final DataSource dataSource;
@@ -18,12 +20,13 @@ public class DatabaseConnectionChecker implements CommandLineRunner {
     public void run(String... args) {
         try (Connection connection = dataSource.getConnection()) {
             if (connection != null) {
-                System.out.println("Database connected successfully!");
+                log.info("Database connected successfully!");
             } else {
-                System.out.println("Failed to connect to the database.");
+                log.error("Failed to connect to the database.");
+                System.out.println();
             }
         } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
+            log.error("SQL Exception: " + e.getMessage());
         }
     }
 }

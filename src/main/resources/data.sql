@@ -64,7 +64,7 @@ insert into code_master(code_id, code, description, reference)
 values (5, 203, '카카오페이', 'pay');
 
 insert into code_master(code_id, code, description, reference)
-values (6, 901, '생일', '그룹 분류');
+values (6, 901, '상품', '그룹 분류');
 
 insert into code_master(code_id, code, description, reference)
 values (7, 902, '여행', '그룹 분류');
@@ -112,8 +112,8 @@ insert into payment_method_list(payment_method_list_id, payment_method_id, membe
 values (8, 3, 4, false, false);
 
 --member_groups(group)
-INSERT INTO funding_db.member_groups (group_active, group_id, group_leader_id, group_name, code) VALUES (true, 1, 1, '마가렛트 사줘', 902);
-INSERT INTO funding_db.member_groups (group_active, group_id, group_leader_id, group_name, code) VALUES (true, 2, 1, '나는 오예스가 먹고싶다', 902);
+INSERT INTO funding_db.member_groups (group_active, group_id, group_leader_id, group_name, group_category_code) VALUES (true, 1, 1, '마가렛트 사줘', 902);
+INSERT INTO funding_db.member_groups (group_active, group_id, group_leader_id, group_name, group_category_code) VALUES (true, 2, 1, '나는 오예스가 먹고싶다', 902);
 
 --groupStatus
 INSERT INTO funding_db.group_status (accepted, banned, exited, invited, requested, group_id, group_leader_id, group_member_id, group_status_id) VALUES (true, false, false, false, false, 1, 1, 1, 1);
@@ -125,9 +125,9 @@ INSERT INTO funding_db.group_status (accepted, banned, exited, invited, requeste
 --friendStatus
 
 --funding
-INSERT INTO funding_db.funding (closed, completed, deleted, current_funding_amount, funding_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date) VALUES (false, false, false, 1000, 1, 1, 1, 3, 4200, '24. 8. 16. 오후 5:11', '620-65697-37', '24. 8. 16. 오후 5:11');
-INSERT INTO funding_db.funding (closed, completed, deleted, current_funding_amount, funding_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date) VALUES (false, false, false, 500, 2, null, 1, 5, 15000, '24. 8. 16. 오후 5:14', '540-75235-09', '24. 8. 16. 오후 5:14');
-INSERT INTO funding_db.funding (closed, completed, deleted, current_funding_amount, funding_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date) VALUES (false, false, false, 0, 3, 2, 1, 2, 8000, '24. 8. 16. 오후 5:14', '946-49182-93', '24. 8. 16. 오후 5:14');
+INSERT INTO funding_db.funding (closed, completed, deleted, current_funding_amount, funding_id, travel_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date, funding_category_code) VALUES (false, false, false, 1000, 1, null, 1, 1, 3, 4200, '24. 8. 16. 오후 5:11', '620-65697-37', '24. 8. 16. 오후 5:11', 901);
+INSERT INTO funding_db.funding (closed, completed, deleted, current_funding_amount, funding_id, travel_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date, funding_category_code) VALUES (false, false, false, 500, 2, null, null, 1, 5, 15000, '24. 8. 16. 오후 5:14', '540-75235-09', '24. 8. 16. 오후 5:14', 901);
+INSERT INTO funding_db.funding (closed, completed, deleted, current_funding_amount, funding_id, travel_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date, funding_category_code) VALUES (false, false, false, 0, 3, null, 2, 1, 2, 8000, '24. 8. 16. 오후 5:14', '946-49182-93', '24. 8. 16. 오후 5:14', 901);
 
 
 --orderList

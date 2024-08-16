@@ -13,7 +13,7 @@ public interface AdminService {
     // product
     Product searchProduct(Long productId);
     Product addProduct(String productName, Long price, int stock);
-    Product addStock(Long productId, int stock);
+    boolean addStock(Long productId, int stock);
     boolean setRestock(Long productId);
     boolean setSellFinished(Long productId);
 

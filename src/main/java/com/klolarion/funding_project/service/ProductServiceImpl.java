@@ -37,7 +37,6 @@ public class ProductServiceImpl implements ProductService {
     public Product getProduct(Long productId) {
         QProduct qProduct = QProduct.product;
         Product product = query.selectFrom(qProduct).where(qProduct.productId.eq(productId)).fetchOne();
-
         return product;
 
     }

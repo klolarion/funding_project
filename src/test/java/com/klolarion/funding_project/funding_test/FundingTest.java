@@ -26,6 +26,7 @@ public class FundingTest {
         Long productId = 1L;
         Long groupId = null;
         Long memberId = 1L;
+        int fundingCategoryCode = 902;
 
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
@@ -54,7 +55,8 @@ public class FundingTest {
                     product,
                     group,
                     product.getPrice(),
-                    randomAccountGenerator.generateRandomAccount()
+                    randomAccountGenerator.generateRandomAccount(),
+                    fundingCategoryCode
             );
 
             Funding saved = fundingRepository.save(funding);

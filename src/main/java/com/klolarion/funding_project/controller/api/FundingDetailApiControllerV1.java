@@ -1,13 +1,8 @@
 package com.klolarion.funding_project.controller.api;
 
-import com.klolarion.funding_project.domain.entity.Funding;
-import com.klolarion.funding_project.dto.funding.CreateFundingDto;
 import com.klolarion.funding_project.dto.funding.FundingListDto;
-import com.klolarion.funding_project.dto.funding.FundingMainDto;
 import com.klolarion.funding_project.dto.funding.JoinFundingDto;
 import com.klolarion.funding_project.service.FundingServiceImpl;
-import com.klolarion.funding_project.service.GroupServiceImpl;
-import com.klolarion.funding_project.service.ProductServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/f1/v1")
+@RequestMapping("/api/f1/v1/funding")
 @Slf4j
 public class FundingDetailApiControllerV1 {
-    private final ProductServiceImpl productService;
-    private final GroupServiceImpl groupService;
     private final FundingServiceImpl fundingService;
 
 
@@ -31,7 +24,7 @@ public class FundingDetailApiControllerV1 {
                     @ApiResponse(responseCode = "200", description = "정상 호출"),
                     @ApiResponse(responseCode = "500", description = "서버 오류"),
             })
-    @GetMapping("/funding/{fundingId}")
+    @GetMapping("/{fundingId}")
     public ResponseEntity<?> detail(@PathVariable Long fundingId) {
         try {
             FundingListDto fundingListDto = fundingService.fundingDetail(fundingId);
@@ -48,7 +41,7 @@ public class FundingDetailApiControllerV1 {
                     @ApiResponse(responseCode = "400", description = "펀딩 참여 실패, 송금 실패"),
                     @ApiResponse(responseCode = "500", description = "서버 오류"),
             })
-    @PostMapping("/funding")
+    @PutMapping("/")
     public ResponseEntity<?> joinFunding(@RequestBody JoinFundingDto joinFundingDto) {
         try {
             boolean result = fundingService.joinFunding(joinFundingDto);

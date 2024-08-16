@@ -24,12 +24,12 @@ public class QGroup extends EntityPathBase<Group> {
 
     public final QBaseTime _super = new QBaseTime(this);
 
-    public final NumberPath<Integer> code = createNumber("code", Integer.class);
-
     //inherited
     public final StringPath createdDate = _super.createdDate;
 
     public final BooleanPath groupActive = createBoolean("groupActive");
+
+    public final NumberPath<Integer> groupCategoryCode = createNumber("groupCategoryCode", Integer.class);
 
     public final NumberPath<Long> groupId = createNumber("groupId", Long.class);
 

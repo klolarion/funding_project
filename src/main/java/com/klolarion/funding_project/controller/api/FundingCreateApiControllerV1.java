@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/f1/v1")
+@RequestMapping("/api/f1/v1/funding")
 @Slf4j
 public class FundingCreateApiControllerV1 {
     private final ProductServiceImpl productService;
@@ -31,7 +31,7 @@ public class FundingCreateApiControllerV1 {
                     @ApiResponse(responseCode = "200", description = "정상 호출"),
                     @ApiResponse(responseCode = "500", description = "서버 오류"),
             })
-    @GetMapping("/funding")
+    @GetMapping("/")
     public ResponseEntity<?> fundingMain() {
         try {
             FundingMainDto fundingMainDto = new FundingMainDto(
@@ -51,10 +51,10 @@ public class FundingCreateApiControllerV1 {
                     @ApiResponse(responseCode = "400", description = "펀딩 생성 실패"),
                     @ApiResponse(responseCode = "500", description = "서버 오류"),
             })
-    @PostMapping("/funding/new")
+    @PostMapping("/")
     public ResponseEntity<?> createFunding(@RequestBody CreateFundingDto createFundingDto) {
         try {
-            Funding createdFunding = fundingService.createFundingApi(createFundingDto.getProductId(), createFundingDto.getGroupId());
+            Funding createdFunding = fundingService.createFundingApi(createFundingDto.getProductId(), createFundingDto.getGroupId(), createFundingDto.getFundingCategoryCode());
             if(createdFunding != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("펀딩 생성 성공");
             }else {
@@ -67,28 +67,4 @@ public class FundingCreateApiControllerV1 {
         }
     }
 
-
-    @Operation(summary = "펀딩 참여",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "펀딩 참여됨, 송금 정상"),
-                    @ApiResponse(responseCode = "400", description = "펀딩 참여 실패, 송금 실패"),
-                    @ApiResponse(responseCode = "500", description = "서버 오류"),
-            })
-    @PostMapping("/funding")
-    public ResponseEntity<?> joinFunding(@RequestBody JoinFundingDto joinFundingDto) {
-        try {
-            boolean result = fundingService.joinFunding(joinFundingDto);
-
-            if (result) {
-                log.debug("펀딩 참여 성공, Data - ", joinFundingDto);
-                return ResponseEntity.status(HttpStatus.OK).body("펀딩 참여 성공");
-            }else {
-                log.error("펀딩 참여 실패, Data -  ", joinFundingDto);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("펀딩 참여 실패");
-            }
-        }catch (Exception e){
-            log.error("펀딩 참여 실패, Data -  ", joinFundingDto);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
-        }
-    }
 }
