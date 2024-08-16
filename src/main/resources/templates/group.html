@@ -22,6 +22,14 @@
         <h3>그룹 생성하기</h3>
         <form method="post" th:action="@{/f1/group}">
             <input name="groupName" placeholder="그룹 이름을 입력하세요.">
+            <div>
+                <label>
+                    생일선물<input name="groupCategory" type="radio" value="생일선물" required>
+                </label><br>
+                <label>
+                    여행<input name="groupCategory" type="radio" value="여행">
+                </label><br>
+            </div>
             <button>생성하기</button>
         </form>
     </div>

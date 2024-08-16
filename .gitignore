@@ -20,6 +20,9 @@ bin/
 ### QueryDSL ###
 /src/main/generated/
 
+### Log ###
+/log
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

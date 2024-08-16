@@ -1,6 +1,5 @@
 package com.klolarion.funding_project.controller.api;
 
-import com.klolarion.funding_project.controller.api.blueprint.V1FundingApiController;
 import com.klolarion.funding_project.domain.entity.Funding;
 import com.klolarion.funding_project.dto.funding.CreateFundingDto;
 import com.klolarion.funding_project.dto.funding.FundingListDto;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/f1/v1")
 @Slf4j
-public class V1FundingApiControllerImpl implements V1FundingApiController {
+public class FundingCreateApiControllerV1 {
     private final ProductServiceImpl productService;
     private final GroupServiceImpl groupService;
     private final FundingServiceImpl fundingService;
@@ -33,7 +32,6 @@ public class V1FundingApiControllerImpl implements V1FundingApiController {
                     @ApiResponse(responseCode = "500", description = "서버 오류"),
             })
     @GetMapping("/funding")
-    @Override
     public ResponseEntity<?> fundingMain() {
         try {
             FundingMainDto fundingMainDto = new FundingMainDto(
@@ -47,23 +45,6 @@ public class V1FundingApiControllerImpl implements V1FundingApiController {
         }
     }
 
-    @Operation(summary = "펀딩 조회",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "정상 호출"),
-                    @ApiResponse(responseCode = "500", description = "서버 오류"),
-            })
-    @GetMapping("/funding/{fundingId}")
-    @Override
-    public ResponseEntity<?> detail(@PathVariable Long fundingId) {
-        try {
-            FundingListDto fundingListDto = fundingService.fundingDetail(fundingId);
-            return ResponseEntity.status(HttpStatus.OK).body(fundingListDto);
-        } catch (Exception e) {
-            log.error("펀딩 조회 실패, Data - ", fundingId);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("호출 실패");
-        }
-    }
-
     @Operation(summary = "펀딩 생성",
             responses = {
                     @ApiResponse(responseCode = "201", description = "펀딩 생성 성공"),
@@ -71,7 +52,6 @@ public class V1FundingApiControllerImpl implements V1FundingApiController {
                     @ApiResponse(responseCode = "500", description = "서버 오류"),
             })
     @PostMapping("/funding/new")
-    @Override
     public ResponseEntity<?> createFunding(@RequestBody CreateFundingDto createFundingDto) {
         try {
             Funding createdFunding = fundingService.createFundingApi(createFundingDto.getProductId(), createFundingDto.getGroupId());
@@ -95,7 +75,6 @@ public class V1FundingApiControllerImpl implements V1FundingApiController {
                     @ApiResponse(responseCode = "500", description = "서버 오류"),
             })
     @PostMapping("/funding")
-    @Override
     public ResponseEntity<?> joinFunding(@RequestBody JoinFundingDto joinFundingDto) {
         try {
             boolean result = fundingService.joinFunding(joinFundingDto);

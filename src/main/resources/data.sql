@@ -2,8 +2,8 @@
 --role
 insert into role(role_id, role_name) values (1, 'ROLE_ADMIN');
 insert into role(role_id, role_name) values (2, 'ROLE_USER');
---member
 
+--member
 insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
 values (1, 2, 'admin', 'admin@admin.com', '010-0000-1111', 'Tester',  '1234', true, false, false);
 
@@ -29,7 +29,6 @@ insert into member(member_id, role_id, account, email, tel, member_name, passwor
 values (8, 2, 'tester7', 'tester7@user.com', '010-5442-1127', 'Tester7',  '1234', true, false, false);
 
 --product
-
 insert into product(product_id, product_name, price, stock, restock, sale_finished)
 values (1, '쌀과자', 5000, 20, false, false);
 
@@ -49,7 +48,6 @@ insert into product(product_id, product_name, price, stock, restock, sale_finish
 values (6, '커피사탕', 300, 3000, false, false);
 
 --code
-
 insert into code_master(code_id, code, description, reference)
 values (1, 101, 'KB은행', '은행');
 
@@ -65,8 +63,13 @@ values (4, 201, '네이버페이', 'pay');
 insert into code_master(code_id, code, description, reference)
 values (5, 203, '카카오페이', 'pay');
 
---paymentMethod
+insert into code_master(code_id, code, description, reference)
+values (6, 901, '생일', '그룹 분류');
 
+insert into code_master(code_id, code, description, reference)
+values (7, 902, '여행', '그룹 분류');
+
+--paymentMethod
 insert into payment_method(payment_method_id, payment_name, payment_code, account_number, available_amount)
 values (1, 'KB은행', 101, '123-12345-20', 594835);
 
@@ -84,7 +87,6 @@ values (5, '카카오페이', 203, '333-33213-77', 0);
 
 
 --paymentMethodList
-
 insert into payment_method_list(payment_method_list_id, payment_method_id, member_id, main_payment, off_cd)
 values (1, 1, 1, true, false);
 
@@ -110,47 +112,12 @@ insert into payment_method_list(payment_method_list_id, payment_method_id, membe
 values (8, 3, 4, false, false);
 
 --member_groups(group)
-insert into member_groups(group_id, group_leader_id, group_name, group_active)
-values (1, 1, '하리보맨', true);
-
-insert into member_groups(group_id, group_leader_id, group_name, group_active)
-values (2, 1, '나는 오예스가 먹고싶다', true);
-
-insert into member_groups(group_id, group_leader_id, group_name, group_active)
-values (3, 1, '오예스그룹', true);
-
-insert into member_groups(group_id, group_leader_id, group_name, group_active)
-values (4, 1, '점심그룹', false);
-
-insert into member_groups(group_id, group_leader_id, group_name, group_active)
-values (5, 2, '쌀과자 사주세요', true);
-
-insert into member_groups(group_id, group_leader_id, group_name, group_active)
-values (6, 3, '빵먹자', false);
-
-insert into member_groups(group_id, group_leader_id, group_name, group_active)
-values (7, 4, '저녁그룹', false);
-
+INSERT INTO funding_db.member_groups (group_active, group_id, group_leader_id, group_name, code) VALUES (true, 1, 1, '마가렛트 사줘', 902);
+INSERT INTO funding_db.member_groups (group_active, group_id, group_leader_id, group_name, code) VALUES (true, 2, 1, '나는 오예스가 먹고싶다', 902);
 
 --groupStatus
-insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
-values (1, 1, 1, 1, false, false, true, false, false);
-insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
-values (2, 1, 1, 2, true, false, true, false, false);
-insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
-values (3, 1, 1, 2, true, false, true, true, false);
-insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
-values (4, 1, 1, 3, false, true, false, false, true);
-insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
-values (5, 1, 1, 4, false, true, false, false, false);
-insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
-values (6, 2, 1, 1, false, true, true, false, false);
-insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
-values (7, 2, 1, 2, true, false, false, false, false);
-insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
-values (8, 3, 2, 2, false, false, true, false, false);
-insert into group_status(group_status_id, group_id, group_leader_id, group_member_id, invited, requested, accepted, exited, banned)
-values (9, 4, 3, 3, false, false, true, false, false);
+INSERT INTO funding_db.group_status (accepted, banned, exited, invited, requested, group_id, group_leader_id, group_member_id, group_status_id) VALUES (true, false, false, false, false, 1, 1, 1, 1);
+INSERT INTO funding_db.group_status (accepted, banned, exited, invited, requested, group_id, group_leader_id, group_member_id, group_status_id) VALUES (true, false, false, false, false, 2, 1, 1, 2);
 
 
 --friend
@@ -158,8 +125,13 @@ values (9, 4, 3, 3, false, false, true, false, false);
 --friendStatus
 
 --funding
+INSERT INTO funding_db.funding (closed, completed, deleted, current_funding_amount, funding_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date) VALUES (false, false, false, 1000, 1, 1, 1, 3, 4200, '24. 8. 16. 오후 5:11', '620-65697-37', '24. 8. 16. 오후 5:11');
+INSERT INTO funding_db.funding (closed, completed, deleted, current_funding_amount, funding_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date) VALUES (false, false, false, 500, 2, null, 1, 5, 15000, '24. 8. 16. 오후 5:14', '540-75235-09', '24. 8. 16. 오후 5:14');
+INSERT INTO funding_db.funding (closed, completed, deleted, current_funding_amount, funding_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date) VALUES (false, false, false, 0, 3, 2, 1, 2, 8000, '24. 8. 16. 오후 5:14', '946-49182-93', '24. 8. 16. 오후 5:14');
 
 
 --orderList
 
 --payment
+INSERT INTO funding_db.payment (completed, amount, member_id, payment_id, payment_method_id) VALUES (true, 1000, 1, 1, 1);
+INSERT INTO funding_db.payment (completed, amount, member_id, payment_id, payment_method_id) VALUES (true, 500, 1, 2, 1);

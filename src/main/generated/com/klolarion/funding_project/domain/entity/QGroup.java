@@ -24,6 +24,8 @@ public class QGroup extends EntityPathBase<Group> {
 
     public final QBaseTime _super = new QBaseTime(this);
 
+    public final NumberPath<Integer> code = createNumber("code", Integer.class);
+
     //inherited
     public final StringPath createdDate = _super.createdDate;
 

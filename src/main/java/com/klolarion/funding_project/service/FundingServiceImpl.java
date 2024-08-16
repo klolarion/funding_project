@@ -39,11 +39,14 @@ public class FundingServiceImpl implements FundingService {
     private final CurrentMember currentMember;
     private final ProgressCalculator calculator;
 
+    /*전체 펀딩 조회*/
     @Override
     public List<FundingListDto> allFundingList() {
+        Member member = currentMember.getMember();
         QFunding qFunding = QFunding.funding;
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
+        QPayment qPayment = QPayment.payment;
 
         List<FundingListDto> fundingListDtos = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
@@ -51,7 +54,15 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.memberName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+//                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+                        // progress를 소수점 첫 번째 자리까지만 표시
+                        Expressions.numberTemplate(Double.class,
+                                "ROUND({0}, 1)",
+                                qFunding.currentFundingAmount.doubleValue()
+                                        .divide(qFunding.totalFundingAmount.doubleValue())
+                                        .multiply(100)
+                                        .coalesce(0.0)
+                        ).as("progress"),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
                         qFunding.fundingAccount,
@@ -72,10 +83,11 @@ public class FundingServiceImpl implements FundingService {
         return fundingListDtos;
     }
 
+    /*내 펀딩 리스트 조회*/
     @Override
     public List<FundingListDto> myFundingList() {
-        Member member = currentMember.getMember();
         QFunding qFunding = QFunding.funding;
+        Member member = currentMember.getMember();
 
         List<FundingListDto> myFundingListDtos = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
@@ -83,7 +95,15 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.memberName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+//                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+                        // progress를 소수점 첫 번째 자리까지만 표시
+                        Expressions.numberTemplate(Double.class,
+                                "ROUND({0}, 1)",
+                                qFunding.currentFundingAmount.doubleValue()
+                                        .divide(qFunding.totalFundingAmount.doubleValue())
+                                        .multiply(100)
+                                        .coalesce(0.0)
+                        ).as("progress"),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
                         qFunding.fundingAccount,
@@ -108,7 +128,6 @@ public class FundingServiceImpl implements FundingService {
 
     public FundingListDto fundingDetail(Long fundingId){
         QFunding qFunding = QFunding.funding;
-//        System.out.println("tlfgod");
         FundingListDto fundingListDto = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
                         qFunding.member.memberId,
@@ -121,7 +140,15 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.memberName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+//                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+                        // progress를 소수점 첫 번째 자리까지만 표시
+                        Expressions.numberTemplate(Double.class,
+                                "ROUND({0}, 1)",
+                                qFunding.currentFundingAmount.doubleValue()
+                                        .divide(qFunding.totalFundingAmount.doubleValue())
+                                        .multiply(100)
+                                        .coalesce(0.0)
+                        ).as("progress"),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
                         qFunding.fundingAccount,
@@ -137,7 +164,6 @@ public class FundingServiceImpl implements FundingService {
                 .from(qFunding)
                 .where(qFunding.fundingId.eq(fundingId))  // 특정 fundingId에 해당하는 펀딩 조회
                 .fetchOne();
-//        System.out.println("hhh");
         em.flush();
         em.clear();
         return fundingListDto;
@@ -177,7 +203,7 @@ public class FundingServiceImpl implements FundingService {
                 .from(qFunding)
                 .leftJoin(qFunding.group, qGroup) // Funding과 Group 간의 관계를 조인
                 .leftJoin(qGroupStatus).on(qGroupStatus.group.eq(qGroup)) // GroupStatus와 Group 간의 관계를 조인
-                .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId())) // 멤버가 속한 그룹만 필터링
+                .where(qFunding.group.groupId.eq(groupId))
                 .fetch();
 
         // 결과를 그룹 이름을 key로 하는 Map으로 변환
@@ -361,13 +387,14 @@ public class FundingServiceImpl implements FundingService {
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
         QGroup qGroup = QGroup.group;
+        //전달받은 id로 각 객체 조회
         Tuple tuple = query.select(
                         qMember,
                         qProduct,
                         qGroup
                 ).from(qMember)
                 .join(qProduct).on(qProduct.productId.eq(productId))
-                .leftJoin(qGroup).on((groupId != null ? qGroup.groupId.eq(groupId) : Expressions.TRUE))
+                .leftJoin(qGroup).on(groupId != null ? qGroup.groupId.eq(groupId) : Expressions.FALSE.isTrue())
                 .where(qMember.memberId.eq(memberId))
                 .fetchOne();
 
@@ -446,7 +473,8 @@ public class FundingServiceImpl implements FundingService {
         return result == 1L;
     }
 
-    /*동시성제어 필요*/
+    /*동시성제어 필요
+    * 결제수단이 등록되지 않은경우 예외발생 -> 처리필요*/
     @Override
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE) //jpa 엔티티에 베타락 설정. 읽기/쓰기 차단

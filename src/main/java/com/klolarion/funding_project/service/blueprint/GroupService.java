@@ -26,7 +26,7 @@ public interface GroupService {
     /*그룹 정보 조회 */
     GroupDto groupDetail(Long groupId);
     /*그룹 생성*/
-    Group startGroup(String groupName);
+    Group startGroup(String groupName, String groupCategory);
     /*내 그룹 목록 */
     GroupStatus inviteMember(Long groupId, Long memberId);
     /*그룹 초대 수락 */
@@ -41,4 +41,6 @@ public interface GroupService {
     boolean exitGroup(Long groupId, Long memberId);
 
     boolean banMember(Long groupId, Long memberId);
+
+    boolean groupNameCheck(String groupName);
 }

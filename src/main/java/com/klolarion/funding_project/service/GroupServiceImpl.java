@@ -75,7 +75,6 @@ public class GroupServiceImpl implements GroupService {
 
 
     /*내가 그룹장인 그룹 전부 조회*/
-    @Override
     public List<GroupDto> myLeaderGroups() {
         Member member = currentMember.getMember();
         QGroup qGroup = QGroup.group;
@@ -148,9 +147,17 @@ public class GroupServiceImpl implements GroupService {
                                 .where(qGroupStatus.group.groupId.eq(qGroup.groupId))
                 ))
                 .from(qGroup)
-                .leftJoin(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
                 .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
-                .where(qGroupStatus.groupMember.memberId.notIn(member.getMemberId()))
+                .where(
+                        qGroup.groupLeader.memberId.ne(member.getMemberId()) // 내가 그룹 리더가 아닌 그룹
+                                .and(
+                                        JPAExpressions.select(qGroupStatus.groupMember.memberId)
+                                                .from(qGroupStatus)
+                                                .where(qGroupStatus.group.groupId.eq(qGroup.groupId)
+                                                        .and(qGroupStatus.groupMember.memberId.eq(member.getMemberId())))
+                                                .notExists() // 내가 그룹에 속하지 않은 그룹
+                                )
+                )
                 .fetch();
 
         em.flush();
@@ -190,20 +197,30 @@ public class GroupServiceImpl implements GroupService {
         QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
         QFunding qFunding = QFunding.funding;
 
+        // QueryDSL 쿼리 작성
         List<Tuple> results = query.select(
                         qGroup.groupId,
                         qGroup.groupLeader.memberId,
                         qMember.memberName.as("groupLeaderName"),
                         qGroup.groupName,
                         qGroupStatus.group.countDistinct().as("groupMemberCount"),
-                        qFunding
+                        qFunding.fundingId  // 각 필드를 명시적으로 추가
                 )
                 .from(qGroup)
                 .join(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
                 .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
                 .leftJoin(qFunding).on(qFunding.group.groupId.eq(qGroup.groupId))
-                .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
-                .groupBy(qGroup.groupId, qGroup.groupLeader.memberId, qMember.memberName, qGroup.groupName) // 필요한 필드들을 그룹화
+                .where(
+                        qGroupStatus.groupLeader.memberId.eq(member.getMemberId()) // `group_leader_id = :memberId` 조건
+                                .and(qGroup.groupId.eq(groupId)) // `g.group_id = 2` 조건
+                )
+                .groupBy(
+                        qGroup.groupId,
+                        qGroup.groupLeader.memberId,
+                        qMember.memberName,
+                        qGroup.groupName,
+                        qFunding.fundingId // 명시적으로 그룹화
+                )
                 .fetch();
 
         Map<Long, GroupDto> groupDtoMap = new HashMap<>();
@@ -239,9 +256,11 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group startGroup(String groupName) {
+    public Group startGroup(String groupName, String groupCategory) {
         Member member = currentMember.getMember();
-        Group group = new Group(member, groupName);
+        QCodeMaster qCodeMaster = QCodeMaster.codeMaster;
+        CodeMaster codeMaster = query.selectFrom(qCodeMaster).where(qCodeMaster.description.eq(groupCategory)).fetchOne();
+        Group group = new Group(member, groupName, codeMaster.getCode());
         GroupStatus groupStatus = new GroupStatus(
                 group, member, member, false, false, true
         );
@@ -356,5 +375,16 @@ public class GroupServiceImpl implements GroupService {
         em.flush();
         em.clear();
         return result == 1L;
+    }
+
+    @Override
+    public boolean groupNameCheck(String groupName) {
+        QGroup qGroup = QGroup.group;
+        boolean exists = query
+                .selectOne()
+                .from(qGroup)
+                .where(qGroup.groupName.eq(groupName))
+                .fetchFirst() != null;
+        return !exists; //그룹명이 존재하면 false리턴
     }
 }

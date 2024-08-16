@@ -26,10 +26,14 @@ public class Group extends BaseTime{
     @Column(name = "group_active")
     private boolean groupActive;
 
+    @Column(nullable = false)
+    private int code;
 
-    public Group(Member groupLeader, String groupName) {
+
+    public Group(Member groupLeader, String groupName, int code) {
         this.groupLeader = groupLeader;
         this.groupName = groupName;
         this.groupActive = true;
+        this.code = code;
     }
 }

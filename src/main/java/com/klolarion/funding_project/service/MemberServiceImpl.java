@@ -176,11 +176,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean removePayment(Long paymentMethodListId) {
-        Long memberId = currentMember.getMember().getMemberId();
         QPaymentMethodList qPaymentMethodList = QPaymentMethodList.paymentMethodList;
         long result = query.update(qPaymentMethodList)
                 .set(qPaymentMethodList.offCd, true)
-                .where(qPaymentMethodList.member.memberId.eq(memberId))
+                .where(qPaymentMethodList.paymentMethodListId.eq(paymentMethodListId)
+                        .and(qPaymentMethodList.mainPayment.isFalse())) //주 결제수단이 아니어야 삭제가능
                 .execute();
         em.flush();
         em.clear();

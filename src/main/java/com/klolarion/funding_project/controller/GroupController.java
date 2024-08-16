@@ -32,9 +32,14 @@ public class GroupController {
         return "group";
     }
 
+    @GetMapping("/check")
+    public boolean groupNameCheck(String groupName){
+        return groupServiceImpl.groupNameCheck(groupName);
+    }
+
     @PostMapping
-    public String createGroup(@RequestParam String groupName) {
-        groupServiceImpl.startGroup(groupName);
+    public String createGroup(@RequestParam String groupName, String groupCategory) {
+        groupServiceImpl.startGroup(groupName, groupCategory);
         return "redirect:/f1/group";
     }
 
