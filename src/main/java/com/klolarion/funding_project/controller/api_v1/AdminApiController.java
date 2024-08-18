@@ -1,4 +1,4 @@
-package com.klolarion.funding_project.controller.api;
+package com.klolarion.funding_project.controller.api_v1;
 
 import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.dto.PaymentMethodDto;
