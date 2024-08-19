@@ -41,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean save(RegisterDto registerDto) {
-        Optional<Role> role = roleRepository.findById(2L);
+        Optional<Role> role = roleRepository.findById(2L); //USER
         Role defauleRole = role.orElseThrow(() -> new UsernameNotFoundException("Role not found"));
         Member member = new Member(
                 registerDto.getAccount(),
@@ -76,14 +76,7 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    @Override
-    public List<Member>  searchMember(String memberName){
-        QMember qMember = QMember.member;
-        List<Member> fetch = query.selectFrom(qMember).where(qMember.memberName.contains(memberName)).fetch();
-        em.flush();
-        em.clear();
-        return fetch;
-    }
+
 
     @Override
     public void setMemberCache(Member member){
@@ -116,6 +109,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member myInfo() {
         return currentMember.getMember();
+    }
+
+    @Override
+    public List<Member>  searchMember(String memberName){
+        QMember qMember = QMember.member;
+        List<Member> fetch = query.selectFrom(qMember).where(qMember.memberName.contains(memberName)).fetch();
+        em.flush();
+        em.clear();
+        return fetch;
     }
 
     @Override

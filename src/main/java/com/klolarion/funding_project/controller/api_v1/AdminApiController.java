@@ -23,6 +23,7 @@ public class AdminApiController {
     public ResponseEntity<?> admin() {
         try {
             AdminDto adminDto = new AdminDto(
+                    //한방쿼리로 수정 가능한지 검토
                     productServiceImpl.allProducts(),
                     adminServiceImpl.getCodes(),
                     adminServiceImpl.paymentMethodList()

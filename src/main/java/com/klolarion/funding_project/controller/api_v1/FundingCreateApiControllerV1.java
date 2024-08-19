@@ -27,7 +27,7 @@ public class FundingCreateApiControllerV1 {
 
 
     @Operation(summary = "펀딩 메인",
-            tags = {"펀딩 API"},
+            tags = {"펀딩 API - V1"},
             description = "모든 상품과 내가 그룹장인 모든 펀딩 목록 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "정상 호출",
@@ -47,13 +47,13 @@ public class FundingCreateApiControllerV1 {
             );
             return ResponseEntity.status(HttpStatus.OK).body(fundingMainDto);
         } catch (Exception e) {
-            log.error("펀딩 메인페이지 호출 실패(서버 오류)");
+            log.error("펀딩 메인페이지 호출 실패(서버 오류)", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("호출 실패");
         }
     }
 
     @Operation(summary = "펀딩 생성",
-            tags = {"펀딩 API"},
+            tags = {"펀딩 API - V1"},
             description = "펀딩, 그룹, 분류 ID로 신규 펀딩 생성",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "펀딩 생성 요청 Dto",
@@ -77,7 +77,7 @@ public class FundingCreateApiControllerV1 {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("펀딩 생성 실패");
             }
         } catch (Exception e) {
-            log.error("펀딩 생성 실패(서버 오류), Data -  ", createFundingDto);
+            log.error("펀딩 생성 실패(서버 오류), Data -  ", createFundingDto, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("펀딩 생성 실패");
         }
     }

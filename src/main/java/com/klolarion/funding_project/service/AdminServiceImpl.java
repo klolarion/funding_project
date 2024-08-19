@@ -84,8 +84,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     /*동시성제어 필요*/
-    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean setRestock(Long productId) {
         QProduct qProduct = QProduct.product;
         long result = query.update(qProduct).set(qProduct.restock, new CaseBuilder()
@@ -178,7 +178,6 @@ public class AdminServiceImpl implements AdminService {
     public List<PaymentMethod> paymentMethodList() {
         QPaymentMethod qPaymentMethod = QPaymentMethod.paymentMethod;
         List<PaymentMethod> fetched = query.selectFrom(qPaymentMethod).fetch();
-
         return fetched;
     }
 

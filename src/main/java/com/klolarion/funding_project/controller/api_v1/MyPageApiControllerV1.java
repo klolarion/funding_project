@@ -31,7 +31,7 @@ public class MyPageApiControllerV1 {
     private final CurrentMember currentMember;
 
     @Operation(summary = "마이 페이지",
-            tags = {"마이 페이지 API"},
+            tags = {"마이 페이지 API - V1"},
             description = "내 펀딩, 내가 생성한 그룹, 주 결제수단, 참여중인 그룹, 결제수단 목록 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "정상 호출",
@@ -57,7 +57,7 @@ public class MyPageApiControllerV1 {
             );
             return ResponseEntity.status(HttpStatus.OK).body(myPageDto);
         }catch (Exception e){
-            log.error("마이 페이지 호출 실패(서버 오류)");
+            log.error("마이 페이지 호출 실패(서버 오류)", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("호출 실패");
         }
     }

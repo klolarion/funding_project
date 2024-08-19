@@ -24,7 +24,7 @@ public class FundingDetailApiControllerV1 {
 
 
     @Operation(summary = "펀딩 조회",
-            tags = {"펀딩 API"},
+            tags = {"펀딩 API - V1"},
             description = "펀딩 ID로 특정 펀딩 정보를 조회",
             parameters = {
                     @Parameter(name = "fundingId", description = "조회할 펀딩의 ID", required = true, in = ParameterIn.PATH),
@@ -43,13 +43,13 @@ public class FundingDetailApiControllerV1 {
             FundingListDto fundingListDto = fundingService.fundingDetail(fundingId);
             return ResponseEntity.status(HttpStatus.OK).body(fundingListDto);
         } catch (Exception e) {
-            log.error("펀딩 조회 실패(서버 오류), Data - ", fundingId);
+            log.error("펀딩 조회 실패(서버 오류), Data - ", fundingId, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("호출 실패");
         }
     }
 
     @Operation(summary = "펀딩 참여",
-            tags = {"펀딩 API"},
+            tags = {"펀딩 API - V1"},
             description = "펀딩 계좌로 송금",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "펀딩 참여 요청 Dto",
@@ -75,7 +75,7 @@ public class FundingDetailApiControllerV1 {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("펀딩 참여 실패");
             }
         } catch (Exception e) {
-            log.error("펀딩 참여 실패(서버 오류), Data -  ", joinFundingDto);
+            log.error("펀딩 참여 실패(서버 오류), Data -  ", joinFundingDto, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
         }
     }

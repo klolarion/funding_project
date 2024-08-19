@@ -16,7 +16,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(isolation = Isolation.SERIALIZABLE) // 동시성제어 최고등급. Read제한까지 하려면 베타락 필요
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final JPAQueryFactory query;

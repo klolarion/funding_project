@@ -51,6 +51,9 @@ spring:
       port: 6379
 
 #Swagger 3.0
+#서버 실행 후 조회 경로
+#http://localhost:9091/swagger-ui/index.html
+  html:
 springdoc:
   swagger-ui:
     path: /api-docs
