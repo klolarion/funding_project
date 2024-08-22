@@ -1,15 +1,22 @@
 package com.klolarion.funding_project.util;
 
 import com.klolarion.funding_project.domain.entity.CsrfToken;
+import com.klolarion.funding_project.domain.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -21,6 +28,7 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TokenService {
     private final ClaimsGenerator claimsGenerator;
     private final RedisService redisService;
@@ -32,6 +40,33 @@ public class TokenService {
     private String privateKey; // for access token
     @Value("${application.security.jwt.expiration}0")
     private long jwtExpiration; // for admin token
+
+    @Value("${auth.server.url}")
+    private String authServerUrl;
+
+    private final RestTemplate restTemplate;
+
+
+    public String requestNewAccessToken(String refreshToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("refresh-token", refreshToken);
+        headers.set("service", "funding");
+
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                authServerUrl + "/api/v1/a1/auth/refresh",
+                HttpMethod.POST,
+                requestEntity,
+                String.class
+        );
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return response.getBody();
+        } else {
+            log.error("Failed to refresh access token");
+            throw new RuntimeException("Failed to refresh access token");
+        }
+    }
 
 
 
@@ -158,11 +193,11 @@ public class TokenService {
 
     //토큰 cft와 redis에 저장된 body 일치여부 확인
     private boolean adminCsrfMatches(String tokenBody, String account){
-        String csrfToken = redisService.getData(account+"_funding_admin");
+        Member csrfToken = (Member) redisService.getData(account+"_funding_admin");
         return csrfToken.equals(tokenBody);
     }
     private boolean memberCsrfMatches(String tokenBody, String account){
-        String csrfToken = redisService.getData(account);
+        Member csrfToken = (Member) redisService.getData(account);
         return csrfToken.equals(tokenBody);
     }
 

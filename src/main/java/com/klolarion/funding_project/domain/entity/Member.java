@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseTime{
+public class Member extends BaseTime implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -41,22 +42,18 @@ public class Member extends BaseTime{
     @Size(max = 100)
     private String memberName;
 
-    @Column(nullable = false)
-    private String password;
-
     private String lastUpdateDate;
 
     private boolean enabled;
     private boolean banned;
     private boolean offCd;
 
-    public Member( Role role, String email, String tel, String memberName, String password, String lastUpdateDate) {
+    public Member( Role role, String email, String tel, String memberName, String lastUpdateDate) {
         this.paymentMethodList = null;
         this.role = role;
         this.email = email;
         this.tel = tel;
         this.memberName = memberName;
-        this.password = password;
         this.lastUpdateDate = lastUpdateDate;
         this.enabled = false;
         this.banned = false;
@@ -72,12 +69,13 @@ public class Member extends BaseTime{
     }
 
     //userDetails 로 변환
-    public CustomUserDetails memberToCustom() {
-        return new CustomUserDetails(
-                account,
-                password,
-                enabled,
-                role
-        );
-    }
+//    public CustomUserDetails memberToCustom() {
+//        return new CustomUserDetails(
+//                new Member,
+//                account,
+//                password,
+//                enabled,
+//                role
+//        );
+//    }
 }

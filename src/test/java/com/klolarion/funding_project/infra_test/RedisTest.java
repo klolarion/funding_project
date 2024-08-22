@@ -121,17 +121,13 @@ public class RedisTest {
         //LocalDateTime을 직렬화하기위한 설정
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        try {
-            String data = redisService.getData(cacheTestDto.getAccount() + "_cache");
-            System.out.println("Data : " + data);
-            CacheDto value = objectMapper.readValue(data, CacheDto.class);
-            System.out.println();
-            System.out.println(">> Saved cache data <<");
-            System.out.println(value.toString());
-            System.out.println();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        Member data = (Member) redisService.getData(cacheTestDto.getAccount() + "_cache");
+        System.out.println("Data : " + data);
+//            CacheDto value = objectMapper.readValue(data, CacheDto.class);
+        System.out.println();
+        System.out.println(">> Saved cache data <<");
+        System.out.println(data.toString());
+        System.out.println();
 
 
         System.out.println("Redis output finished ------------>>");

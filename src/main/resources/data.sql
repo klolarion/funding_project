@@ -4,29 +4,29 @@ insert into role(role_id, role_name) values (1, 'ROLE_ADMIN');
 insert into role(role_id, role_name) values (2, 'ROLE_USER');
 
 --member
-insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (1, 2, 'admin', 'admin@admin.com', '010-0000-1111', 'Tester',  '1234', true, false, false);
+insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
+values (1, 2, 'admin', 'admin@admin.com', '010-0000-1111', 'Tester', true, false, false);
 
-insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (2, 2, 'tester1', 'tester1@user.com', '010-1234-1234', 'Tester1',  '1234', true, false, false);
+insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
+values (2, 2, 'tester1', 'tester1@user.com', '010-1234-1234', 'Tester1', true, false, false);
 
-insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (3, 2, 'tester2', 'tester2@user.com', '010-9911-3344', 'Tester2',  '1234', false, false, false);
+insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
+values (3, 2, 'tester2', 'tester2@user.com', '010-9911-3344', 'Tester2', false, false, false);
 
-insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (4, 2, 'tester3', 'tester3@user.com', '010-5932-1927', 'Tester3',  '1234', true, false, true);
+insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
+values (4, 2, 'tester3', 'tester3@user.com', '010-5932-1927', 'Tester3', true, false, true);
 
-insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (5, 2, 'tester4', 'tester4@user.com', '010-5122-1727', 'Tester4',  '1234', true, false, false);
+insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
+values (5, 2, 'tester4', 'tester4@user.com', '010-5122-1727', 'Tester4', true, false, false);
 
-insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (6, 2, 'tester5', 'tester5@user.com', '010-5932-1527', 'Tester5',  '1234', true, false, false);
+insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
+values (6, 2, 'tester5', 'tester5@user.com', '010-5932-1527', 'Tester5', true, false, false);
 
-insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (7, 2, 'tester6', 'tester6@user.com', '010-3232-1447', 'Tester6',  '1234', true, false, false);
+insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
+values (7, 2, 'tester6', 'tester6@user.com', '010-3232-1447', 'Tester6', true, false, false);
 
-insert into member(member_id, role_id, account, email, tel, member_name, password, enabled, banned, off_cd)
-values (8, 2, 'tester7', 'tester7@user.com', '010-5442-1127', 'Tester7',  '1234', true, false, false);
+insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
+values (8, 2, 'tester7', 'tester7@user.com', '010-5442-1127', 'Tester7', true, false, false);
 
 --product
 insert into product(product_id, product_name, price, stock, restock, sale_finished)
@@ -112,8 +112,8 @@ insert into payment_method_list(payment_method_list_id, payment_method_id, membe
 values (8, 3, 4, false, false);
 
 --member_groups(group)
-INSERT INTO funding_db.member_groups (group_active, group_id, group_leader_id, group_name, group_category_code) VALUES (true, 1, 1, '마가렛트 사줘', 902);
-INSERT INTO funding_db.member_groups (group_active, group_id, group_leader_id, group_name, group_category_code) VALUES (true, 2, 1, '나는 오예스가 먹고싶다', 902);
+INSERT INTO funding_db.member_groups (group_active, group_id, group_leader_id, group_name, group_category_code) VALUES (true, 1, 1, '마가렛트 사줘', 901);
+INSERT INTO funding_db.member_groups (group_active, group_id, group_leader_id, group_name, group_category_code) VALUES (true, 2, 1, '나는 오예스가 먹고싶다', 901);
 
 --groupStatus
 INSERT INTO funding_db.group_status (accepted, banned, exited, invited, requested, group_id, group_leader_id, group_member_id, group_status_id) VALUES (true, false, false, false, false, 1, 1, 1, 1);

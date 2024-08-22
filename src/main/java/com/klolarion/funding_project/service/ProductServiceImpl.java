@@ -7,6 +7,7 @@ import com.klolarion.funding_project.service.blueprint.ProductService;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class ProductServiceImpl implements ProductService {
     private final EntityManager em;
     private final JPAQueryFactory query;
@@ -52,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
                 .set(qProduct.stock, new CaseBuilder()
                         .when(qProduct.stock.subtract(stock).gt(0)).then(qProduct.stock.subtract(stock))
                         .otherwise(qProduct.stock))
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE)  // 비관적 잠금 설정
                 .where(qProduct.productId.eq(productId)).execute();
 
         em.flush();
@@ -59,10 +62,7 @@ public class ProductServiceImpl implements ProductService {
         return result == 1L;
     }
 
-
-    /*동시성제어 필요*/
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean deleteProduct(Long productId) {
         QProduct qProduct = QProduct.product;
         long result = query.delete(qProduct).where(qProduct.productId.eq(productId)).execute();

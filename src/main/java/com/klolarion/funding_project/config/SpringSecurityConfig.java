@@ -1,6 +1,7 @@
 package com.klolarion.funding_project.config;
 
 import com.klolarion.funding_project.config.filter.JwtFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,13 +32,28 @@ public class SpringSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 안 함
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                                .anyRequest().permitAll()
+                                .anyRequest().permitAll() //테스트용 전부 오픈
 //                        .requestMatchers("/f1/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll() // 특정 경로는 모든 사용자에게 허용
 //                                .requestMatchers("/admin/**").hasRole("ADMIN")
 //                        .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
                 .authenticationProvider(customAuthenticationProvider) // 사용자 정의 인증 프로바이더 설정
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class) // 사용자 정의 필터 추가
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+//                .exceptionHandling(exceptionHandling -> 예외처리
+//                        exceptionHandling
+//                                .authenticationEntryPoint((request, response, authException) -> {
+//                                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//                                    response.setCharacterEncoding("utf-8");
+//                                    response.setContentType("text/html; charset=UTF-8");
+//                                    response.getWriter().write("인증되지 않은 사용자입니다.");
+//                                })
+//                                .accessDeniedHandler((request, response, accessDeniedException) -> { //404도 같이 처리
+//                                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//                                    response.setCharacterEncoding("utf-8");
+//                                    response.setContentType("text/html; charset=UTF-8");
+//                                    response.getWriter().write("잘못된 주소 혹은 권한이 없는 사용자입니다.");
+//                                })
+//                )
         ;
         return http.build();
     }

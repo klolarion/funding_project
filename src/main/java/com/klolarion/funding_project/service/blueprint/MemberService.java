@@ -9,6 +9,9 @@ import java.util.List;
 
 public interface MemberService {
 
+    /*CustomUserDetails 조회용*/
+    Member getMember(String account);
+
     /*인증서버에서 받아온 가입정보로 사용자 생성*/
     boolean save(RegisterDto registerDto);
 

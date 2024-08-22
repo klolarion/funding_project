@@ -11,5 +11,4 @@ public class OtpDto {
     private String account;
     private String serviceName;
     private String code;
-    private String firebaseToken;
 }

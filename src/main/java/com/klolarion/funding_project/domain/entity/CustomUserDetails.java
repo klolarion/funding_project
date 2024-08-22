@@ -13,14 +13,11 @@ import java.util.List;
 @ToString
 public class CustomUserDetails implements UserDetails {
 
-    private String account;
-    private String password;
-    private boolean enabled;
-    private Role role;
+    private final Member member;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.getRoleName()));
+        return List.of(new SimpleGrantedAuthority(member.getRole().getRoleName()));
     }
 
     @Override
@@ -30,7 +27,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return account;
+        return member.getMemberName();
     }
 
     @Override
@@ -50,6 +47,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return member.isEnabled();
     }
 }

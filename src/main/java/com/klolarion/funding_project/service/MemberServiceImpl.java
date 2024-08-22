@@ -40,6 +40,12 @@ public class MemberServiceImpl implements MemberService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
+    public Member getMember(String account){
+        return memberRepository.findByAccount(account).orElseThrow(() -> new UsernameNotFoundException("사용자 조회 실패"));
+    }
+
+
+    @Override
     public boolean save(RegisterDto registerDto) {
         Optional<Role> role = roleRepository.findById(2L); //USER
         Role defauleRole = role.orElseThrow(() -> new UsernameNotFoundException("Role not found"));
@@ -58,15 +64,13 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-
     @Override
     public Member getMemberCache() throws JsonProcessingException {
 //        memberRepository.findByAccount("account", LockModeType.PESSIMISTIC_READ);
         Member memberCache = null;
-        String mString = redisService.getData("account" + "_funding_cache");
+        Member mString = (Member) redisService.getData("account" + "_funding_cache");
         if (mString != null) {
             //redis에 저장된 데이터를 entity로 변환
-            memberCache = objectMapper.readValue(mString, Member.class);
             return memberCache;
         }else{
             //캐시에 데이터가 없으면 DB에서 조회
@@ -75,8 +79,6 @@ public class MemberServiceImpl implements MemberService {
             return memberCache;
         }
     }
-
-
 
     @Override
     public void setMemberCache(Member member){
@@ -96,15 +98,16 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    public CustomUserDetails findMemberToCustom(String account) {
-        Optional<Member> findMember = memberRepository.findByAccount(account);
-        if (findMember.isPresent()) {
-            if(!findMember.get().isOffCd()) {
-                return findMember.get().memberToCustom();
-            }
-        }
-        return null;
-    }
+//    public CustomUserDetails findMemberToCustom(String account) {
+//        Optional<Member> findMember = memberRepository.findByAccount(account);
+//        if (findMember.isPresent()) {
+//            if(!findMember.get().isOffCd()) {
+//                return findMember.get().memberToCustom();
+//            }
+//        }
+//        return null;
+//    }
+
 
     @Override
     public Member myInfo() {
@@ -120,6 +123,7 @@ public class MemberServiceImpl implements MemberService {
         return fetch;
     }
 
+
     @Override
     public List<PaymentMethodList> myPaymentLists(Long memberId) {
         QPaymentMethodList qPaymentMethodList = QPaymentMethodList.paymentMethodList;
@@ -131,6 +135,8 @@ public class MemberServiceImpl implements MemberService {
         return paymentMethodList;
     }
 
+    // 결제수단 관련 수정시 캐시 데이터도 수정해야함
+
     @Override
     public PaymentMethodList addPaymentMethod(Long paymentMethodId) {
         QPaymentMethod qPaymentMethod = QPaymentMethod.paymentMethod;
@@ -141,7 +147,6 @@ public class MemberServiceImpl implements MemberService {
         return paymentMethodListRepository.save(paymentMethodList);
 
     }
-
 
     @Override
     public boolean makeMainPayment(Long paymentMethodListId) {
@@ -189,11 +194,14 @@ public class MemberServiceImpl implements MemberService {
         return result == 1L;
     }
 
+
+    /*캐시 삭제*/
     @Override
     public boolean logout() {
         return false;
     }
 
+    /*캐시 삭제*/
     @Override
     public boolean leave() {
         return false;

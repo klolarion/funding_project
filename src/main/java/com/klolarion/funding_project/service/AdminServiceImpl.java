@@ -11,8 +11,10 @@ import com.klolarion.funding_project.util.CurrentMember;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +24,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@jakarta.transaction.Transactional
+@Transactional
 public class AdminServiceImpl implements AdminService {
     private final PaymentRepository paymentRepository;
     private final CurrentMember currentMember;
@@ -76,14 +78,18 @@ public class AdminServiceImpl implements AdminService {
 
     /*동시성제어 필요*/
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean addStock(Long productId, int stock){
+        if(stock < 0){
+            return false;
+        }
         QProduct qProduct = QProduct.product;
-        long result = query.update(qProduct).set(qProduct.stock, qProduct.stock.add(stock)).execute();
+        long result = query.update(qProduct).set(qProduct.stock, qProduct.stock.add(stock))
+                .where(qProduct.productId.eq(productId))
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE)  // 비관적 잠금 설정
+                .execute();
         return result == 1L;
     }
 
-    /*동시성제어 필요*/
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean setRestock(Long productId) {
@@ -96,7 +102,6 @@ public class AdminServiceImpl implements AdminService {
         return result == 1L;
     }
 
-    /*동시성제어 필요*/
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public boolean setSellFinished(Long productId) {
@@ -125,7 +130,9 @@ public class AdminServiceImpl implements AdminService {
     public boolean closeFunding(Long fundingId) {
         QFunding qFunding = QFunding.funding;
         long result = query.update(qFunding).set(qFunding.closed, true)
-                .where(qFunding.fundingId.eq(fundingId)).execute();
+                .where(qFunding.fundingId.eq(fundingId))
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE)  // 비관적 잠금 설정
+                .execute();
         em.flush();
         em.clear();
         return result == 1L;
@@ -137,7 +144,9 @@ public class AdminServiceImpl implements AdminService {
     public boolean deleteFunding(Long fundingId) {
         QFunding qFunding = QFunding.funding;
         long result = query.update(qFunding).set(qFunding.deleted, true)
-                .where(qFunding.fundingId.eq(fundingId)).execute();
+                .where(qFunding.fundingId.eq(fundingId))
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE)  // 비관적 잠금 설정
+                .execute();
         em.flush();
         em.clear();
         return result == 1L;

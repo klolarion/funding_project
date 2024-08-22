@@ -46,8 +46,6 @@ public class QMember extends EntityPathBase<Member> {
 
     public final BooleanPath offCd = createBoolean("offCd");
 
-    public final StringPath password = createString("password");
-
     public final ListPath<PaymentMethodList, QPaymentMethodList> paymentMethodList = this.<PaymentMethodList, QPaymentMethodList>createList("paymentMethodList", PaymentMethodList.class, QPaymentMethodList.class, PathInits.DIRECT2);
 
     public final QRole role;

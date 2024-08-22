@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 캐시에 저장된 사용자 정보를 불러와서 사용
+ * 시큐리티 컨텍스트에서 사용자 정보를 불러와서 사용
  * */
 @Component
 @RequiredArgsConstructor
 public class CurrentMember {
     private final MemberRepository memberRepository;
     public Member getMember(){
-//        String account = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String account = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         Optional<Member> findMember = memberRepository.findByAccount("admin");
         return findMember.orElseThrow(() -> new UsernameNotFoundException("사용자 조회 실패"));
     }

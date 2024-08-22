@@ -428,6 +428,7 @@ public class FundingServiceImpl implements FundingService {
 
     @Override
     public Funding createFundingApi(Long productId, Long groupId, int fundingCategoryCode) {
+        //결제수단이 없으면
         Member m = currentMember.getMember();
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
@@ -473,6 +474,7 @@ public class FundingServiceImpl implements FundingService {
     }
 
     @Override
+    @Transactional
     public boolean completeFunding(Long fundingId) {
         QFunding qFunding = QFunding.funding;
         long result = query.update(qFunding).set(qFunding.deleted, true).execute();
@@ -485,7 +487,6 @@ public class FundingServiceImpl implements FundingService {
     * 결제수단이 등록되지 않은경우 예외발생 -> 처리필요*/
     @Override
     @Transactional
-    @Lock(LockModeType.PESSIMISTIC_WRITE) //jpa 엔티티에 베타락 설정. 읽기/쓰기 차단
     public boolean joinFunding(JoinFundingDto joinFundingDto) {
 
         Long fundingId = joinFundingDto.getFundingId();
@@ -509,13 +510,14 @@ public class FundingServiceImpl implements FundingService {
                 .join(qPaymentMethod).on(qPaymentMethod.paymentMethodId.eq(qPaymentMethodList.paymentMethod.paymentMethodId))
                 .join(qMember).on(qMember.memberId.eq(memberId))
                 .where(qFunding.fundingId.eq(fundingId))
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE) // 락 설정
                 .fetchOne();
 
         Funding funding = result.get(qFunding);
         PaymentMethod paymentMethod = result.get(qPaymentMethod);
         Member member = result.get(qMember);
 
-        //금액조건이 유효하면 송금처리 후 결제목록 생성
+        //금액조건이 유효하면 송금처리
         if (paymentMethod.getAvailableAmount() >= amount &&
                 funding.getTotalFundingAmount() - funding.getCurrentFundingAmount() >= amount) {
 
@@ -535,6 +537,8 @@ public class FundingServiceImpl implements FundingService {
                     amount,
                     true
             );
+
+            //결제목록 생성
             if (executeF == 1 && executeP == 1) {
                 Payment saved = paymentRepository.save(payment);
                 //저장과정에서 오류가 생기면 completed를 false로 저장.

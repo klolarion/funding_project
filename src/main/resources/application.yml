@@ -68,6 +68,9 @@ application:
       secret-key: awef
       private-key : awef
       expiration: 6000000 # 100 mins
+auth:
+  server:
+    url: https://almagest-auth.com
 
 server:
   port: 9091
