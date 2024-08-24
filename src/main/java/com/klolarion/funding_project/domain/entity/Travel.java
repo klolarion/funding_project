@@ -30,6 +30,8 @@ public class Travel {
     private Long groupId;
     private Long memberId;
 
+    private String travelName;
+
     @OneToOne(mappedBy = "travel")
     private Funding funding;
 
@@ -44,4 +46,15 @@ public class Travel {
     private LocalDateTime startDate;
     @Column(nullable = false)
     private LocalDateTime endDate;
+
+    public Travel(String city, Long groupId, String travelName, Long memberId, Funding funding, Long price, String description, LocalDateTime startDate, LocalDateTime endDate) {
+        this.city = city;
+        this.groupId = groupId;
+        this.memberId = memberId;
+        this.funding = funding;
+        this.price = price;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }

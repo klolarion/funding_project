@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class CreateFundingDto {
     private Long productId;
     private Long GroupId;
+    private Long travelId;
     private int fundingCategoryCode;
 }

@@ -26,7 +26,8 @@
           <a th:href="@{/f1/detail(fundingId=${funding.getFundingId()})}">
           <div >
               <p class="funding-progress"  th:text="${funding.getProgress()} + '%'">펀딩진행률</p>
-              <p th:text="${funding.getProductName()}">상품 이름</p>
+              <p th:if="${funding.productName != null}" th:text="${funding.productName}">상품 이름</p>
+              <p th:if="${funding.travelName != null}" th:text="${funding.travelName}">여행 이름</p>
               <p th:text="${funding.getCurrentFundingAmount()} +'원 / ' + ${funding.totalFundingAmount} + '원'">현재 모금액</p>
           </div>
           </a>

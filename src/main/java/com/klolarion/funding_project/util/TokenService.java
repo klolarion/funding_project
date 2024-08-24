@@ -1,19 +1,13 @@
 package com.klolarion.funding_project.util;
 
-import com.klolarion.funding_project.domain.entity.CsrfToken;
 import com.klolarion.funding_project.domain.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -22,8 +16,6 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -34,41 +26,17 @@ public class TokenService {
     private final RedisService redisService;
     private final SignKeyService signKeyService;
 
-    @Value("${application.security.jwt.secret-key}")
-    private String secretKey; // for admin token
+//    @Value("${application.security.jwt.secret-key}")
+//    private String secretKey; // for admin token
     @Value("${application.security.jwt.private-key}")
     private String privateKey; // for access token
-    @Value("${application.security.jwt.expiration}0")
-    private long jwtExpiration; // for admin token
-
-    @Value("${auth.server.url}")
-    private String authServerUrl;
+//    @Value("${application.security.jwt.expiration}0")
+//    private long jwtExpiration; // for admin token
+//
+//    @Value("${auth.server.url}")
+//    private String authServerUrl;
 
     private final RestTemplate restTemplate;
-
-
-    public String requestNewAccessToken(String refreshToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("refresh-token", refreshToken);
-        headers.set("service", "funding");
-
-        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(
-                authServerUrl + "/api/v1/a1/auth/refresh",
-                HttpMethod.POST,
-                requestEntity,
-                String.class
-        );
-
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return response.getBody();
-        } else {
-            log.error("Failed to refresh access token");
-            throw new RuntimeException("Failed to refresh access token");
-        }
-    }
-
-
 
 
     /**
@@ -201,81 +169,13 @@ public class TokenService {
         return csrfToken.equals(tokenBody);
     }
 
-    /**
-     * 토큰생성
-     * userDeatils를 받아 서명된 토큰을 생성하고 리턴한다.
-     * */
-    //userDetails로 토큰을 생성한다.
-    public String generateCsrfToken(UserDetails userDetails) {
-        return generateCsrfToken(new HashMap<>(), userDetails);
-    }
-    public String generateAdminToken(UserDetails userDetails) {return buildAdminToken(userDetails);}
 
-    public String generateCsrfToken(
-            Map<String, Object> csrfClaims,
-            UserDetails userDetails
-    ) {
-        CsrfToken csrfToken = new CsrfToken(userDetails.getUsername(), csrfClaims.get("cft").toString());
-        try {
-            redisService.saveCsrfToken(csrfToken.getAccount()+"_funding", csrfToken.getToken());
-        }catch (Exception e){
-            System.out.println("Redis error");
-        }
-        return buildCsrfToken(csrfClaims, userDetails, jwtExpiration);
-    }
-
-    public String generateAdminCsrfToken(
-            Map<String, Object> csrfClaims,
-            UserDetails userDetails
-    ) {
-        CsrfToken csrfToken = new CsrfToken(userDetails.getUsername(), csrfClaims.get("cft").toString());
-        try {
-            redisService.saveCsrfToken(csrfToken.getAccount() + "_funding_admin", csrfToken.getToken());
-        } catch (Exception e) {
-            System.out.println("Redis error");
-        }
-        return buildCsrfToken(csrfClaims, userDetails, jwtExpiration);
-    }
-
-
-    //admin 토큰 빌더
-    private String buildAdminToken(
-            UserDetails userDetails
-    ) {
-        return Jwts
-                .builder()
-//                .setClaims(extraClaims) //추가claim을 설정
-                .setIssuer("https://funding.com")//발행주체
-//                .setAudience("ClientKey")//등록된 앱의 키
-                .setSubject(userDetails.getUsername())//username 설정. userDetails에서 가져온다.
-                .setIssuedAt(new Date(System.currentTimeMillis()))//현재시간
-                .setExpiration(new Date(System.currentTimeMillis() + 3600000))//만료시간 1h
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)//서명정보.
-                .compact();
-    }
-
-    //csrf토큰 빌더
-    private String buildCsrfToken(
-            Map<String, Object> csrfClaims,
-            UserDetails userDetails,
-            long expiration
-    ) {
-        return Jwts
-                .builder()
-                .setClaims(csrfClaims) //csrf토큰 로드
-                .setIssuer("https://funding.com")//발행주체
-                .setSubject(userDetails.getUsername())//username 설정. userDetails에서 가져온다.
-                .setIssuedAt(new Date(System.currentTimeMillis()))//현재시간
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))//만료시간 밀리초 * 초 * 분 * 시(1일)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)//서명정보.
-                .compact();
-    }
 
     /**
      * 보안키로 서명
      * */
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(privateKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

@@ -37,18 +37,21 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        //csrf토큰추출
-        final String csrfToken = request.getHeader("almagest_csrf");
+        // 인증서버 csrf토큰 -> 중복로그인 방지용으로 교체예정
+        // samsite=lax 설정으로 csrf 대응
 
-        //헤더에 csrf토큰이 없으면 거부
-        if (csrfToken == null) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+//        //csrf토큰추출
+//        final String csrfToken = request.getHeader("almagest_csrf");
+//
+//        //헤더에 csrf토큰이 없으면 거부
+//        if (csrfToken == null) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
 
 
         // 프론트서버와 연결시 구현
-        //httpOnly쿠키에서 access_token추출
+        //httpOnly쿠키에서 access_token/refresh_token 추출
         Cookie[] cookies = request.getCookies();
         String access = null;
         String refresh = null;
@@ -56,15 +59,18 @@ public class JwtFilter extends OncePerRequestFilter {
             for (Cookie cookie : cookies) {
                 if ("access_token".equals(cookie.getName())) {
                     access = cookie.getValue();
-                    break;
+                    continue;
                 }
                 if ("refresh_token".equals(cookie.getName())) {
                     refresh = cookie.getValue();
+                    continue;
+                }
+                if(access != null && refresh != null){
                     break;
                 }
             }
         } catch (Exception e) {
-            log.error("빈 쿠키");
+            log.error("쿠키 없어!!!!");
         }
 
         final String account;
@@ -92,9 +98,6 @@ public class JwtFilter extends OncePerRequestFilter {
                             new WebAuthenticationDetailsSource().buildDetails(request)
                     );
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-                }else{
-                    //refresh토큰으로 인증토큰 재요청
-
                 }
             }
         } catch (Exception e) {

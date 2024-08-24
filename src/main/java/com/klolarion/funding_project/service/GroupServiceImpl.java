@@ -88,7 +88,8 @@ public class GroupServiceImpl implements GroupService {
                         qGroup.groupName,
                         JPAExpressions.select(qGroupStatus.countDistinct())
                                 .from(qGroupStatus)
-                                .where(qGroupStatus.group.groupId.eq(qGroup.groupId))
+                                .where(qGroupStatus.group.groupId.eq(qGroup.groupId)),
+                        qGroup.groupCategoryCode
                 ))
                 .from(qGroup)
                 .join(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
@@ -117,7 +118,8 @@ public class GroupServiceImpl implements GroupService {
                         qGroup.groupName,
                         JPAExpressions.select(qGroupStatus.countDistinct())
                                 .from(qGroupStatus)
-                                .where(qGroupStatus.group.groupId.eq(qGroup.groupId))
+                                .where(qGroupStatus.group.groupId.eq(qGroup.groupId)),
+                        qGroup.groupCategoryCode
                 ))
                 .from(qGroup)
                 .leftJoin(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
@@ -143,9 +145,10 @@ public class GroupServiceImpl implements GroupService {
                         qMember.memberName.as("groupLeaderName"),
                         qGroup.groupName,
                         JPAExpressions.select(qGroupStatus.countDistinct())
-                                .from(qGroupStatus)
-                                .where(qGroupStatus.group.groupId.eq(qGroup.groupId))
-                ))
+                        .from(qGroupStatus)
+                        .where(qGroupStatus.group.groupId.eq(qGroup.groupId)),
+                        qGroup.groupCategoryCode
+                        ))
                 .from(qGroup)
                 .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
                 .where(
@@ -236,7 +239,7 @@ public class GroupServiceImpl implements GroupService {
                 groupDto.setGroupLeaderName(tuple.get(qMember.memberName.as("groupLeaderName")));
                 groupDto.setGroupName(tuple.get(qGroup.groupName));
                 groupDto.setGroupMemberCount(tuple.get(qGroupStatus.group.countDistinct().as("groupMemberCount")));
-
+                groupDto.setGroupCategoryCode(tuple.get(qGroup.groupCategoryCode));
                 groupDto.setGroupFunding(new ArrayList<>());
                 groupDtoMap.put(groupIdTmp, groupDto);
             }

@@ -24,15 +24,35 @@
     <div>
         <h1>펀딩 만들기</h1>
         <div>
+            <div>
+                <label>
+                    상품<input name="groupCategory" type="radio" value="상품" required checked onchange="toggleSelectionList()">
+                </label><br>
+                <label>
+                    여행<input name="groupCategory" type="radio" value="여행" onchange="toggleSelectionList()">
+                </label><br>
+            </div>
             <form method="post" th:action="@{/f1/funding}">
                 <div class="list" id="product-option">
                     <h3>상품 선택</h3>
                     <div class="product-list">
                         <div th:each="product : ${productList}">
 
-                            <button type="button" th:name="${product.getProductId()} "
+                            <button type="button" th:Pname="${product.getProductId()} "
                                     th:attr="data-price=${product.getPrice()}" th:text="${product.getProductName()}" onclick="setPriceAndInput(this)"></button>
                         </div>
+                        <input type="hidden" id="selectedProductId" name="productId">
+                    </div>
+                </div>
+                <div class="list" id="travel-option">
+                    <h3>여행 선택</h3>
+                    <div class="product-list">
+                        <div th:each="travel : ${travelList}">
+
+                            <button type="button" th:Tname="${travel.getTravelId()} "
+                                    th:attr="data-price=${travel.getPrice()}" th:text="${travel.getTravelName()}" onclick="setPriceAndInput(this)"></button>
+                        </div>
+                        <input type="hidden" id="selectedTravelId" name="travelId" >
                     </div>
                 </div>
                 <div class="list" id="target-price">
@@ -43,12 +63,12 @@
                     <h3>그룹 선택 <span>   *옵션</span></h3>
                     <div class="product-list">
                         <div th:each="group : ${myLeaderGroups}">
-                            <button type="button" th:name="${group.getGroupId()} "
+                            <button type="button" th:name="${group.getGroupId()}"
+                                     th:attr="data-group-category-code=${group.getGroupCategoryCode()}"
                                      th:text="${group.getGroupName()}" onclick="setGroupId(this)"></button>
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="selectedProductId" name="productId">
                 <input type="hidden" id="groupId" name="groupId">
                 <button>펀딩 만들기</button>
             </form>
@@ -62,7 +82,8 @@
     function setPriceAndInput(button) {
         document.querySelectorAll('.list button').forEach(btn => btn.removeAttribute('id'));
         const price = button.getAttribute('data-price');  // 버튼의 data-price 속성에서 가격 가져오기
-        const productId = button.getAttribute('name');
+        const productId = button.getAttribute('Pname');
+        const travelId = button.getAttribute('Tname');
 
         //목표 금액
         const targetPriceElement = document.querySelector('#target-price p');  // 목표 금액 p 태그 선택
@@ -70,8 +91,8 @@
 
         //가격 설정
         document.getElementById('selectedProductId').value = productId;
+        document.getElementById('selectedTravelId').value = travelId;
         button.id = 'selected';
-
     }
 
     function  setGroupId(button){
@@ -82,5 +103,36 @@
         button.id = 'selected';
         // console.log(document.getElementById("groupId").value);
     }
+
+    function toggleSelectionList() {
+        const selectedCategory = document.querySelector('input[name="groupCategory"]:checked').value;
+        const productOption = document.getElementById('product-option');
+        const travelOption = document.getElementById('travel-option');
+
+        if (selectedCategory === '상품') {
+            productOption.style.display = 'block';
+            travelOption.style.display = 'none';
+        } else if (selectedCategory === '여행') {
+            productOption.style.display = 'none';
+            travelOption.style.display = 'block';
+        }
+
+        // 그룹 필터링
+        const groupButtons = document.querySelectorAll('#group-option button');
+        groupButtons.forEach(button => {
+            const groupCategoryCode = button.getAttribute('data-group-category-code');
+            if ((selectedCategory === '상품' && groupCategoryCode == '901') ||
+                (selectedCategory === '여행' && groupCategoryCode == '902')) {
+                button.style.display = 'block';
+            } else {
+                button.style.display = 'none';
+            }
+        });
+    }
+
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleSelectionList(); // 기본으로 "상품"을 선택한 상태로 설정
+    });
 </script>
 </html>
