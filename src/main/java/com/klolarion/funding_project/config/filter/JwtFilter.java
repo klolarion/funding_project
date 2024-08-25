@@ -39,18 +39,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // 인증서버 csrf토큰 -> 중복로그인 방지용으로 교체예정
         // samsite=lax 설정으로 csrf 대응
-
-//        //csrf토큰추출
-//        final String csrfToken = request.getHeader("almagest_csrf");
-//
-//        //헤더에 csrf토큰이 없으면 거부
-//        if (csrfToken == null) {
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
-
-
-        // 프론트서버와 연결시 구현
         //httpOnly쿠키에서 access_token/refresh_token 추출
         Cookie[] cookies = request.getCookies();
         String access = null;
@@ -75,8 +63,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         final String account;
         try {
-            account = tokenService.extractMemberAccount(access);//jwt토큰에서 계정명 추출
-            //추출된 계정명인 null이 아니고 보안컨텍스트의 인증정보가 null인경우 추출된 계정명으로 사용자정보를 db에서 불러온다.
+            account = tokenService.extractClaim(access);//jwt토큰에서 계정명 추출
+
+            //추출된 계정명이 null이 아니고 보안컨텍스트의 인증정보가 null인경우 추출된 계정명으로 사용자정보를 불러온다.
             //보안컨텍스트에 인증정보가 존재하면 넘어간다.
             //불러온 사용자정보를 UsernamePasswordAuthenticationToken에 넣고 보안컨텍스트에 등록한다.
 
@@ -86,7 +75,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 CustomUserDetails userDetails = this.customUserDetailsService.loadUserByUsername(account);
 
                 //토큰검증
-                if (tokenService.isMemberTokenValid(access, userDetails)) {
+                if (tokenService.isTokenValid(access, userDetails)) {
                     //UsernamePasswordAuthenticationToken은 추후 인증이 끝나고 SecurityContextHolder.getContext()에 등록될 Authentication 객체이다
                     // 사용자 정보를 포함한 UsernamePasswordAuthenticationToken 생성
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

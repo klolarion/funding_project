@@ -22,12 +22,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     public CustomUserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
         Member member;
         try {
+            //캐시에서 조회
             member = memberService.getMemberCache();
         } catch (JsonProcessingException e) {
             log.error("캐시 데이터 파싱 실패, ", e);
             throw new RuntimeException(e);
         }
         if (member == null) {
+            //db에서 조회
             member = memberService.getMember(account);
         }
         return new CustomUserDetails(member);

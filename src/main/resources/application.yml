@@ -70,19 +70,10 @@ springdoc:
     path: /v3/api-docs
     enabled: true # open-api 공개설정
 
-# 외부토큰 받아올거라 의미없음
 application:
   security:
     jwt:
-#      sensitive-key : awefawef
-#      secret-key: awef
-      private-key : awef
-#      expiration: 6000000 # 100 mins
-
-#
-#auth:
-#  server:
-#    url: https://almagest-auth.com
+      private-key : ${ALMAGEST_KEY}
 
 server:
   port: 9091

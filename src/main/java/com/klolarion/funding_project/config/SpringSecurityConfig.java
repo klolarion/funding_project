@@ -26,6 +26,11 @@ public class SpringSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 
+//        .csrf((csrf) -> csrf
+//                        .csrfTokenRepository(new HttpSessionCsrfTokenRepository()) // (Default)
+//                // .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // JavaScript Application | Cookie | JSON
+//        )
+
         http
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 보호 비활성화
                 .sessionManagement(session -> session
