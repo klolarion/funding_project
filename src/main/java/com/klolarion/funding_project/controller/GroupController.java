@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/f1/group")
+@RequestMapping("/group")
 @RequiredArgsConstructor
 public class GroupController {
     private final GroupServiceImpl groupServiceImpl;
@@ -38,14 +38,13 @@ public class GroupController {
     }
 
     @PostMapping
-    public String createGroup(@RequestParam String groupName, String groupCategory) {
+    public String createGroup(@RequestParam("groupName") String groupName, @RequestParam("groupCategory") String groupCategory) {
         groupServiceImpl.startGroup(groupName, groupCategory);
-        return "redirect:/f1/group";
+        return "redirect:/group";
     }
 
     @GetMapping("/detail")
-    public String detail(@RequestParam Long groupId, Model model) {
-//        System.out.println(groupId);
+    public String detail(@RequestParam("groupId") Long groupId, Model model) {
         model.addAttribute("groupDetail", groupServiceImpl.groupDetail(groupId));
         model.addAttribute("groupMembers", groupServiceImpl.groupMembers(groupId));
         model.addAttribute("requestMembers", groupServiceImpl.requestedMembersToMyGroup(groupId));
@@ -54,44 +53,48 @@ public class GroupController {
     }
 
     @PostMapping("/detail/member")
-    public String findMember(@RequestParam String memberName, @RequestParam Long groupId, RedirectAttributes redirectAttributes){
+    public String findMember(@RequestParam("memberName") String memberName, @RequestParam("groupId") Long groupId, RedirectAttributes redirectAttributes){
         redirectAttributes.addFlashAttribute("foundMembers", memberServiceImpl.searchMember(memberName));
 
-        return "redirect:/f1/group/detail?groupId=" + groupId;
+        return "redirect:/group/detail?groupId=" + groupId;
     }
 
     @PostMapping("/detail/invite")
-    public String inviteMember(@RequestParam Long memberId, @RequestParam Long groupId, RedirectAttributes redirectAttributes){
+    public String inviteMember(@RequestParam("memberId") Long memberId, @RequestParam("groupId") Long groupId, RedirectAttributes redirectAttributes){
         groupServiceImpl.inviteMember( groupId, memberId);
-        return "redirect:/f1/group/detail?groupId=" + groupId;
+        return "redirect:/group/detail?groupId=" + groupId;
     }
 
     @PostMapping("/detail/request")
-    public String acceptRequest(@RequestParam Long memberId, @RequestParam Long groupId, RedirectAttributes redirectAttributes){
+    public String acceptRequest(@RequestParam("memberId") Long memberId, @RequestParam("groupId") Long groupId, RedirectAttributes redirectAttributes){
         groupServiceImpl.acceptMemberRequest( groupId, memberId);
-        return "redirect:/f1/group/detail?groupId=" + groupId;
+        return "redirect:/group/detail?groupId=" + groupId;
     }
 
     //group Info
     @GetMapping("/info")
-    public String info(@RequestParam Long groupId, Model model) {
-        model.addAttribute("groupDetail", groupServiceImpl.groupDetail(groupId));
-        model.addAttribute("groupMembers", groupServiceImpl.groupMembers(groupId));
-        Map<String, List<FundingListDto>> groupedMap = fundingServiceImpl.allFundingListByGroup(groupId);
-        List<FundingListDto> singleList = groupedMap.values()
-                .stream()
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
-//        System.out.println(singleList);
-        model.addAttribute("fundingList", singleList);
+    public String info(@RequestParam("groupId") Long groupId, Model model) {
+        try {
+            model.addAttribute("groupDetail", groupServiceImpl.groupInfoDetail(groupId));
+            model.addAttribute("groupMembers", groupServiceImpl.groupMembers(groupId));
+            Map<String, List<FundingListDto>> groupedMap = fundingServiceImpl.allFundingListByGroup(groupId);
+            List<FundingListDto> singleList = groupedMap.values()
+                    .stream()
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
+            model.addAttribute("fundingList", singleList);
 
-        return "groupInfo";
+            return "groupInfo";
+        }catch (Exception e){
+            System.out.println("info error, " + e);
+        }
+        return null;
     }
 
     @PostMapping("/info/request")
-    public String requestGroup(@RequestParam Long groupId){
+    public String requestGroup(@RequestParam("groupId") Long groupId){
         groupServiceImpl.requestToGroup(groupId);
-        return "redirect:/f1/group/info?groupId=" + groupId;
+        return "redirect:/group/info?groupId=" + groupId;
     }
 
 }

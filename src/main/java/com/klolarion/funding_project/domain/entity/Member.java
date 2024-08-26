@@ -11,8 +11,9 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Member extends BaseTime implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,47 +36,33 @@ public class Member extends BaseTime implements Serializable {
     private String email;
 
     @Column(nullable = false, unique = true)
-    @Size(max = 50)
-    private String tel;
-
-    @Column(nullable = false, unique = true)
     @Size(max = 100)
     private String memberName;
 
-    private String lastUpdateDate;
+    private String provider; //공급자 (google, facebook ...)
+    private String providerId; //공급 아이디 ?
 
     private boolean enabled;
     private boolean banned;
     private boolean offCd;
 
-    public Member( Role role, String email, String tel, String memberName, String lastUpdateDate) {
+    public Member(Role role, String email, String memberName, String provider, String providerId) {
         this.paymentMethodList = null;
         this.role = role;
         this.email = email;
-        this.tel = tel;
         this.memberName = memberName;
-        this.lastUpdateDate = lastUpdateDate;
-        this.enabled = false;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.enabled = true;
         this.banned = false;
         this.offCd = false;
     }
 
-    public Member(String account, String name, String email, String tel, Role role) {
+    public Member(String account, String name, String email, Role role) {
         this.account = account;
         this.memberName = name;
         this.email = email;
-        this.tel = tel;
         this.role = role;
     }
 
-    //userDetails 로 변환
-//    public CustomUserDetails memberToCustom() {
-//        return new CustomUserDetails(
-//                new Member,
-//                account,
-//                password,
-//                enabled,
-//                role
-//        );
-//    }
 }

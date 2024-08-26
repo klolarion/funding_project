@@ -17,7 +17,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@jakarta.transaction.Transactional
+@Transactional
 public class FundingServiceImpl implements FundingService {
     private final PaymentRepository paymentRepository;
     private final EntityManager em;
@@ -40,11 +39,10 @@ public class FundingServiceImpl implements FundingService {
     /*전체 펀딩 조회*/
     @Override
     public List<FundingListDto> allFundingList() {
-        Member member = currentMember.getMember();
         QFunding qFunding = QFunding.funding;
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
-        QPayment qPayment = QPayment.payment;
+        QTravel qTravel = QTravel.travel;
 
         List<FundingListDto> fundingListDtos = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
@@ -52,7 +50,8 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.memberName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-//                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+                        qFunding.travel.travelId,
+                        qFunding.travel.travelName,
                         // progress를 소수점 첫 번째 자리까지만 표시
                         Expressions.numberTemplate(Double.class,
                                 "ROUND({0}, 1)",
@@ -74,7 +73,8 @@ public class FundingServiceImpl implements FundingService {
                                 .otherwise("펀딩중").as("status")))
                 .from(qFunding)
                 .join(qFunding.member, qMember)   // Member와 조인
-                .join(qFunding.product, qProduct) // Product와 조인
+                .leftJoin(qFunding.product, qProduct) // Product와 조인
+                .leftJoin(qFunding.travel, qTravel) // Travel과 조인
                 .fetch();
         em.flush();
         em.clear();
@@ -85,6 +85,9 @@ public class FundingServiceImpl implements FundingService {
     @Override
     public List<FundingListDto> myFundingList() {
         QFunding qFunding = QFunding.funding;
+        QMember qMember = QMember.member;
+        QProduct qProduct = QProduct.product;
+        QTravel qTravel = QTravel.travel;
         Member member = currentMember.getMember();
 
         List<FundingListDto> myFundingListDtos = query.select(Projections.constructor(FundingListDto.class,
@@ -93,7 +96,8 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.memberName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-//                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+                        qFunding.travel.travelId,
+                        qFunding.travel.travelName,
                         // progress를 소수점 첫 번째 자리까지만 표시
                         Expressions.numberTemplate(Double.class,
                                 "ROUND({0}, 1)",
@@ -115,6 +119,9 @@ public class FundingServiceImpl implements FundingService {
                                 .otherwise("펀딩중").as("status")
                 ))
                 .from(qFunding)
+                .join(qFunding.member, qMember)   // Member와 조인
+                .leftJoin(qFunding.product, qProduct) // Product와 조인
+                .leftJoin(qFunding.travel, qTravel) // Travel과 조인
                 .where(
                         qFunding.member.memberId.eq(member.getMemberId())  // 현재 로그인한 사용자와 관련된 펀딩만 조회
                 )
@@ -124,11 +131,16 @@ public class FundingServiceImpl implements FundingService {
         return myFundingListDtos;
     }
 
-    public FundingListDto fundingDetail(Long fundingId){
+    public FundingListDto fundingDetail(Long fundingId) {
         QFunding qFunding = QFunding.funding;
+        QProduct qProduct = QProduct.product;
+        QTravel qTravel = QTravel.travel;
+        QGroup qGroup = QGroup.group;
         FundingListDto fundingListDto = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
                         qFunding.member.memberId,
+                        qFunding.group.groupId,
+                        qFunding.group.groupName,
 //                        new CaseBuilder()
 //                        .when(qFunding.group.groupId.isNull()).then(Expressions.constant(0L))  // 그룹 ID가 null인 경우 null로 처리
 //                        .otherwise(qFunding.group.groupId),  // 그룹 ID가 null이 아닌 경우
@@ -138,7 +150,8 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.memberName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-//                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+                        qFunding.travel.travelId,
+                        qFunding.travel.travelName,
                         // progress를 소수점 첫 번째 자리까지만 표시
                         Expressions.numberTemplate(Double.class,
                                 "ROUND({0}, 1)",
@@ -159,7 +172,11 @@ public class FundingServiceImpl implements FundingService {
                                 .then("중단")
                                 .otherwise("펀딩중").as("status")
                 ))
+                .distinct()
                 .from(qFunding)
+                .leftJoin(qFunding.product, qProduct) // Product와 조인
+                .leftJoin(qFunding.travel, qTravel) // Travel과 조인
+                .leftJoin(qFunding.group, qGroup) // Group과 조인
                 .where(qFunding.fundingId.eq(fundingId))  // 특정 fundingId에 해당하는 펀딩 조회
                 .fetchOne();
         em.flush();
@@ -185,6 +202,8 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.memberName,
                         qFunding.product.productId,
                         qFunding.product.productName,
+                        qFunding.travel.travelId,
+                        qFunding.travel.travelName,
                         qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
@@ -230,6 +249,8 @@ public class FundingServiceImpl implements FundingService {
                         qMember.memberName,
                         qProduct.productId,
                         qProduct.productName,
+                        qFunding.travel.travelId,
+                        qFunding.travel.travelName,
                         qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
@@ -273,6 +294,8 @@ public class FundingServiceImpl implements FundingService {
                         qMember.memberName,
                         qFunding.product.productId,
                         qFunding.product.productName,
+                        qFunding.travel.travelId,
+                        qFunding.travel.travelName,
                         qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
@@ -315,6 +338,8 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.memberName,
                         qFunding.product.productId,
                         qFunding.product.productName,
+                        qFunding.travel.travelId,
+                        qFunding.travel.travelName,
                         qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
@@ -358,6 +383,8 @@ public class FundingServiceImpl implements FundingService {
                         qMember.memberName,
                         qProduct.productId,
                         qProduct.productName,
+                        qFunding.travel.travelId,
+                        qFunding.travel.travelName,
                         qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
@@ -381,19 +408,23 @@ public class FundingServiceImpl implements FundingService {
     }
 
     @Override
-    public Funding createFunding(Long memberId, Long productId, Long groupId, int fundingCategoryCode) {
+    public Funding createFunding(Long memberId, Long productId, Long travelId, Long groupId) {
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
         QGroup qGroup = QGroup.group;
         QCodeMaster qCodeMaster = QCodeMaster.codeMaster;
+        QTravel qTravel = QTravel.travel;
+        int fundingCategoryCode = productId != null ? 901 : 902;
         //전달받은 id로 각 객체 조회
         Tuple tuple = query.select(
                         qMember,
                         qProduct,
                         qGroup,
+                        qTravel,
                         qCodeMaster
                 ).from(qMember)
-                .join(qProduct).on(qProduct.productId.eq(productId))
+                .leftJoin(qProduct).on(productId != null ? qProduct.productId.eq(productId) : qProduct.productId.isNull())
+                .leftJoin(qTravel).on(travelId != null ? qTravel.travelId.eq(travelId) : qTravel.travelId.isNull())
                 .join(qCodeMaster).on(qCodeMaster.code.eq(fundingCategoryCode))
                 .leftJoin(qGroup).on(groupId != null ? qGroup.groupId.eq(groupId) : Expressions.FALSE.isTrue())
                 .where(qMember.memberId.eq(memberId))
@@ -403,6 +434,24 @@ public class FundingServiceImpl implements FundingService {
         Product product = tuple.get(qProduct);
         Group group = tuple.get(qGroup);
         CodeMaster codeMaster = tuple.get(qCodeMaster);
+        Travel travel = tuple.get(qTravel);
+
+        if (travel != null) {
+            Funding funding = new Funding(
+                    member,
+                    null,
+                    travel,
+                    group,
+                    travel.getPrice(),
+                    randomAccountGenerator.generateRandomAccount(),
+                    codeMaster.getCode()
+            );
+
+            Funding saved = fundingRepository.save(funding);
+            em.flush();
+            em.clear();
+            return saved;
+        }
 
         //상품 재고, 재입고여부, 판매종료여부 확인
         if (product.getStock() > 0 || product.isRestock() || !product.isSaleFinished()) {
@@ -410,6 +459,7 @@ public class FundingServiceImpl implements FundingService {
             Funding funding = new Funding(
                     member,
                     product,
+                    null,
                     group,
                     product.getPrice(),
                     randomAccountGenerator.generateRandomAccount(),
@@ -421,28 +471,35 @@ public class FundingServiceImpl implements FundingService {
             em.clear();
             return saved;
         }
+
+
         em.flush();
         em.clear();
         return null;
     }
 
     @Override
-    public Funding createFundingApi(Long productId, Long groupId, int fundingCategoryCode) {
+    public Funding createFundingApi(Long productId, Long travelId, Long groupId) {
         //결제수단이 없으면
         Member m = currentMember.getMember();
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
         QGroup qGroup = QGroup.group;
         QCodeMaster qCodeMaster = QCodeMaster.codeMaster;
+        QTravel qTravel = QTravel.travel;
+        int fundingCategoryCode = productId != null ? 901 : 902;
+        //전달받은 id로 각 객체 조회
         Tuple tuple = query.select(
                         qMember,
                         qProduct,
                         qGroup,
+                        qTravel,
                         qCodeMaster
                 ).from(qMember)
-                .join(qProduct).on(qProduct.productId.eq(productId))
+                .leftJoin(qProduct).on(qProduct.productId.eq(productId))
+                .leftJoin(qTravel).on(qTravel.travelId.eq(travelId))
                 .join(qCodeMaster).on(qCodeMaster.code.eq(fundingCategoryCode))
-                .leftJoin(qGroup).on((groupId != null ? qGroup.groupId.eq(groupId) : Expressions.TRUE))
+                .leftJoin(qGroup).on(groupId != null ? qGroup.groupId.eq(groupId) : Expressions.FALSE.isTrue())
                 .where(qMember.memberId.eq(m.getMemberId()))
                 .fetchOne();
 
@@ -450,6 +507,24 @@ public class FundingServiceImpl implements FundingService {
         Product product = tuple.get(qProduct);
         Group group = tuple.get(qGroup);
         CodeMaster codeMaster = tuple.get(qCodeMaster);
+        Travel travel = tuple.get(qTravel);
+
+        if (travel != null) {
+            Funding funding = new Funding(
+                    member,
+                    null,
+                    travel,
+                    group,
+                    product.getPrice(),
+                    randomAccountGenerator.generateRandomAccount(),
+                    codeMaster.getCode()
+            );
+
+            Funding saved = fundingRepository.save(funding);
+            em.flush();
+            em.clear();
+            return saved;
+        }
 
         //상품 재고, 재입고여부, 판매종료여부 확인
         if (product.getStock() > 0 || product.isRestock() || !product.isSaleFinished()) {
@@ -457,6 +532,7 @@ public class FundingServiceImpl implements FundingService {
             Funding funding = new Funding(
                     member,
                     product,
+                    null,
                     group,
                     product.getPrice(),
                     randomAccountGenerator.generateRandomAccount(),
@@ -484,7 +560,7 @@ public class FundingServiceImpl implements FundingService {
     }
 
     /*동시성제어 필요
-    * 결제수단이 등록되지 않은경우 예외발생 -> 처리필요*/
+     * 결제수단이 등록되지 않은경우 예외발생 -> 처리필요*/
     @Override
     @Transactional
     public boolean joinFunding(JoinFundingDto joinFundingDto) {
@@ -510,12 +586,14 @@ public class FundingServiceImpl implements FundingService {
                 .join(qPaymentMethod).on(qPaymentMethod.paymentMethodId.eq(qPaymentMethodList.paymentMethod.paymentMethodId))
                 .join(qMember).on(qMember.memberId.eq(memberId))
                 .where(qFunding.fundingId.eq(fundingId))
-                .setLockMode(LockModeType.PESSIMISTIC_WRITE) // 락 설정
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE) // 락 설정. 이 쿼리로 조회된 데이터에 대해서 읽기/쓰기 제한
                 .fetchOne();
 
         Funding funding = result.get(qFunding);
         PaymentMethod paymentMethod = result.get(qPaymentMethod);
         Member member = result.get(qMember);
+
+        Long balanceBefore = paymentMethod.getAvailableAmount();
 
         //금액조건이 유효하면 송금처리
         if (paymentMethod.getAvailableAmount() >= amount &&
@@ -534,7 +612,11 @@ public class FundingServiceImpl implements FundingService {
             Payment payment = new Payment(
                     member,
                     paymentMethod,
+                    funding.getFundingAccount(),
+                    paymentMethod.getAccountNumber(),
                     amount,
+                    balanceBefore,
+                    paymentMethod.getAvailableAmount(),
                     true
             );
 

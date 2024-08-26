@@ -15,25 +15,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/f1/detail")
+@RequestMapping("/detail")
 @Slf4j
 public class DetailController {
     private final FundingServiceImpl fundingServiceImpl;
 
     @GetMapping
-    public String detail(@RequestParam Long fundingId, Model model) {
+    public String detail(@RequestParam("fundingId") Long fundingId, Model model) {
         model.addAttribute("funding",fundingServiceImpl.fundingDetail(fundingId));
         return "detail";
     }
 
     @PostMapping
-    public String joinFunding(@RequestParam Long fundingId, @RequestParam Long amount, Model model, HttpSession session) {
+    public String joinFunding(@RequestParam("fundingId") Long fundingId, @RequestParam("amount") Long amount, Model model, HttpSession session) {
         Member member = (Member) session.getAttribute("member");
         JoinFundingDto joinFundingDto = new JoinFundingDto();
         joinFundingDto.setAmount(amount);
         joinFundingDto.setFundingId(fundingId);
         joinFundingDto.setMemberId(member.getMemberId());
         fundingServiceImpl.joinFunding(joinFundingDto);
-        return "redirect:/f1";
+        return "redirect:/index";
     }
 }

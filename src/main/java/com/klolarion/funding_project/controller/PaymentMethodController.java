@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/f1/paymentMethod")
+@RequestMapping("/paymentMethod")
 @Slf4j
 public class PaymentMethodController {
 //    private final PaymentServiceImpl paymentServiceImpl;
@@ -32,20 +32,20 @@ public class PaymentMethodController {
     }
 
     @PostMapping("/myPaymentMethod")
-    public String addMyPaymentMethod(@RequestParam Long paymentMethodId, Model model, HttpSession session) {
+    public String addMyPaymentMethod(@RequestParam("paymentMethodId") Long paymentMethodId, Model model, HttpSession session) {
         memberServiceImpl.addPaymentMethod(paymentMethodId);
-        return "redirect:/f1/paymentMethod";
+        return "redirect:/paymentMethod";
     }
 
     @PostMapping("/mainMethod")
-    public String addMainPaymentMethod(@RequestParam Long myPaymentMethodId, Model model, HttpSession session) {
+    public String addMainPaymentMethod(@RequestParam("myPaymentMethodId") Long myPaymentMethodId, Model model, HttpSession session) {
         memberServiceImpl.makeMainPayment(myPaymentMethodId);
-        return "redirect:/f1/paymentMethod";
+        return "redirect:/paymentMethod";
     }
 
     @PostMapping("/mainMethod/delete")
-    public String deletePaymentMethod(@RequestParam Long myPaymentMethodId, Model model, HttpSession session) {
+    public String deletePaymentMethod(@RequestParam("myPaymentMethodId") Long myPaymentMethodId, Model model, HttpSession session) {
         memberServiceImpl.removePayment(myPaymentMethodId);
-        return "redirect:/f1/paymentMethod";
+        return "redirect:/paymentMethod";
     }
 }

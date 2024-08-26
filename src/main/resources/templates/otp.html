@@ -36,7 +36,7 @@
 
         console.log(JSON.stringify(data));
 
-        fetch('https://almagest-auth.com/api/v1/auth/req', {
+        fetch('https://almagest-auth.com/api/a1/v1/auth/token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -46,23 +46,6 @@
         })
             .then(response => {
                 if (response.ok) {
-                    // 헤더에서 토큰 값을 읽어옵니다.
-                    const accessToken = response.headers.get('Access');
-                    const csrfToken = response.headers.get('Csrf');
-
-                    // 로컬 스토리지에 저장
-                    if (accessToken) {
-                        localStorage.setItem('almagest_access', accessToken);
-                    } else {
-                        console.error('Access token not found in the response headers');
-                    }
-
-                    if (csrfToken) {
-                        localStorage.setItem('almagest_csrf', csrfToken);
-                    } else {
-                        console.error('CSRF token not found in the response headers');
-                    }
-
                     return response.json();  // 응답 본문을 JSON으로 파싱
                 } else {
                     throw new Error('Authentication failed');

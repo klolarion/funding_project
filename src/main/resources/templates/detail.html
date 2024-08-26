@@ -14,7 +14,9 @@
 </style>
 <body>
     <div>
-        <h2 th:text="${funding.getProductName()}">product name</h2>
+        <h2 th:if="${funding.productName != null}" th:text="${funding.productName}">product name</h2>
+        <h2 th:if="${funding.travelName != null}" th:text="${funding.travelName}">travel name</h2>
+
         <h3>펀딩 주최</h3>
         <p th:unless="${funding.groupName != null}" th:text="${funding.memberName}"></p>
         <p th:if="${funding.groupName != null}" th:text="${funding.groupName}"></p>
@@ -25,7 +27,7 @@
         <h3>현재 모금액</h3>
         <p th:text="${funding.getCurrentFundingAmount()} + '원'">product 모금 금액</p>
         <h3>참여 금액</h3>
-        <form method="post" th:action="@{/f1/detail}">
+        <form method="post" th:action="@{/detail}">
             <input type="hidden" name="fundingId" th:value="${funding.getFundingId()}">
             <input type="number" name="amount" placeholder="참여하고 싶은 금액을 입력하세요.">
             <button >펀딩 참여하기</button>

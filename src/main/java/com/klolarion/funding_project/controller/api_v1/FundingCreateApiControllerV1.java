@@ -68,7 +68,7 @@ public class FundingCreateApiControllerV1 {
     @PostMapping("/")
     public ResponseEntity<?> createFunding(@RequestBody CreateFundingDto createFundingDto) {
         try {
-            Funding createdFunding = fundingService.createFundingApi(createFundingDto.getProductId(), createFundingDto.getGroupId(), createFundingDto.getFundingCategoryCode());
+            Funding createdFunding = fundingService.createFundingApi(createFundingDto.getProductId(), createFundingDto.getTravelId(), createFundingDto.getGroupId());
             if(createdFunding != null) {
                 log.debug("펀딩 생성 성공, Data -  ", createFundingDto);
                 return ResponseEntity.status(HttpStatus.CREATED).body("펀딩 생성 성공");
