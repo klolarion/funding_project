@@ -20,7 +20,7 @@
     <h2>그룹 관리</h2>
     <div id="create-group">
         <h3>그룹 생성하기</h3>
-        <form method="post" th:action="@{/f1/group}">
+        <form method="post" th:action="@{/group}">
             <input name="groupName" placeholder="그룹 이름을 입력하세요.">
             <div>
                 <label>
@@ -37,7 +37,7 @@
         <h3>내가 만든 그룹</h3>
         <ul th:if="${myLeaderGroup}">
             <li th:each="group : ${myLeaderGroup}" >
-                <a th:href="@{/f1/group/detail(groupId=${group.getGroupId()})}" th:text="${group.getGroupName()}">그룹 이름</a>
+                <a th:href="@{/group/detail(groupId=${group.getGroupId()})}" th:text="${group.getGroupName()}">그룹 이름</a>
             </li>
         </ul>
     </div>

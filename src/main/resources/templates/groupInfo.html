@@ -32,7 +32,7 @@
     </div>
     <div id="create-group">
         <h3>그룹 참여하기</h3>
-        <form method="post" th:action="@{/f1/group/info/request}">
+        <form method="post" th:action="@{/group/info/request}">
             <input type="hidden" name="groupId" th:value="${groupDetail.getGroupId()}">
             <button>신청</button>
         </form>
@@ -41,7 +41,7 @@
         <h3>그룹이 참여하고 있는 펀딩</h3>
         <ul th:if="${fundingList}">
             <li th:each="funding : ${fundingList}" >
-                <a th:href="@{/f1/detail(fundingId=${funding.fundingId})}" th:text="${funding.productName}">그룹 이름</a>
+                <a th:href="@{/detail(fundingId=${funding.fundingId})}" th:text="${funding.productName}">그룹 이름</a>
             </li>
         </ul>
     </div>

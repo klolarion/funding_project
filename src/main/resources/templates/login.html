@@ -18,60 +18,18 @@
 <body>
 <div id="login-form">
     <h1>로그인</h1>
-    <form id="loginForm">
-        <div>
-            <input name="account" id="account" placeholder="아이디를 입력하세요.">
-        </div>
-        <div>
-            <input name="password" id="password" type="password" placeholder="비밀번호를 입력하세요.">
-        </div>
-        <button type="button" onclick="submitForm()"> 로그인 하기</button>
+    <form th:action="@{/oauth2/authorization/google}" method="post">
+        <input type="submit" value="Google Login">
+        <input hidden name="provider" value="Google">
     </form>
-    <a href="https://play.google.com/store/apps/details?id=com.klolarion.almagest_app&pcampaignid=web_share">안드로이드 다운로드 링크</a><br><br>
-    <a href="https://apps.apple.com/kr/app/almagest-moblie/id6457259294%7D">애플 다운로드 링크</a>
+    <form method="post">
+        <input type="submit" value="Kakao Login">
+        <input hidden name="provider" value="Kakao">
+    </form>
+    <form method="post">
+        <input type="submit" value="Naver Login">
+        <input hidden name="provider" value="Naver">
+    </form>
 </div>
-
-<script>
-    function submitForm(event) {
-        // 기본 폼 제출 동작 방지
-        // event.preventDefault();
-
-        const data = {
-            id : null,
-            account: document.getElementById('account').value,
-            password: document.getElementById('password').value,
-            firebaseToken : null
-        };
-
-        console.log(JSON.stringify(data));
-
-
-        fetch('https://almagest-auth.com/api/v1/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();  // 응답이 성공적이라면 JSON으로 파싱
-                } else {
-                    console.log(JSON.stringify(data))
-                    throw new Error('Authentication failed');
-
-                }
-            })
-            .then(result => {
-                console.log('Authentication successful:', result);
-                window.location.href = '/f1/otp';
-                // 인증이 성공하면 원하는 작업을 수행 (예: 리다이렉트)
-            })
-            .catch((error) => {
-                console.log(data)
-                console.error('Error:', error);
-            });
-    }
-</script>
 </body>
 </html>

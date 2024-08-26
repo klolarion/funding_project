@@ -4,29 +4,29 @@ insert into role(role_id, role_name) values (1, 'ROLE_ADMIN');
 insert into role(role_id, role_name) values (2, 'ROLE_USER');
 
 
-insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
-values (1, 2, 'admin', 'admin@admin.com', '010-0000-1111', 'Tester', true, false, false);
+insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
+values (1, 2, 'admin', 'admin@admin.com', 'Tester', true, false, false);
 
-insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
-values (2, 2, 'tester1', 'tester1@user.com', '010-1234-1234', 'Tester1', true, false, false);
+insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
+values (2, 2, 'tester1', 'tester1@user.com', 'Tester1', true, false, false);
 
-insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
-values (3, 2, 'tester2', 'tester2@user.com', '010-9911-3344', 'Tester2', false, false, false);
+insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
+values (3, 2, 'tester2', 'tester2@user.com', 'Tester2', false, false, false);
 
-insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
-values (4, 2, 'tester3', 'tester3@user.com', '010-5932-1927', 'Tester3', true, false, true);
+insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
+values (4, 2, 'tester3', 'tester3@user.com', 'Tester3', true, false, true);
 
-insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
-values (5, 2, 'tester4', 'tester4@user.com', '010-5122-1727', 'Tester4', true, false, false);
+insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
+values (5, 2, 'tester4', 'tester4@user.com', 'Tester4', true, false, false);
 
-insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
-values (6, 2, 'tester5', 'tester5@user.com', '010-5932-1527', 'Tester5', true, false, false);
+insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
+values (6, 2, 'tester5', 'tester5@user.com', 'Tester5', true, false, false);
 
-insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
-values (7, 2, 'tester6', 'tester6@user.com', '010-3232-1447', 'Tester6', true, false, false);
+insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
+values (7, 2, 'tester6', 'tester6@user.com', 'Tester6', true, false, false);
 
-insert into member(member_id, role_id, account, email, tel, member_name, enabled, banned, off_cd)
-values (8, 2, 'tester7', 'tester7@user.com', '010-5442-1127', 'Tester7', true, false, false);
+insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
+values (8, 2, 'tester7', 'tester7@user.com', 'Tester7', true, false, false);
 
 
 insert into product(product_id, product_name, price, stock, restock, sale_finished)
@@ -122,16 +122,9 @@ INSERT INTO group_status (accepted, banned, exited, invited, requested, group_id
 INSERT INTO group_status (accepted, banned, exited, invited, requested, group_id, group_leader_id, group_member_id, group_status_id) VALUES (true, false, false, false, false, 3, 1, 1, 3);
 
 
-
 INSERT INTO funding (closed, completed, deleted, current_funding_amount, funding_id, travel_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date, funding_category_code) VALUES (false, false, false, 1000, 1, null, 1, 1, 3, 4200, '24. 8. 16. 오후 5:11', '620-65697-37', '24. 8. 16. 오후 5:11', 901);
 INSERT INTO funding (closed, completed, deleted, current_funding_amount, funding_id, travel_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date, funding_category_code) VALUES (false, false, false, 500, 2, null, null, 1, 5, 15000, '24. 8. 16. 오후 5:14', '540-75235-09', '24. 8. 16. 오후 5:14', 901);
 INSERT INTO funding (closed, completed, deleted, current_funding_amount, funding_id, travel_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date, funding_category_code) VALUES (false, false, false, 0, 3, null, 2, 1, 2, 8000, '24. 8. 16. 오후 5:14', '946-49182-93', '24. 8. 16. 오후 5:14', 901);
-
-
-
-INSERT INTO payment (completed, amount, member_id, payment_id, payment_method_id) VALUES (true, 1000, 1, 1, 1);
-INSERT INTO payment (completed, amount, member_id, payment_id, payment_method_id) VALUES (true, 500, 1, 2, 1);
-
 
 
 INSERT INTO travel (travel_name, end_date, group_id, member_id, price, start_date, travel_id, description, city) VALUES ('부산호캉스', '2024-10-24 21:11:29.000000', 3, 1, 1500000, '2024-10-20 12:00:00.000000', 1, '부산호캉스 돼지국밥냠냠', '부산');

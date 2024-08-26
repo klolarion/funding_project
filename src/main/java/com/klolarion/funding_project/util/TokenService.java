@@ -21,7 +21,7 @@ public class TokenService {
     private final SignKeyService signKeyService;
 
     @Value("${application.security.jwt.private-key}")
-    private String privateKey; // for access token
+    private String publicKey; // for access token
 
 
     /**
@@ -53,7 +53,7 @@ public class TokenService {
      */
     private Claims extractAllClaims(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return Jwts.parserBuilder()
-                .setSigningKey(getPrivateKey())
+                .setSigningKey(getPublicKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -75,7 +75,7 @@ public class TokenService {
     /**
      * 서명용 개인 키 가져오기
      */
-    private Key getPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return signKeyService.toPrivateKey(privateKey);
+    private Key getPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return signKeyService.toPublicKey(publicKey);
     }
 }

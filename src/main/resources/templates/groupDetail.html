@@ -32,7 +32,7 @@
     </div>
     <div id="create-group">
         <h3>그룹 초대하기</h3>
-        <form id="search" method="post" th:action="@{/f1/group/detail/member}">
+        <form id="search" method="post" th:action="@{/group/detail/member}">
             <input type="hidden" name="groupId" th:value="${groupDetail.getGroupId()}">
             <input name="memberName" placeholder="사용자 이름을 입력하세요.">
             <button>검색</button>
@@ -41,7 +41,7 @@
             <li th:each="member : ${foundMembers}" >
                 <span th:text="${member.memberName}">그룹 이름</span>
                 <span >
-                    <form method="post" th:action="@{/f1/group/detail/invite}">
+                    <form method="post" th:action="@{/group/detail/invite}">
                         <input type="hidden" name="groupId" th:value="${groupDetail.getGroupId()}">
                         <input type="hidden"  name="memberId" th:value="${member.memberId}">
                         <button>초대</button>
@@ -64,7 +64,7 @@
             <li id="requestId" th:each="member : ${requestMembers}" >
                 <span th:text="${member.memberName}">그룹 이름</span>
                 <span >
-                    <form method="post" th:action="@{/f1/group/detail/request}">
+                    <form method="post" th:action="@{/group/detail/request}">
                         <input type="hidden" name="groupId" th:value="${groupDetail.getGroupId()}">
                         <input type="hidden"  name="memberId" th:value="${member.memberId}">
                         <button>수락</button>

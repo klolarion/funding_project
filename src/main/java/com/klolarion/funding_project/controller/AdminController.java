@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/f0/admin")
+@RequestMapping("/admin")
 @Slf4j
 public class AdminController {
     private final AdminServiceImpl adminServiceImpl;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.klolarion.funding_project.domain.entity.Member;
 import com.klolarion.funding_project.domain.entity.PaymentMethodList;
 import com.klolarion.funding_project.dto.auth.RegisterDto;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.List;
 
@@ -47,4 +48,6 @@ public interface MemberService {
 
     /*회원탈퇴*/
     boolean leave();
+
+    Member saveOrUpdateUserGoogle(OAuth2User principal);
 }

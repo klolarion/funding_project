@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/f1/detail")
+@RequestMapping("/detail")
 @Slf4j
 public class DetailController {
     private final FundingServiceImpl fundingServiceImpl;
@@ -34,6 +34,6 @@ public class DetailController {
         joinFundingDto.setFundingId(fundingId);
         joinFundingDto.setMemberId(member.getMemberId());
         fundingServiceImpl.joinFunding(joinFundingDto);
-        return "redirect:/f1";
+        return "redirect:/index";
     }
 }

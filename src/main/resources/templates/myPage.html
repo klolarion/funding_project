@@ -42,7 +42,7 @@
                 <p th:text="${member.email}">email</p>
             </div>
             <div id="mypage-util">
-                <button>로그아웃</button>
+                <button><a th:href="@{/logout}">로그아웃</a></button>
                 <button>회원탈퇴</button>
             </div>
         </div>
@@ -61,19 +61,29 @@
                         <li th:each="myGroup : ${myLeaderGroup}" th:text="${myGroup.groupName}">친구 이름</li>
                     </ul>
                     <p id="no-group" th:unless="${myLeaderGroup.size() > 0}">그룹을 만들어 보세요.</p>
-                    <a th:href="@{/f1/group}"><button>내가 만든 그룹 관리</button></a>
+                    <a th:href="@{/group}"><button>내가 만든 그룹 관리</button></a>
                 </div>
                 <div class="mypage-top-list">
                     <h3>결제 수단</h3>
-                    <p th:text="${myMainPayment.paymentMethod.paymentName} + ' '+ ${myMainPayment.paymentMethod.accountNumber}"></p>
-                    <a th:href="@{/f1/paymentMethod}"><button>결제 수단 관리</button></a>
+                    <p th:unless="${myMainPayment == null}">
+                        <span th:text="${myMainPayment.paymentMethod?.paymentName} + ' ' + ${myMainPayment.paymentMethod?.accountNumber}"></span>
+                    </p>
+                    <a th:href="@{/paymentMethod}"><button>결제 수단 관리</button></a>
+                </div>
+                <div class="mypage-top-list">
+                    <h3>여행 만들기</h3>
+                    <a th:href="@{/paymentMethod}"><button>여행 만들기</button></a>
+                </div>
+                <div class="mypage-top-list">
+                    <h3>내 결제 목록</h3>
+                    <a th:href="@{/paymentMethod}"><button>내 결제 목록</button></a>
                 </div>
             </div>
             <div class="mypage-bottom-list">
                 <h3>나의 펀딩 내역</h3>
                 <ul>
                     <li th:each="myFunding: ${myFundingList}">
-                        <a th:href="@{/f1/detail(fundingId=${myFunding.getFundingId()})}">
+                        <a th:href="@{/detail(fundingId=${myFunding.getFundingId()})}">
                             <span th:text="${myFunding.productName}"></span>
                             <span th:text="${myFunding.progress} +'%'"></span>
                             <span th:text="${myFunding.totalFundingAmount} +'원'"></span>
@@ -95,7 +105,7 @@
 <!--                <h3>나의 구매 내역</h3>-->
 <!--                <ul>-->
 <!--                    <li th:each="myFunding: ${myFundingList}">-->
-<!--                        <a th:href="@{/f1/detail(fundingId=${myFunding.getFundingId()})}">-->
+<!--                        <a th:href="@{/detail(fundingId=${myFunding.getFundingId()})}">-->
 <!--                            <span th:text="${myFunding.productName}"></span>-->
 <!--                            <span th:text="${myFunding.progress} +'%'"></span>-->
 <!--                            <span th:text="${myFunding.totalFundingAmount} +'원'"></span>-->

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/f1/myPage")
+@RequestMapping("/myPage")
 @Slf4j
 public class MypageController {
     private final PaymentServiceImpl paymentServiceImpl;

@@ -20,11 +20,16 @@ public interface GroupService {
 
     List<GroupDto> allGroupExceptMy();
 
+    List<GroupDto> allGroups();
+
     /*그룹 멤버 조회*/
     List<Member> groupMembers(Long groupId);
 
     /*그룹 정보 조회 */
     GroupDto groupDetail(Long groupId);
+
+    GroupDto groupInfoDetail(Long groupId);
+
     /*그룹 생성*/
     Group startGroup(String groupName, String groupCategory);
     /*내 그룹 목록 */

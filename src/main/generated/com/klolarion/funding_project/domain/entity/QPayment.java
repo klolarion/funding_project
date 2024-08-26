@@ -24,13 +24,21 @@ public class QPayment extends EntityPathBase<Payment> {
 
     public final NumberPath<Long> amount = createNumber("amount", Long.class);
 
+    public final NumberPath<Long> balanceAfter = createNumber("balanceAfter", Long.class);
+
+    public final NumberPath<Long> balanceBefore = createNumber("balanceBefore", Long.class);
+
     public final BooleanPath completed = createBoolean("completed");
 
     public final QMember member;
 
+    public final StringPath paymentAccount = createString("paymentAccount");
+
     public final NumberPath<Long> paymentId = createNumber("paymentId", Long.class);
 
     public final QPaymentMethod paymentMethod;
+
+    public final StringPath targetAccount = createString("targetAccount");
 
     public QPayment(String variable) {
         this(Payment.class, forVariable(variable), INITS);

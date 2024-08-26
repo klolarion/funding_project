@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/f1/funding")
+@RequestMapping("/funding")
 //@RequestMapping("/f1/v1/funding")
 @Slf4j
 public class fundingController {
@@ -29,7 +29,7 @@ public class fundingController {
     @GetMapping
     public String funding(Model model) {
         model.addAttribute("productList",productServiceImpl.allProducts());
-        model.addAttribute("travelList", travelService.allTravels());
+        model.addAttribute("travelList", travelService.myTravels());
         model.addAttribute("myLeaderGroups", groupServiceImpl.myLeaderGroups());
         return "createFunding";
     }
@@ -41,6 +41,6 @@ public class fundingController {
                                 HttpSession session) {
         Member member = (Member) session.getAttribute("member");
         fundingServiceImpl.createFunding(member.getMemberId(), productId, travelId, groupId);
-        return "redirect:/f1";
+        return "redirect:/index";
     }
 }

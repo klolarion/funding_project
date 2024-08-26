@@ -20,18 +20,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     //필터에서 캐시&DB 조회 후 컨텍스트에 등록. 서비스로직은 컨텍스트에서 사용자정보 호출
     @Override
     public CustomUserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
-        Member member;
-        try {
-            //캐시에서 조회
-            member = memberService.getMemberCache();
-        } catch (JsonProcessingException e) {
-            log.error("캐시 데이터 파싱 실패, ", e);
-            throw new RuntimeException(e);
-        }
-        if (member == null) {
-            //db에서 조회
-            member = memberService.getMember(account);
-        }
+        Member member = memberService.getMember(account);
+
         return new CustomUserDetails(member);
     }
 }

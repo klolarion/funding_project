@@ -20,10 +20,11 @@
 </style>
 <div th:insert="fragments/header :: header"></div>
 <body>
+<p th:if="${name != null}">현재 사용자 : <span th:text="${name}"></span></p>
     <h3>전체 펀딩</h3>
     <div class="funding-list" >
       <div class="list-items"  th:if=" ${allFundingList.size() > 0} " th:each="funding : ${allFundingList}" >
-          <a th:href="@{/f1/detail(fundingId=${funding.getFundingId()})}">
+          <a th:href="@{/detail(fundingId=${funding.getFundingId()})}">
           <div >
               <p class="funding-progress"  th:text="${funding.getProgress()} + '%'">펀딩진행률</p>
               <p th:if="${funding.productName != null}" th:text="${funding.productName}">상품 이름</p>
@@ -39,7 +40,7 @@
     <h3>그룹</h3>
     <div class="funding-list">
       <div class="list-items" th:if=" ${allGroupList.size() > 0} " th:each="group : ${allGroupList}">
-          <a th:href="@{/f1/group/info(groupId=${group.groupId})}">
+          <a th:href="@{/group/info(groupId=${group.groupId})}">
               <div >
                   <p th:text="${group.groupName}">그룹이름</p>
                   <p th:text="${group.groupMemberCount} +'명'">인원 수</p>

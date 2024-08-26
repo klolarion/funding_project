@@ -169,6 +169,31 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public List<GroupDto> allGroups(){
+        QGroup qGroup = QGroup.group;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+        QMember qMember = QMember.member;
+
+        List<GroupDto> groups = query.select(Projections.constructor(GroupDto.class,
+                        qGroup.groupId,
+                        qGroup.groupLeader.memberId,
+                        qMember.memberName.as("groupLeaderName"),
+                        qGroup.groupName,
+                        JPAExpressions.select(qGroupStatus.countDistinct())
+                                .from(qGroupStatus)
+                                .where(qGroupStatus.group.groupId.eq(qGroup.groupId)),
+                        qGroup.groupCategoryCode
+                ))
+                .from(qGroup)
+                .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
+                .fetch();
+
+        em.flush();
+        em.clear();
+        return groups;
+    }
+
+    @Override
     public List<Member> groupMembers(Long groupId){
         QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
         QGroup qGroup = QGroup.group;
@@ -207,7 +232,8 @@ public class GroupServiceImpl implements GroupService {
                         qMember.memberName.as("groupLeaderName"),
                         qGroup.groupName,
                         qGroupStatus.group.countDistinct().as("groupMemberCount"),
-                        qFunding.fundingId  // 각 필드를 명시적으로 추가
+                        qFunding.fundingId,  // 각 필드를 명시적으로 추가
+                        qGroup.groupCategoryCode
                 )
                 .from(qGroup)
                 .join(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
@@ -251,6 +277,75 @@ public class GroupServiceImpl implements GroupService {
         }
 
         GroupDto groupDto = groupDtoMap.isEmpty() ? null : groupDtoMap.values().iterator().next();
+
+
+        em.flush();
+        em.clear();
+
+        return groupDto;
+    }
+
+    @Override
+    public GroupDto groupInfoDetail(Long groupId) {
+        Long groupIdTmp = 0L;
+        QMember qMember = QMember.member;
+        QGroup qGroup = QGroup.group;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+        QFunding qFunding = QFunding.funding;
+
+        // QueryDSL 쿼리 작성
+        List<Tuple> results = query.select(
+                        qGroup.groupId,
+                        qGroup.groupLeader.memberId,
+                        qMember.memberName.as("groupLeaderName"),
+                        qGroup.groupName,
+                        qGroupStatus.group.countDistinct().as("groupMemberCount"),
+                        qFunding.fundingId,  // 각 필드를 명시적으로 추가
+                        qGroup.groupCategoryCode
+                )
+                .from(qGroup)
+                .join(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
+                .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
+                .leftJoin(qFunding).on(qFunding.group.groupId.eq(qGroup.groupId))
+                .where(
+//                        qGroupStatus.groupLeader.memberId.eq(member.getMemberId()) // `group_leader_id = :memberId` 조건
+                                qGroup.groupId.eq(groupId)// `g.group_id = 2` 조건
+                )
+                .groupBy(
+                        qGroup.groupId,
+                        qGroup.groupLeader.memberId,
+                        qMember.memberName,
+                        qGroup.groupName,
+                        qFunding.fundingId // 명시적으로 그룹화
+                )
+                .fetch();
+
+        Map<Long, GroupDto> groupDtoMap = new HashMap<>();
+
+        for (Tuple tuple : results) {
+            groupIdTmp = tuple.get(qGroup.groupId);
+
+            GroupDto groupDto = groupDtoMap.get(groupIdTmp);
+            if (groupDto == null) {
+                groupDto = new GroupDto();
+                groupDto.setGroupId(groupIdTmp);
+                groupDto.setGroupLeaderId(tuple.get(qGroup.groupLeader.memberId));
+                groupDto.setGroupLeaderName(tuple.get(qMember.memberName.as("groupLeaderName")));
+                groupDto.setGroupName(tuple.get(qGroup.groupName));
+                groupDto.setGroupMemberCount(tuple.get(qGroupStatus.group.countDistinct().as("groupMemberCount")));
+                groupDto.setGroupCategoryCode(tuple.get(qGroup.groupCategoryCode));
+                groupDto.setGroupFunding(new ArrayList<>());
+                groupDtoMap.put(groupIdTmp, groupDto);
+            }
+
+            Funding funding = tuple.get(qFunding);
+            if (funding != null) {
+                groupDto.getGroupFunding().add(funding);
+            }
+        }
+
+        GroupDto groupDto = groupDtoMap.isEmpty() ? null : groupDtoMap.values().iterator().next();
+
 
         em.flush();
         em.clear();

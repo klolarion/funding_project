@@ -27,14 +27,27 @@ public class Payment {
     private PaymentMethod paymentMethod;
 
     @Column(nullable = false)
+    private String targetAccount;
+    @Column(nullable = false)
+    private String paymentAccount;
+
+    @Column(nullable = false)
     private Long amount;
+    @Column(nullable = false)
+    private Long balanceBefore;
+    @Column(nullable = false)
+    private Long balanceAfter;
 
     private boolean completed;
 
-    public Payment(Member member, PaymentMethod paymentMethod, Long amount, boolean completed) {
+    public Payment(Member member, PaymentMethod paymentMethod, String targetAccount, String paymentAccount, Long amount, Long balanceBefore, Long balanceAfter, boolean completed) {
         this.member = member;
         this.paymentMethod = paymentMethod;
+        this.targetAccount = targetAccount;
+        this.paymentAccount = paymentAccount;
         this.amount = amount;
+        this.balanceBefore = balanceBefore;
+        this.balanceAfter = balanceAfter;
         this.completed = completed;
     }
 

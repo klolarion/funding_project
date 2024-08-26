@@ -586,12 +586,14 @@ public class FundingServiceImpl implements FundingService {
                 .join(qPaymentMethod).on(qPaymentMethod.paymentMethodId.eq(qPaymentMethodList.paymentMethod.paymentMethodId))
                 .join(qMember).on(qMember.memberId.eq(memberId))
                 .where(qFunding.fundingId.eq(fundingId))
-                .setLockMode(LockModeType.PESSIMISTIC_WRITE) // 락 설정
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE) // 락 설정. 이 쿼리로 조회된 데이터에 대해서 읽기/쓰기 제한
                 .fetchOne();
 
         Funding funding = result.get(qFunding);
         PaymentMethod paymentMethod = result.get(qPaymentMethod);
         Member member = result.get(qMember);
+
+        Long balanceBefore = paymentMethod.getAvailableAmount();
 
         //금액조건이 유효하면 송금처리
         if (paymentMethod.getAvailableAmount() >= amount &&
@@ -610,7 +612,11 @@ public class FundingServiceImpl implements FundingService {
             Payment payment = new Payment(
                     member,
                     paymentMethod,
+                    funding.getFundingAccount(),
+                    paymentMethod.getAccountNumber(),
                     amount,
+                    balanceBefore,
+                    paymentMethod.getAvailableAmount(),
                     true
             );
 

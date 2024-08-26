@@ -19,6 +19,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,7 +54,6 @@ public class MemberServiceImpl implements MemberService {
                 registerDto.getAccount(),
                 registerDto.getName(),
                 registerDto.getEmail(),
-                registerDto.getTel(),
                 defauleRole
         );
         try {
@@ -205,5 +205,37 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean leave() {
         return false;
+    }
+
+
+
+    //구글로그인 테스트용
+    @Override
+    public Member saveOrUpdateUserGoogle(OAuth2User oAuth2User) {
+
+        Optional<Role> role = roleRepository.findById(2L); //USER
+        Role defauleRole = role.orElseThrow(() -> new UsernameNotFoundException("Role not found"));
+
+        String googleId = oAuth2User.getAttribute("sub");
+        String email = oAuth2User.getAttribute("email");
+        String name = oAuth2User.getAttribute("name");
+        boolean enabled = oAuth2User.getAttribute("email_verified");
+
+        return memberRepository.findByAccount(googleId)
+                .map(member -> {
+                    member.setEmail(email);
+                    member.setMemberName(name);
+                    return memberRepository.save(member);
+                })
+                .orElseGet(() -> {
+                    Member member = new Member();
+                    member.setAccount(googleId);
+                    member.setEmail(email);
+                    member.setMemberName(name);
+                    member.setRole(defauleRole); // 기본 권한 설정
+                    member.setProvider("Google");
+                    member.setEnabled(enabled);
+                    return memberRepository.save(member);
+                });
     }
 }
