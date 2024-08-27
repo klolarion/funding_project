@@ -33,6 +33,9 @@ public class DetailController {
         joinFundingDto.setAmount(amount);
         joinFundingDto.setFundingId(fundingId);
         joinFundingDto.setMemberId(member.getMemberId());
+
+        //주 결제수단이 없으면 에러발생.
+        //예외처리 하거나 첫 가입시 주 결제수단 등록하게끔 강제해야함
         fundingServiceImpl.joinFunding(joinFundingDto);
         return "redirect:/index";
     }

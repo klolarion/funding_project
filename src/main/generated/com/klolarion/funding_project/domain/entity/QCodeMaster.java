@@ -19,11 +19,19 @@ public class QCodeMaster extends EntityPathBase<CodeMaster> {
 
     public static final QCodeMaster codeMaster = new QCodeMaster("codeMaster");
 
+    public final QBaseTime _super = new QBaseTime(this);
+
     public final NumberPath<Integer> code = createNumber("code", Integer.class);
 
     public final NumberPath<Long> codeId = createNumber("codeId", Long.class);
 
+    //inherited
+    public final StringPath createdDate = _super.createdDate;
+
     public final StringPath description = createString("description");
+
+    //inherited
+    public final StringPath lastModifiedDate = _super.lastModifiedDate;
 
     public final StringPath reference = createString("reference");
 

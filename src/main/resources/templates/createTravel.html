@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Travel</title>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+<style>
+    body {
+        padding: 0 90px;
+        margin: 50px auto;
+        width: 500px
+    }
+
+    #total-money {
+        display: flex;
+        justify-content: space-between;
+        margin: 30px 0;
+        padding: 20px 0;
+        border-top: 1px solid #cccccc
+    }
+
+    h3 {
+        margin-top: 40px
+    }
+
+    button {
+        width: 100%;
+        padding: 15px;
+        background-color: #E9E9FAFF;
+        color: #4444e6;
+        border: none;
+        border-radius: 5px;
+        font-size: 15px;
+    }
+
+    .list {
+        margin-bottom: 20px
+    }
+
+    #product-option {
+        margin-bottom: 10px
+    }
+
+    .product-list {
+        border: 1px solid #CCCCCCFF;
+        border-radius: 10px;
+        padding: 10px 0;
+        height: 200px;
+        overflow: scroll
+    }
+
+    .list button {
+        background-color: white;
+        color: black;
+        font-weight: normal;
+        border-radius: 0px
+    }
+
+    .list button:hover {
+        background-color: #E9E9FAFF
+    }
+
+    #target-price p {
+        width: 100%;
+        margin: 10px 0;
+        padding: 15px;
+        box-sizing: border-box;
+        border: 1px solid #cccccc;
+        border-radius: 5px
+    }
+
+    #group-option span {
+        font-size: small;
+        color: #79797e
+    }
+
+    #selected {
+        background-color: #E9E9FAFF
+    }
+</style>
+<body>
+<div>
+    <div>
+        <h1>여행 만들기</h1>
+        <input hidden name="groupCategory" value="여행">
+        <div>
+            <form method="post" th:action="@{/travel}">
+                <div class="list">
+                    <h3>여행 이름</h3>
+                    <input type="text" id="travelName" name="travelName"/>
+                </div>
+                <div class="list">
+                    <h3>날짜 선택</h3>
+                    <label for="start">시작일:</label>
+                    <input type="datetime-local" id="start" name="startDate" required><br><br>
+
+                    <label for="end">종료일:</label>
+                    <input type="datetime-local" id="end" name="endDate" required><br><br>
+                </div>
+                <div class="list" id="product-option">
+                    <button type="button" onclick="searchAddress()">주소 선택</button>
+                    <input type="text" id="selectedCity" name="city" placeholder="선택된 주소" readonly/>
+                </div>
+                <div class="list">
+                    <h3>여행 계획</h3>
+                    <textarea id="description" name="description" rows="8" cols="50"></textarea>
+                </div>
+                <div class="list" id="target-price">
+                    <h3>목표 금액</h3>
+                    <input type="text" id="price" name="price"/>
+                </div>
+                <div class="list" id="group-option">
+                    <h3>그룹 선택 <span>   *옵션</span></h3>
+                    <div class="product-list">
+                        <div th:each="group : ${myLeaderTravelGroups}">
+                            <button type="button" th:name="${group.getGroupId()}"
+                                    th:attr="data-group-category-code=${group.getGroupCategoryCode()}"
+                                    th:text="${group.getGroupName()}" onclick="setGroupId(this)"></button>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="groupId" name="groupId">
+                <button>여행 만들기</button>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+</body>
+<script>
+
+    function setGroupId(button) {
+        document.querySelectorAll('.list button').forEach(btn => btn.removeAttribute('id'));
+        const id = button.getAttribute('name');
+
+        document.getElementById("groupId").value = id;
+        button.id = 'selected';
+        // console.log(document.getElementById("groupId").value);
+    }
+
+    function searchAddress() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                // 선택된 주소를 가져와서 시 이름을 추출
+                var cityName = data.sido; // 특별,광역시,도 이름 추출
+                var stateName = data.sigungu; // 시 이름 추출
+
+
+                // 정규표현식: "시"로 끝나는 단어와 그 뒤에 이어지는 "구"로 끝나는 단어를 구분
+                const regex = /(\S+시)\s(\S+구)/;
+
+                // 주소가 "시 구" 형태인지 확인
+                const match = stateName.match(regex);
+
+                if (match) {
+                    // "시 구" 형태인 경우 시 이름만 반환
+                    stateName = match[1]; // 첫 번째 캡처 그룹(시 이름) 반환
+                    document.getElementById("selectedCity").value = cityName + " " + stateName;
+                } else {
+                    document.getElementById("selectedCity").value = cityName;
+                }
+            }
+        }).open();
+    }
+
+
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function () {
+        toggleSelectionList(); // 기본으로 "상품"을 선택한 상태로 설정
+    });
+</script>
+</html>

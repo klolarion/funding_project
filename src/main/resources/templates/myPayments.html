@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Payments</title>
+</head>
+<style>
+    body{padding: 0 90px; margin: 50px auto; width: 500px; display: flex; justify-content: center; align-items: center;}
+    #total-money {display: flex; justify-content: space-between; margin:30px 0; padding: 20px 0; border-top: 1px solid #cccccc
+    }
+    h3{margin-top: 40px}
+    button{width:100%; padding:15px; background-color: #E9E9FAFF; color: #4444e6; border:none; border-radius: 5px; font-size: 15px; }
+    .list {margin-bottom: 20px; width: 80%; max-width: 800px;}
+    #product-option {margin-bottom: 10px}
+    .product-list {overflow-x: hidden; border: 1px solid #CCCCCCFF; border-radius: 10px; padding: 10px 0; width: 1000px; height: 200px; overflow: scroll; }
+    .list button { background-color: white; color: black; font-weight: normal; border-radius: 0px}
+    .list button:hover {background-color: #E9E9FAFF}
+    #target-price p {width: 100%; margin:10px 0; padding: 15px; box-sizing: border-box; border: 1px solid #cccccc; border-radius: 5px}
+    #group-option span {font-size: small; color: #79797e}
+    #selected {background-color:#E9E9FAFF }
+</style>
+<body>
+<div>
+    <div>
+        <h1>내 결제목록</h1>
+        <div>
+
+            <form method="post" th:action="@{/index}">
+                <div class="list" id="group-option">
+                    <div class="product-list">
+                        <div th:each="payment : ${myPayments}">
+                            <button type="button" th:name="${payment.getPaymentId()}"
+                                    th:text="'내 계좌: ' + ${payment.getPaymentAccount()} +
+                                     ', 대상 계좌: ' + ${payment.getTargetAccount()} +
+                                     ', 결제금액: ' + ${payment.getAmount()} +
+                                     ', 결제 전 잔고: ' + ${payment.getBalanceBefore()} +
+                                     ', 결제 후 잔고: ' + ${payment.getBalanceAfter()} +
+                                     ', 결제일시: ' + ${payment.getCreatedDate()}"
+                                    onclick="setGroupId(this)"></button>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="paymentId" name="paymentId">
+            </form>
+
+        </div>
+
+    </div>
+</div>
+</body>
+<script>
+</script>
+</html>

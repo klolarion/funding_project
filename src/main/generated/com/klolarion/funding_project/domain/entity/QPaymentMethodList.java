@@ -22,6 +22,14 @@ public class QPaymentMethodList extends EntityPathBase<PaymentMethodList> {
 
     public static final QPaymentMethodList paymentMethodList = new QPaymentMethodList("paymentMethodList");
 
+    public final QBaseTime _super = new QBaseTime(this);
+
+    //inherited
+    public final StringPath createdDate = _super.createdDate;
+
+    //inherited
+    public final StringPath lastModifiedDate = _super.lastModifiedDate;
+
     public final BooleanPath mainPayment = createBoolean("mainPayment");
 
     public final QMember member;

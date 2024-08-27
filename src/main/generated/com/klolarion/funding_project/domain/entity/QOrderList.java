@@ -22,9 +22,17 @@ public class QOrderList extends EntityPathBase<OrderList> {
 
     public static final QOrderList orderList = new QOrderList("orderList");
 
+    public final QBaseTime _super = new QBaseTime(this);
+
+    //inherited
+    public final StringPath createdDate = _super.createdDate;
+
     public final QFunding funding;
 
     public final QGroup group;
+
+    //inherited
+    public final StringPath lastModifiedDate = _super.lastModifiedDate;
 
     public final QMember member;
 

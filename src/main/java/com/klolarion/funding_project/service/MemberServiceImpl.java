@@ -140,12 +140,24 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public PaymentMethodList addPaymentMethod(Long paymentMethodId) {
         QPaymentMethod qPaymentMethod = QPaymentMethod.paymentMethod;
+        QPaymentMethodList qPaymentMethodList = QPaymentMethodList.paymentMethodList;
         Member member = currentMember.getMember();
         PaymentMethod paymentMethod = query.selectFrom(qPaymentMethod).where(qPaymentMethod.paymentMethodId.eq(paymentMethodId)).fetchOne();
 
         PaymentMethodList paymentMethodList = new PaymentMethodList(paymentMethod, member);
-        return paymentMethodListRepository.save(paymentMethodList);
 
+
+        //이미 등록된 결제수단인지 확인
+        //null이면 등록
+        PaymentMethodList fetched = query.selectFrom(qPaymentMethodList).where(
+                qPaymentMethodList.member.memberId.eq(member.getMemberId())
+                        .and(qPaymentMethodList.paymentMethod.paymentMethodId.eq(paymentMethodId))
+        ).fetchFirst();
+
+        if(fetched != null){
+            return null;
+        }
+        return paymentMethodListRepository.save(paymentMethodList);
     }
 
     @Override

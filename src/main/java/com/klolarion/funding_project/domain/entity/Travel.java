@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Travel {
+public class Travel extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "travel_id")
@@ -50,6 +50,7 @@ public class Travel {
     public Travel(String city, Long groupId, String travelName, Long memberId, Funding funding, Long price, String description, LocalDateTime startDate, LocalDateTime endDate) {
         this.city = city;
         this.groupId = groupId;
+        this.travelName = travelName;
         this.memberId = memberId;
         this.funding = funding;
         this.price = price;

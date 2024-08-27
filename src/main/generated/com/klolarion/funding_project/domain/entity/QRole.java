@@ -19,6 +19,14 @@ public class QRole extends EntityPathBase<Role> {
 
     public static final QRole role = new QRole("role");
 
+    public final QBaseTime _super = new QBaseTime(this);
+
+    //inherited
+    public final StringPath createdDate = _super.createdDate;
+
+    //inherited
+    public final StringPath lastModifiedDate = _super.lastModifiedDate;
+
     public final NumberPath<Long> roleId = createNumber("roleId", Long.class);
 
     public final StringPath roleName = createString("roleName");
