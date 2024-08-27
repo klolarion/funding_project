@@ -22,13 +22,21 @@ public class QFriendStatus extends EntityPathBase<FriendStatus> {
 
     public static final QFriendStatus friendStatus = new QFriendStatus("friendStatus");
 
+    public final QBaseTime _super = new QBaseTime(this);
+
     public final BooleanPath accepted = createBoolean("accepted");
 
     public final QMember accepter;
 
+    //inherited
+    public final StringPath createdDate = _super.createdDate;
+
     public final BooleanPath denied = createBoolean("denied");
 
     public final NumberPath<Long> friendStatusId = createNumber("friendStatusId", Long.class);
+
+    //inherited
+    public final StringPath lastModifiedDate = _super.lastModifiedDate;
 
     public final QMember requester;
 

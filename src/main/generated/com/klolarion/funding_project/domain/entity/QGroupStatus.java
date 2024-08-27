@@ -22,9 +22,14 @@ public class QGroupStatus extends EntityPathBase<GroupStatus> {
 
     public static final QGroupStatus groupStatus = new QGroupStatus("groupStatus");
 
+    public final QBaseTime _super = new QBaseTime(this);
+
     public final BooleanPath accepted = createBoolean("accepted");
 
     public final BooleanPath banned = createBoolean("banned");
+
+    //inherited
+    public final StringPath createdDate = _super.createdDate;
 
     public final BooleanPath exited = createBoolean("exited");
 
@@ -37,6 +42,9 @@ public class QGroupStatus extends EntityPathBase<GroupStatus> {
     public final NumberPath<Long> groupStatusId = createNumber("groupStatusId", Long.class);
 
     public final BooleanPath invited = createBoolean("invited");
+
+    //inherited
+    public final StringPath lastModifiedDate = _super.lastModifiedDate;
 
     public final BooleanPath requested = createBoolean("requested");
 

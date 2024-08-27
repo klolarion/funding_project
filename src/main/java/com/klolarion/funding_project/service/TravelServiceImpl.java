@@ -36,8 +36,13 @@ public class TravelServiceImpl implements TravelService {
     @Override
     public List<Travel> myTravels() {
         QTravel qTravel = QTravel.travel;
+        QFunding qFunding = QFunding.funding;
         Member member = currentMember.getMember();
-        return query.selectFrom(qTravel).where(qTravel.memberId.eq(member.getMemberId())).fetch();
+        return query.selectFrom(qTravel)
+                .leftJoin(qFunding).on(qTravel.travelId.eq(qFunding.travel.travelId))
+                .where(qTravel.memberId.eq(member.getMemberId())
+                        .and(qFunding.travel.travelId.isNull()))  // Funding에 등록되지 않은 Travel
+                .fetch();
     }
 
     @Override
@@ -48,12 +53,13 @@ public class TravelServiceImpl implements TravelService {
 
     @Override
     public Travel createTravel(TravelDto travelDto) {
+        Member member = currentMember.getMember();
         //생성시 펀딩은 null
         Travel travel = new Travel(
                 travelDto.getCity(),
                 travelDto.getGroupId(),
                 travelDto.getTravelName(),
-                travelDto.getMemberId(),
+                member.getMemberId(),
                 null,
                 travelDto.getPrice(),
                 travelDto.getDescription(),

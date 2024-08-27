@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GroupStatus {
+public class GroupStatus extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_status_id")

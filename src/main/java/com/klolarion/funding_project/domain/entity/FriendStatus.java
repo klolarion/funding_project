@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FriendStatus {
+public class FriendStatus extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "friend_status_id")

@@ -22,6 +22,8 @@ public class QPayment extends EntityPathBase<Payment> {
 
     public static final QPayment payment = new QPayment("payment");
 
+    public final QBaseTime _super = new QBaseTime(this);
+
     public final NumberPath<Long> amount = createNumber("amount", Long.class);
 
     public final NumberPath<Long> balanceAfter = createNumber("balanceAfter", Long.class);
@@ -29,6 +31,12 @@ public class QPayment extends EntityPathBase<Payment> {
     public final NumberPath<Long> balanceBefore = createNumber("balanceBefore", Long.class);
 
     public final BooleanPath completed = createBoolean("completed");
+
+    //inherited
+    public final StringPath createdDate = _super.createdDate;
+
+    //inherited
+    public final StringPath lastModifiedDate = _super.lastModifiedDate;
 
     public final QMember member;
 

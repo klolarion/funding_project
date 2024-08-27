@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CodeMaster {
+public class CodeMaster extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "code_id")

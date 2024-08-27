@@ -30,7 +30,9 @@
     <div>
         <h3>대표 결제 수단</h3>
         <p th:unless="${mainPaymentMethod == null}">
-            <span th:text="${mainPaymentMethod.paymentMethod.paymentName} + ${mainPaymentMethod.paymentMethod.accountNumber}">NH 어쩌구 저쩌구</span>
+            <span th:text="${mainPaymentMethod.paymentMethod.paymentName}">NH 어쩌구 저쩌구</span>
+            <span th:text="${mainPaymentMethod.paymentMethod.accountNumber}">123-123456-123</span>
+            <span th:text="${mainPaymentMethod.paymentMethod.availableAmount}">123456</span>
         </p>
 <!--        <p th:text="${mainPaymentMethod.paymentMethod.paymentName} + ${mainPaymentMethod.paymentMethod.accountNumber}">NH 어쩌구 저쩌구</p>-->
     </div>
@@ -40,6 +42,7 @@
             <li th:each="myPaymentMethod : ${myPaymentList}">
                 <span th:text="${myPaymentMethod.paymentMethod.paymentName}"></span>
                 <span th:text="${myPaymentMethod.paymentMethod.accountNumber}"></span>
+                <span th:text="${myPaymentMethod.paymentMethod.availableAmount}"></span>
                 <form method="post" th:action="@{/paymentMethod/mainMethod}">
                     <input type="hidden" name="myPaymentMethodId" th:value="${myPaymentMethod.paymentMethodListId}" >
                     <button>대표</button>

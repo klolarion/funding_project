@@ -447,6 +447,8 @@ public class FundingServiceImpl implements FundingService {
                     codeMaster.getCode()
             );
 
+
+            //여행과 펀딩은 1:1매핑으로 하나의 여행으로 여러번 펀딩할 수 없음
             Funding saved = fundingRepository.save(funding);
             em.flush();
             em.clear();
@@ -609,6 +611,7 @@ public class FundingServiceImpl implements FundingService {
                     .where(qPaymentMethod.paymentMethodId.eq(paymentMethod.getPaymentMethodId()))
                     .execute();
 
+
             Payment payment = new Payment(
                     member,
                     paymentMethod,
@@ -616,7 +619,7 @@ public class FundingServiceImpl implements FundingService {
                     paymentMethod.getAccountNumber(),
                     amount,
                     balanceBefore,
-                    paymentMethod.getAvailableAmount(),
+                    balanceBefore - amount,
                     true
             );
 
