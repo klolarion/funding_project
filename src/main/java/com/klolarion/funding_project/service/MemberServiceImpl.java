@@ -250,4 +250,36 @@ public class MemberServiceImpl implements MemberService {
                     return memberRepository.save(member);
                 });
     }
+
+    @Override
+    public Member saveOrUpdateUserNaver(OAuth2User oAuth2User) {
+        System.out.printf("hi");
+        Optional<Role> role = roleRepository.findById(2L); //USER
+        Role defauleRole = role.orElseThrow(() -> new UsernameNotFoundException("Role not found"));
+//        System.out.println("oauth" + oAuth2User);
+        String naverId = oAuth2User.getAttribute("id");
+        String email = oAuth2User.getAttribute("email");
+        String name = oAuth2User.getAttribute("name");
+//        boolean enabled = oAuth2User.getAttribute("email_verified");
+
+        return memberRepository.findByAccount(naverId)
+                .map(member -> {
+                    member.setEmail(email);
+                    member.setMemberName(name);
+                    return memberRepository.save(member);
+                })
+                .orElseGet(() -> {
+                    Member member = new Member();
+                    member.setAccount(naverId);
+                    member.setEmail(email);
+                    member.setMemberName(name);
+                    member.setRole(defauleRole); // 기본 권한 설정
+                    member.setProvider("Naver");
+//                    member.setEnabled(enabled);
+                    return memberRepository.save(member);
+                });
+//        return null;
+    }
+
+
 }

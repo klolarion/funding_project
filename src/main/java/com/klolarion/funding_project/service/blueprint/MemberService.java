@@ -50,4 +50,6 @@ public interface MemberService {
     boolean leave();
 
     Member saveOrUpdateUserGoogle(OAuth2User principal);
+    Member saveOrUpdateUserNaver(OAuth2User principal);
+
 }
