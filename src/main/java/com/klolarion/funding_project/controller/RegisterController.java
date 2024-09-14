@@ -23,8 +23,9 @@ public class RegisterController {
     @GetMapping
     public String register(@AuthenticationPrincipal OAuth2User principal, Model model, OAuth2AuthenticationToken token) {
         if (principal != null) {
+//            Member member = memberService.saveOrUpdateUserGoogle(principal);
             String registrationId = token.getAuthorizedClientRegistrationId();
-            System.out.println("regiID: " +registrationId);
+            System.out.println("regiID: " + registrationId);
 
             Member member = null;
             if ("google".equals(registrationId)) {
@@ -33,17 +34,21 @@ public class RegisterController {
             } else if ("naver".equals(registrationId)) {
                 // 네이버 로그인 처리
                 member = memberService.saveOrUpdateUserNaver(principal);
+            } else if ("kakao".equals(registrationId)) {
+                // 카카오 로그인 처리
+                member = memberService.saveOrUpdateUserKakao(principal);
+
             } else {
                 // 다른 소셜 로그인이 있을 경우를 대비한 처리
                 throw new IllegalArgumentException("Unsupported provider: " + registrationId);
             }
 
             model.addAttribute("member", member);
-            //인증 성공시 회원등록 후 바로 메인페이지로 리다이렉트
-            return "redirect:/index";
+            // 인증 성공 시 회원 등록 후 바로 메인 페이지로 리다이렉트
+            return "redirect:http://localhost:5173";
         }
-        //인증실패시 다시 로그엔페이지로. 오류메세지 필요
-        return "redirect:/login";
+        // 인증 실패 시 다시 로그인 페이지로. 오류 메시지 필요
+        return "redirect:http://localhost:5173/login";
     }
 
 

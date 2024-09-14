@@ -13,5 +13,4 @@ import java.util.List;
 @NoArgsConstructor
 public class IndexDto {
     private List<FundingListDto> fundingDtoList;
-    private List<GroupDto> groupDtoList;
 }

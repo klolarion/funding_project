@@ -24,6 +24,8 @@ public interface AdminService {
 
     //member
     Member searchMember(Long id);
+//    Member setPink(Long memberId);
+//    Member setSilver(Long memberId);
 
     //paymentMethod
     List<PaymentMethod> paymentMethodList();

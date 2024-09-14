@@ -34,7 +34,7 @@ public interface FundingService {
     List<FundingListDto> fundingListByProduct(Long productId);
 
     /*펀딩 시작*/
-    Funding createFunding(Long memberId, Long productId, Long travelId, Long GroupId);
+    Funding createFunding(Long memberId, Long productId, Long travelId, Long GroupId, int statusCode);
 
     Funding createFundingApi(Long productId, Long groupId, Long travelId);
 

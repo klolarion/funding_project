@@ -1,6 +1,7 @@
 package com.klolarion.funding_project.controller.api_v1;
 
 import com.klolarion.funding_project.dto.IndexDto;
+import com.klolarion.funding_project.dto.funding.FundingListDto;
 import com.klolarion.funding_project.dto.funding.FundingMainDto;
 import com.klolarion.funding_project.service.FundingServiceImpl;
 import com.klolarion.funding_project.service.GroupServiceImpl;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +34,7 @@ public class IndexApiControllerV1 {
             responses = {
                     @ApiResponse(responseCode = "200", description = "정상 호출",
                             content = @Content(
-                                    schema = @Schema(implementation = IndexDto.class),
+                                    schema = @Schema(implementation = FundingListDto.class),
                                     mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "정보 조회 실패",
                             content = @Content(
@@ -43,13 +46,10 @@ public class IndexApiControllerV1 {
     @GetMapping
     public ResponseEntity<?> getIndex(){
         try {
-            IndexDto indexDto = new IndexDto(
-                    fundingServiceImpl.allFundingList(),
-                    groupServiceImpl.allGroupExceptMy()
-            );
-            if(indexDto != null) {
+            List<FundingListDto> result = fundingServiceImpl.allFundingList();
+            if(result != null) {
                 log.debug("정보 조회 성공 : Index");
-                return ResponseEntity.status(HttpStatus.OK).body(indexDto);
+                return ResponseEntity.status(HttpStatus.OK).body(result);
             }else {
                 log.debug("정보 조회 실패 : Index");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("정보 조회 실패");

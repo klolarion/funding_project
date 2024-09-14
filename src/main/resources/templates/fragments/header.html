@@ -5,19 +5,20 @@
     <title>header</title>
 
 </head>
-<!--<style>-->
-<!--    header {display: flex; justify-content: space-between; padding: 0px 90px}-->
-<!--    #header-right{ margin: 20px 20px}-->
-<!--    header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}-->
-<!--    #header-right a{text-decoration: none; padding: 10px 20px; color: black}-->
-<!--</style>-->
+<style>
+    header {display: flex; justify-content: space-between; }
+    #header-right{ margin: 20px 20px}
+    header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
+    #header-right a{text-decoration: none; padding: 10px 20px; color: black}
+</style>
 <body>
 <div th:fragment="header">
     <header>
 
-        <h2><a id="index" th:href="@{/f1}">FUNDING PROJECT</a></h2>
+        <h2><a id="index" th:href="@{/index}">FUNDING PROJECT</a></h2>
         <div id="header-right">
-            <a th:href="@{/myPage}">MY PAGE</a>
+            <a th:href="@{/index}">Home</a>
+            <a th:href="@{/myPage}">My page</a>
             <a th:href="@{/funding}"><button>펀딩 시작하기</button></a>
         </div>
     </header>

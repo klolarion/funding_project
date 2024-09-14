@@ -1,6 +1,8 @@
 package com.klolarion.funding_project.util;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -29,6 +31,17 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
         }
 
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+        // SecurityContext에 사용자를 저장
+        OAuth2User user = new DefaultOAuth2User(
+                Collections.singleton(authority),
+                attributes,
+                userNameAttributeName);
+
+        SecurityContextHolder.getContext()
+                .setAuthentication(new UsernamePasswordAuthenticationToken(
+                        user, null,
+                        user.getAuthorities()));
+
 
         return new DefaultOAuth2User(
                 Collections.singleton(authority),

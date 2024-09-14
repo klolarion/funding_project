@@ -4,29 +4,29 @@ insert into role(role_id, role_name) values (1, 'ROLE_ADMIN');
 insert into role(role_id, role_name) values (2, 'ROLE_USER');
 
 
-insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
-values (1, 2, 'admin', 'admin@admin.com', 'Tester', true, false, false);
+insert into member(member_id, role_id, account, email, member_name, tel, enabled, banned, off_cd)
+values (1, 2, 'admin', 'admin@admin.com', 'Tester', '010-1211-2252', true, false, false);
 
-insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
-values (2, 2, 'tester1', 'tester1@user.com', 'Tester1', true, false, false);
+insert into member(member_id, role_id, account, email, member_name, tel, enabled, banned, off_cd)
+values (2, 2, 'tester1', 'tester1@user.com', 'Tester1', '010-1000-2222', true, false, false);
 
-insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
-values (3, 2, 'tester2', 'tester2@user.com', 'Tester2', false, false, false);
+insert into member(member_id, role_id, account, email, member_name, tel, enabled, banned, off_cd)
+values (3, 2, 'tester2', 'tester2@user.com', 'Tester2', '010-1311-9999', false, false, false);
 
-insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
-values (4, 2, 'tester3', 'tester3@user.com', 'Tester3', true, false, true);
+insert into member(member_id, role_id, account, email, member_name, tel, enabled, banned, off_cd)
+values (4, 2, 'tester3', 'tester3@user.com', 'Tester3', '010-1761-2222', true, false, true);
 
-insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
-values (5, 2, 'tester4', 'tester4@user.com', 'Tester4', true, false, false);
+insert into member(member_id, role_id, account, email, member_name, tel, enabled, banned, off_cd)
+values (5, 2, 'tester4', 'tester4@user.com', 'Tester4', '010-1121-2222', true, false, false);
 
-insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
-values (6, 2, 'tester5', 'tester5@user.com', 'Tester5', true, false, false);
+insert into member(member_id, role_id, account, email, member_name, tel, enabled, banned, off_cd)
+values (6, 2, 'tester5', 'tester5@user.com', 'Tester5', '010-1331-2222', true, false, false);
 
-insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
-values (7, 2, 'tester6', 'tester6@user.com', 'Tester6', true, false, false);
+insert into member(member_id, role_id, account, email, member_name, tel, enabled, banned, off_cd)
+values (7, 2, 'tester6', 'tester6@user.com', 'Tester6', '010-4441-2222', true, false, false);
 
-insert into member(member_id, role_id, account, email, member_name, enabled, banned, off_cd)
-values (8, 2, 'tester7', 'tester7@user.com', 'Tester7', true, false, false);
+insert into member(member_id, role_id, account, email, member_name, tel, enabled, banned, off_cd)
+values (8, 2, 'tester7', 'tester7@user.com', 'Tester7', '010-1115-2222', true, false, false);
 
 
 insert into product(product_id, product_name, price, stock, restock, sale_finished)
@@ -64,10 +64,16 @@ insert into code_master(code_id, code, description, reference)
 values (5, 203, '카카오페이', 'pay');
 
 insert into code_master(code_id, code, description, reference)
-values (6, 901, '상품', '그룹분류');
+values (6, 901, '선물', '그룹분류');
 
 insert into code_master(code_id, code, description, reference)
 values (7, 902, '여행', '그룹분류');
+
+insert into code_master(code_id, code, description, reference)
+values (8, 903, '핑크', '그룹분류');
+
+insert into code_master(code_id, code, description, reference)
+values (9, 904, '실버', '그룹분류');
 
 
 insert into payment_method(payment_method_id, payment_name, payment_code, account_number, available_amount)
@@ -128,3 +134,8 @@ INSERT INTO funding (closed, completed, deleted, current_funding_amount, funding
 
 
 INSERT INTO travel (travel_name, end_date, group_id, member_id, price, start_date, travel_id, description, city) VALUES ('부산호캉스', '2024-10-24 21:11:29.000000', 3, 1, 1500000, '2024-10-20 12:00:00.000000', 1, '부산호캉스 돼지국밥냠냠', '부산');
+
+-- INSERT INTO friend_status (accepted, denied, accepter_id, friend_status_id, requester_id, created_date, last_modified_date) VALUES (true, false, 9, 1, 1, null, null);
+-- INSERT INTO friend_status (accepted, denied, accepter_id, friend_status_id, requester_id, created_date, last_modified_date) VALUES (false, false, 9, 2, 2, null, null);
+--
+-- INSERT INTO friend (banned, deleted, accepter_id, friend_id, requester_id, created_date, last_modified_date) VALUES (false, false, 9, 1, 1, null, null);

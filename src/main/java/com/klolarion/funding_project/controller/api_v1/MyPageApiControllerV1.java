@@ -3,9 +3,7 @@ package com.klolarion.funding_project.controller.api_v1;
 import com.klolarion.funding_project.domain.entity.Member;
 import com.klolarion.funding_project.dto.member.MyPageDto;
 import com.klolarion.funding_project.service.FundingServiceImpl;
-import com.klolarion.funding_project.service.GroupServiceImpl;
 import com.klolarion.funding_project.service.MemberServiceImpl;
-import com.klolarion.funding_project.service.PaymentServiceImpl;
 import com.klolarion.funding_project.util.CurrentMember;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,9 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/f2/v1")
 @Slf4j
 public class MyPageApiControllerV1 {
-    private final PaymentServiceImpl paymentServiceImpl;
     private final FundingServiceImpl fundingServiceImpl;
-    private final GroupServiceImpl groupServiceImpl;
     private final MemberServiceImpl memberServiceImpl;
     private final CurrentMember currentMember;
 
@@ -45,15 +41,14 @@ public class MyPageApiControllerV1 {
     @GetMapping("/mypage")
     public ResponseEntity<?> myPage() {
         try {
-            Member member = currentMember.getMember();
             //조회가 5개!!
+            Member member = currentMember.getMember();
             // -> 컨트롤러에서 멤버 조회 후 서비스에 일괄전달방식으로 변경 필요 또는 마이페이지 서비스를 따로 만들어 거대한 한방쿼리 가능한지 검토 필요
             MyPageDto myPageDto = new MyPageDto(
                     fundingServiceImpl.myFundingList(),
-                    groupServiceImpl.myLeaderGroups(),
                     memberServiceImpl.getMainPaymentMethod(),
-                    groupServiceImpl.myGroups(),
-                    paymentServiceImpl.getMyPayments()
+                    memberServiceImpl.getMemberPageData(),
+                    memberServiceImpl.getMyActivity()
             );
             return ResponseEntity.status(HttpStatus.OK).body(myPageDto);
         }catch (Exception e){

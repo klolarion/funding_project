@@ -5,11 +5,16 @@
   <title>Travel pay</title>
 </head>
 <style>
+  header {display: flex; justify-content: space-between; }
+  #header-right{ margin: 20px 20px}
+  header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
+  #header-right a{text-decoration: none; padding: 10px 20px; color: black}
   body{padding: 0 90px; margin: 150px auto; width: 500px}
   #total-money {display: flex; justify-content: space-between; margin:30px 0; padding: 20px 0; border-top: 1px solid #cccccc
   }
   button{width:100%; padding:15px; background-color: #E9E9FAFF; color: #4949CCFF; border:none; border-radius: 5px;  }
 </style>
+<a th:href="@{/index}">Home</a>
 <body>
 <div>
   <div>

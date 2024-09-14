@@ -22,10 +22,11 @@ public class FundingListDto {
     private Long currentFundingAmount;
     private String fundingAccount;
     private String status;
+    private int fundingCategoryCode;
 
     public FundingListDto(Long fundingId, Long memberId, String memberName, Long productId, String productName, Long travelId, String travelName,
                          double progress, Long totalFundingAmount, Long currentFundingAmount,
-                         String fundingAccount, String status) {
+                         String fundingAccount, String status, int fundingCategoryCode) {
         this.fundingId = fundingId;
         this.memberId = memberId;
         this.memberName = memberName;
@@ -38,6 +39,7 @@ public class FundingListDto {
         this.currentFundingAmount = currentFundingAmount;
         this.fundingAccount = fundingAccount;
         this.status = status;
+        this.fundingCategoryCode = fundingCategoryCode;
     }
 
 }

@@ -36,6 +36,10 @@ public class Member extends BaseTime implements Serializable {
     private String email;
 
     @Column(nullable = false, unique = true)
+    @Size(max = 20)
+    private String tel;
+
+    @Column(nullable = false, unique = true)
     @Size(max = 100)
     private String memberName;
 

@@ -5,6 +5,10 @@
     <title>Group detail</title>
 </head>
 <style>
+    header {display: flex; justify-content: space-between; }
+    #header-right{ margin: 20px 20px}
+    header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
+    #header-right a{text-decoration: none; padding: 10px 20px; color: black}
     body{padding: 0 90px; margin: 60px auto; width: 500px}
     h3{margin-top: 30px}
     a{text-decoration: none; color: black}
@@ -19,6 +23,7 @@
     #search button {width: 20%; background-color: #E9E9FAFF; color: #4949CCFF; border:none; border-radius: 5px;}
     #requestId {display: flex;}
 </style>
+<a th:href="@{/index}">Home</a>
 <body>
 <div>
     <h2 th:text="${groupDetail.groupName}">그룹 이름</h2>

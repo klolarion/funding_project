@@ -6,6 +6,10 @@
     <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 <style>
+    header {display: flex; justify-content: space-between; }
+    #header-right{ margin: 20px 20px}
+    header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
+    #header-right a{text-decoration: none; padding: 10px 20px; color: black}
     body {
         padding: 0 90px;
         margin: 50px auto;
@@ -79,6 +83,7 @@
         background-color: #E9E9FAFF
     }
 </style>
+<a th:href="@{/index}">Home</a>
 <body>
 <div>
     <div>

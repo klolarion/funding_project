@@ -22,10 +22,12 @@
         <input type="submit" value="Google Login">
         <input hidden name="provider" value="Google">
     </form>
-    <form   method="post">
+    <br>
+    <form th:action="@{/oauth2/authorization/kakao}"  method="post">
         <input type="submit" value="Kakao Login">
         <input hidden name="provider" value="Kakao">
     </form>
+    <br>
     <form th:action="@{/oauth2/authorization/naver}" method="post">
         <input type="submit" value="Naver Login">
         <input hidden name="provider" value="Naver">
