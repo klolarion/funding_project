@@ -15,9 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class MyPageDto {
     private List<FundingListDto> fundingListDtos;
-    private List<GroupDto> myLeaderGroupDtos;
     private PaymentMethodList mainPaymentMethod;
-    private List<GroupDto> myGroupDtos;
-    private List<Payment> myPayments;
+    private MemberDto memberDto;
+    private MyActivityDto myActivity;
 
 }

@@ -52,6 +52,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final QRole role;
 
+    public final StringPath tel = createString("tel");
+
     public QMember(String variable) {
         this(Member.class, forVariable(variable), INITS);
     }

@@ -1,9 +1,6 @@
 package com.klolarion.funding_project.controller;
 
-import com.klolarion.funding_project.service.FundingServiceImpl;
-import com.klolarion.funding_project.service.GroupServiceImpl;
-import com.klolarion.funding_project.service.MemberServiceImpl;
-import com.klolarion.funding_project.service.PaymentServiceImpl;
+import com.klolarion.funding_project.service.*;
 import com.klolarion.funding_project.util.CurrentMember;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +19,7 @@ public class MypageController {
     private final FundingServiceImpl fundingServiceImpl;
     private final GroupServiceImpl groupServiceImpl;
     private final MemberServiceImpl memberServiceImpl;
+    private final FriendServiceImpl friendService;
     private final CurrentMember currentMember;
 
     @GetMapping
@@ -30,6 +28,7 @@ public class MypageController {
         model.addAttribute("member", session.getAttribute("member"));
         model.addAttribute("myFundingList", fundingServiceImpl.myFundingList());
         model.addAttribute("myLeaderGroup", groupServiceImpl.myLeaderGroups());
+
         model.addAttribute("myMainPayment", memberServiceImpl.getMainPaymentMethod());
         model.addAttribute("myGroup", groupServiceImpl.myGroups());
         model.addAttribute("myPayments", paymentServiceImpl.getMyPayments());

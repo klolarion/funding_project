@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<style>
+    header {display: flex; justify-content: space-between; }
+    #header-right{ margin: 20px 20px}
+    header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
+    #header-right a{text-decoration: none; padding: 10px 20px; color: black}
+    *{ margin: 0; padding: 0; text-decoration: none}
+    #login-form{ margin: 0 auto; width:450px}
+    h1{ margin: 120px 0 40px 0}
+    form div { margin-bottom: 1rem }
+    form input {width: 100%; padding: 15px; box-sizing: border-box; border: 1px solid #EFEFEF; border-radius: 5px}
+    form button {width: 100%; margin: 20px 0; padding: 15px; border: none; background-color: #e9e9fa; color: #4949cc; border-radius: 5px}
+</style>
+<body>
+<div id="login-form">
+    <h1>Register</h1>
+    <form method="post" >
+        <div>
+            <input type="text" name="account" id="account" placeholder="계정을 입력하세요.">
+            <input name="tel" id="tel" placeholder="전화번호를 입력하세요.">
+        </div>
+        <button type="button" onclick="submitForm()">전송</button>
+    </form>
+</div>
+
+</body>
+</html>

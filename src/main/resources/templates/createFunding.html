@@ -5,6 +5,10 @@
     <title>Create Funding</title>
 </head>
 <style>
+    header {display: flex; justify-content: space-between; }
+    #header-right{ margin: 20px 20px}
+    header button {padding: 15px 25px; background-color: #e9e9fa; color: #4949cc; border-radius: 5px; border: none}
+    #header-right a{text-decoration: none; padding: 10px 20px; color: black}
     body{padding: 0 90px; margin: 50px auto; width: 500px}
     #total-money {display: flex; justify-content: space-between; margin:30px 0; padding: 20px 0; border-top: 1px solid #cccccc
     }
@@ -19,20 +23,27 @@
     #group-option span {font-size: small; color: #79797e}
     #selected {background-color:#E9E9FAFF }
 </style>
+<a th:href="@{/index}">Home</a>
 <body>
 <div>
     <div>
         <h1>펀딩 만들기</h1>
         <div>
-            <div>
-                <label>
-                    상품<input name="groupCategory" type="radio" value="상품" required checked onchange="toggleSelectionList()">
-                </label><br>
-                <label>
-                    여행<input name="groupCategory" type="radio" value="여행" onchange="toggleSelectionList()">
-                </label><br>
-            </div>
             <form method="post" th:action="@{/funding}">
+                <div>
+                    <label>
+                        상품<input name="groupCategory" type="radio" value="상품" required checked onchange="toggleSelectionList()">
+                    </label>
+                    <label>
+                        여행<input name="groupCategory" type="radio" value="여행" onchange="toggleSelectionList()">
+                    </label>
+                    <label>
+                        핑크<input name="groupCategory" type="radio" value="핑크" onchange="toggleSelectionList()">
+                    </label>
+                    <label>
+                        실버<input name="groupCategory" type="radio" value="실버" onchange="toggleSelectionList()">
+                    </label><br>
+                </div>
                 <div class="list" id="product-option">
                     <h3>상품 선택</h3>
                     <div class="product-list">
@@ -70,6 +81,7 @@
                     </div>
                 </div>
                 <input type="hidden" id="groupId" name="groupId">
+                <input type="hidden" name="statusCode" id="statusCode" value="">
                 <button>펀딩 만들기</button>
             </form>
 
@@ -115,19 +127,36 @@
         } else if (selectedCategory === '여행') {
             productOption.style.display = 'none';
             travelOption.style.display = 'block';
+        } else if (selectedCategory === '핑크') {
+            productOption.style.display = 'block';
+            travelOption.style.display = 'none';
+        } else if (selectedCategory === '실버') {
+            productOption.style.display = 'block';
+            travelOption.style.display = 'none';
         }
 
         // 그룹 필터링
         const groupButtons = document.querySelectorAll('#group-option button');
         groupButtons.forEach(button => {
             const groupCategoryCode = button.getAttribute('data-group-category-code');
-            if ((selectedCategory === '상품' && groupCategoryCode == '901') ||
-                (selectedCategory === '여행' && groupCategoryCode == '902')) {
+            if ((selectedCategory === '상품' && groupCategoryCode === '901') ||
+                (selectedCategory === '여행' && groupCategoryCode === '902') ||
+                (selectedCategory === '핑크' && groupCategoryCode === '903') ||
+                (selectedCategory === '실버' && groupCategoryCode === '904')
+            ) {
                 button.style.display = 'block';
             } else {
                 button.style.display = 'none';
             }
         });
+        const statusCodes = {
+            '상품': '901',
+            '여행': '902',
+            '핑크': '903',
+            '실버': '904'
+        };
+
+        document.getElementById('statusCode').value = statusCodes[selectedCategory];
     }
 
     // 페이지 로드 시 초기화

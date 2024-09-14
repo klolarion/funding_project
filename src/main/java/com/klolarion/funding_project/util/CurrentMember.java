@@ -23,6 +23,8 @@ public class CurrentMember {
 
         String account;
         String email;
+
+        System.out.println(principal.toString());
         if (principal instanceof UserDetails) {
             account = ((UserDetails) principal).getUsername();
             Optional<Member> findMember = memberRepository.findByAccount(account);
@@ -30,6 +32,7 @@ public class CurrentMember {
         } else if (principal instanceof OAuth2User) {
             //oAuth는 이메일로 사용자 조회
             email = ((OAuth2User) principal).getAttribute("email");
+            System.out.println(email);
             Optional<Member> findMember = memberRepository.findByEmail(email);
             return findMember.orElseThrow(() -> new UsernameNotFoundException("사용자 조회 실패"));
         } else {

@@ -25,6 +25,10 @@ public interface MemberService {
     /*캐시에서 멤버정보 조회 => 실패시 DB에서 조회 후 리턴*/
     void setMemberCache(Member member);
 
+    Member setPink(Long memberId);
+
+    Member setSilver(Long memberId);
+
     /*내 정보*/
     Member myInfo();
 
@@ -50,4 +54,7 @@ public interface MemberService {
     boolean leave();
 
     Member saveOrUpdateUserGoogle(OAuth2User principal);
+    Member saveOrUpdateUserNaver(OAuth2User principal);
+
+    Member saveOrUpdateUserKakao(OAuth2User principal);
 }

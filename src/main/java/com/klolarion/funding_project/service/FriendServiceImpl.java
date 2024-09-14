@@ -94,6 +94,7 @@ public class FriendServiceImpl implements FriendService {
         Member member = currentMember.getMember();
         QFriend qFriend = QFriend.friend;
         QMember qMember = QMember.member;
+
         List<SearchFriendDto> friends = query
                 .select(Projections.constructor(SearchFriendDto.class,
                         qMember.memberId,

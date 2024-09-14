@@ -32,6 +32,7 @@
     ul{height: 50px; overflow: scroll}
     .mypage-bottom-list ul {height: 130px}
     #no-group{color: gray; font-size: small}
+    #no-friend{color: gray; font-size: small}
 </style>
 <div th:insert="fragments/header :: header"></div>
 <body>
@@ -42,7 +43,7 @@
                 <p th:text="${member.email}">email</p>
             </div>
             <div id="mypage-util">
-                <button><a th:href="@{/logout}">로그아웃</a></button>
+                <a th:href="@{/logout}"><button>로그아웃</button></a>
                 <button>회원탈퇴</button>
             </div>
         </div>
@@ -50,15 +51,12 @@
             <div id="mypage-top">
                 <div class="mypage-top-list" >
                     <h3>친구</h3>
-                    <ul>
-                        <li>친구 이름</li>
-                    </ul>
                     <a th:href="@{/friend}"><button>친구 관리</button></a>
                 </div>
                 <div class="mypage-top-list" >
                     <h3>내가 만든 그룹</h3>
                     <ul th:if="${myLeaderGroup.size() > 0}">
-                        <li th:each="myGroup : ${myLeaderGroup}" th:text="${myGroup.groupName}">친구 이름</li>
+                        <li th:each="myGroup : ${myLeaderGroup}" th:text="${myGroup.groupName}">그룹 이름</li>
                     </ul>
                     <p id="no-group" th:unless="${myLeaderGroup.size() > 0}">그룹을 만들어 보세요.</p>
                     <a th:href="@{/group}"><button>내가 만든 그룹 관리</button></a>

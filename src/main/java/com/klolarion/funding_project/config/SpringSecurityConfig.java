@@ -35,26 +35,28 @@ public class SpringSecurityConfig {
 //                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 안 함
 //                )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(
-                                "/index/**",
-                                "/login/**",
-                                "/register/**",
-                                "/oauth/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**").permitAll() // 특정 경로는 모든 사용자에게 허용
-                                // .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated() // 나머지 요청은 인증 필요
+                                .anyRequest().permitAll()
+//                        .requestMatchers(
+//                                "/api/**",
+//                                "/index/**",
+//                                "/login/**",
+//                                "/register/**",
+//                                "/oauth/**",
+//                                "/v3/api-docs/**",
+//                                "/swagger-ui/**").permitAll() // 특정 경로는 모든 사용자에게 허용
+//                                // .requestMatchers("/admin/**").hasRole("ADMIN")
+//                        .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")  // 커스텀 로그인 페이지 설정
-                        .defaultSuccessUrl("/register", true)  // 로그인 성공 후 가입 자동진행, 메인페이지로 최종 리다이렉트
+                        .loginPage("http://localhost:5173/login")  // 커스텀 로그인 페이지 설정
+                        .defaultSuccessUrl("/api/f1/v1/auth/register", true)  // 로그인 성공 후 가입 자동진행, 메인페이지로 최종 리다이렉트
                         .failureUrl("/login?error=true")
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oAuth2MemberService)  // 로그인 후 사용자 정보를 가져오고 처리하는 서비스 설정
                         )
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/index")
+                        .logoutSuccessUrl("http://localhost:5173")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")

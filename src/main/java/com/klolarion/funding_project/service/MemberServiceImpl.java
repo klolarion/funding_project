@@ -6,12 +6,15 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.dto.auth.RegisterDto;
+import com.klolarion.funding_project.dto.member.MemberDto;
+import com.klolarion.funding_project.dto.member.MyActivityDto;
 import com.klolarion.funding_project.repository.MemberRepository;
 import com.klolarion.funding_project.repository.PaymentMethodListRepository;
 import com.klolarion.funding_project.repository.RoleRepository;
 import com.klolarion.funding_project.service.blueprint.MemberService;
 import com.klolarion.funding_project.util.CurrentMember;
 import com.klolarion.funding_project.util.RedisService;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -43,6 +46,61 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member getMember(String account){
         return memberRepository.findByAccount(account).orElseThrow(() -> new UsernameNotFoundException("사용자 조회 실패"));
+    }
+
+    public MemberDto getMemberPageData(){
+        Long memberId = currentMember.getMember().getMemberId();
+        QMember qMember = QMember.member;
+        QMemberStatus qMemberStatus = QMemberStatus.memberStatus;
+
+        return query.select(Projections.constructor(MemberDto.class,
+                        qMember.memberId,
+                        qMember.role.roleName,
+                        qMember.account,
+                        qMember.email,
+                        qMember.tel,
+                        qMember.memberName,
+                        qMember.provider,
+                        qMember.providerId,
+                        qMemberStatus.memberStatusId,
+                        qMemberStatus.memberStatusCode,
+                        qMemberStatus.statusExpires
+
+                )).from(qMember)
+                .leftJoin(qMemberStatus).on(qMemberStatus.member.memberId.eq(memberId))
+                .fetchOne();
+
+    }
+
+    public MyActivityDto getMyActivity(){
+        Long memberId = currentMember.getMember().getMemberId();
+        QFunding qFunding = QFunding.funding;
+        QGroup qGroup = QGroup.group;
+        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
+        QPayment qPayment = QPayment.payment;
+
+
+        return query.select(Projections.constructor(MyActivityDto.class,
+                qFunding.count(),
+                qPayment.amount.sum(),
+                qGroup.count(),
+                qGroupStatus.count()
+                ))
+                .from(qFunding)
+                .join(qGroup).on(qGroup.groupLeader.memberId.eq(memberId))
+                .join(qGroupStatus).on(qGroupStatus.groupMember.memberId.eq(memberId))
+                .join(qPayment).on(qPayment.member.memberId.eq(memberId))
+                .where(qGroupStatus.accepted.isTrue()
+                        .and(qGroupStatus.banned).isFalse()
+                        .and(qGroupStatus.exited.isFalse())
+                        .and(qGroup.groupActive.isTrue())
+                        .and(qPayment.completed.isTrue()))
+                .fetchOne();
+    }
+
+    public String getProviderInfo(String account){
+        QLoginChecker qLoginChecker = QLoginChecker.loginChecker;
+        return query.select(qLoginChecker.socialProvider).from(qLoginChecker).where(qLoginChecker.socialProvider.eq(account)).fetchOne();
     }
 
 
@@ -96,6 +154,18 @@ public class MemberServiceImpl implements MemberService {
             System.out.println(">> Data input failed <<");
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Member setPink(Long memberId) {
+
+
+        return null;
+    }
+
+    @Override
+    public Member setSilver(Long memberId) {
+        return null;
     }
 
 //    public CustomUserDetails findMemberToCustom(String account) {
@@ -246,8 +316,72 @@ public class MemberServiceImpl implements MemberService {
                     member.setMemberName(name);
                     member.setRole(defauleRole); // 기본 권한 설정
                     member.setProvider("Google");
+                    member.setTel("");
                     member.setEnabled(enabled);
                     return memberRepository.save(member);
                 });
     }
+
+    @Override
+    public Member saveOrUpdateUserNaver(OAuth2User oAuth2User) {
+        System.out.printf("hi");
+        Optional<Role> role = roleRepository.findById(2L); //USER
+        Role defauleRole = role.orElseThrow(() -> new UsernameNotFoundException("Role not found"));
+//        System.out.println("oauth" + oAuth2User);
+        String naverId = oAuth2User.getAttribute("id");
+        String email = oAuth2User.getAttribute("email");
+        String name = oAuth2User.getAttribute("name");
+//        boolean enabled = oAuth2User.getAttribute("email_verified");
+
+        return memberRepository.findByAccount(naverId)
+                .map(member -> {
+                    member.setEmail(email);
+                    member.setMemberName(name);
+                    return memberRepository.save(member);
+                })
+                .orElseGet(() -> {
+                    Member member = new Member();
+                    member.setAccount(naverId);
+                    member.setEmail(email);
+                    member.setMemberName(name);
+                    member.setRole(defauleRole); // 기본 권한 설정
+                    member.setProvider("Naver");
+                    member.setTel(" ");
+//                    member.setEnabled(enabled);
+                    return memberRepository.save(member);
+                });
+//        return null;
+    }
+
+    @Override
+    public Member saveOrUpdateUserKakao(OAuth2User oAuth2User) {
+        System.out.printf("hi");
+        Optional<Role> role = roleRepository.findById(2L); //USER
+        Role defauleRole = role.orElseThrow(() -> new UsernameNotFoundException("Role not found"));
+//        System.out.println("oauth" + oAuth2User);
+        String naverId = oAuth2User.getAttribute("id");
+        String email = oAuth2User.getAttribute("email");
+        String name = oAuth2User.getAttribute("name");
+//        boolean enabled = oAuth2User.getAttribute("email_verified");
+
+        return memberRepository.findByAccount(naverId)
+                .map(member -> {
+                    member.setEmail(email);
+                    member.setMemberName(name);
+                    return memberRepository.save(member);
+                })
+                .orElseGet(() -> {
+                    Member member = new Member();
+                    member.setAccount(naverId);
+                    member.setEmail(email);
+                    member.setMemberName(name);
+                    member.setRole(defauleRole); // 기본 권한 설정
+                    member.setProvider("Kakao");
+                    member.setTel(" ");
+//                    member.setEnabled(enabled);
+                    return memberRepository.save(member);
+                });
+//        return null;
+    }
+
 }

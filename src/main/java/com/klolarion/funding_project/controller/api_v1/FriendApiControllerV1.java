@@ -55,6 +55,41 @@ public class FriendApiControllerV1 {
         }
     };
 
+    @Operation(summary = "친구 검색",
+            tags = {"친구 API - V1"},
+            description = "이름으로 친구 검색",
+            parameters = {
+                    @Parameter(name = "friendName", description = "검색할 친구의 이름", required = true, in = ParameterIn.PATH),
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "친구 검색 성공",
+                            content = @Content(
+                                    schema = @Schema(implementation = SearchFriendDto.class),
+                                    mediaType = "application/json")),
+                    @ApiResponse(responseCode = "400", description = "없는 이름",
+                            content = @Content(
+                                    mediaType = "application/json")),
+                    @ApiResponse(responseCode = "500", description = "서버 오류",
+                            content = @Content(
+                                    mediaType = "application/json")),
+            })
+    @GetMapping("/{friendName}")
+    public ResponseEntity<?> searchFriend(@PathVariable String friendName){
+        try {
+            List<SearchFriendDto> searchFriendDtos = friendService.searchFriend(friendName);
+            if(searchFriendDtos != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(searchFriendDtos);
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구를 찾을 수 없습니다.");
+        }catch (Exception e){
+            log.error("친구 검색 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+        }
+
+
+
+    }
+
 
 
     @Operation(summary = "친구 요청 목록",

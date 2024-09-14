@@ -1,6 +1,8 @@
 package com.klolarion.funding_project.util;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -20,9 +22,28 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
 
         // 구글에서 가져온 사용자 정보
         Map<String, Object> attributes = oAuth2User.getAttributes();
-        String email = (String) attributes.get("email");
-        String name = (String) attributes.get("name");
+        String userNameAttributeName;
+
+        if ("naver".equals(registrationId)) {
+//            System.out.println("hi");
+            attributes = (Map<String, Object>) attributes.get("response");
+            userNameAttributeName = "id";  // 네이버의 경우 id를 식별자로 사용
+        } else {
+            userNameAttributeName = "email";  // 구글의 경우 email을 식별자로 사용
+        }
+
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+        // SecurityContext에 사용자를 저장
+        OAuth2User user = new DefaultOAuth2User(
+                Collections.singleton(authority),
+                attributes,
+                userNameAttributeName);
+
+        SecurityContextHolder.getContext()
+                .setAuthentication(new UsernamePasswordAuthenticationToken(
+                        user, null,
+                        user.getAuthorities()));
+
 
         // Spring Security의 컨텍스트에 등록할 OAuth2User 객체 생성
         return new DefaultOAuth2User(

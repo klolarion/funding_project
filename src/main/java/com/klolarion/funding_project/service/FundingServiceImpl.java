@@ -70,7 +70,8 @@ public class FundingServiceImpl implements FundingService {
                                 .then("완료")
                                 .when(qFunding.closed.isTrue())
                                 .then("중단")
-                                .otherwise("펀딩중").as("status")))
+                                .otherwise("펀딩중").as("status"),
+                        qFunding.fundingCategoryCode))
                 .from(qFunding)
                 .join(qFunding.member, qMember)   // Member와 조인
                 .leftJoin(qFunding.product, qProduct) // Product와 조인
@@ -116,7 +117,8 @@ public class FundingServiceImpl implements FundingService {
                                 .then("완료")
                                 .when(qFunding.closed.isTrue())
                                 .then("중단")
-                                .otherwise("펀딩중").as("status")
+                                .otherwise("펀딩중").as("status"),
+                        qFunding.fundingCategoryCode
                 ))
                 .from(qFunding)
                 .join(qFunding.member, qMember)   // Member와 조인
@@ -170,7 +172,8 @@ public class FundingServiceImpl implements FundingService {
                                 .then("완료")
                                 .when(qFunding.closed.isTrue())
                                 .then("중단")
-                                .otherwise("펀딩중").as("status")
+                                .otherwise("펀딩중").as("status"),
+                                 qFunding.fundingCategoryCode
                 ))
                 .distinct()
                 .from(qFunding)
@@ -215,7 +218,8 @@ public class FundingServiceImpl implements FundingService {
                                 .then("완료")
                                 .when(qFunding.closed.isTrue())
                                 .then("중단")
-                                .otherwise("펀딩중").as("status")
+                                .otherwise("펀딩중").as("status"),
+                        qFunding.fundingCategoryCode
                 ))
                 .from(qFunding)
                 .leftJoin(qFunding.group, qGroup) // Funding과 Group 간의 관계를 조인
@@ -257,7 +261,8 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.fundingAccount,
                         qFunding.completed,
                         qFunding.closed,
-                        qFunding.deleted
+                        qFunding.deleted,
+                        qFunding.fundingCategoryCode
                 ))
                 .from(qFunding)
                 .join(qFunding.member, qMember)  // Funding과 Member 간의 관계 조인
@@ -307,7 +312,8 @@ public class FundingServiceImpl implements FundingService {
                                 .then("완료")
                                 .when(qFunding.closed.isTrue())
                                 .then("중단")
-                                .otherwise("펀딩중").as("status")
+                                .otherwise("펀딩중").as("status"),
+                        qFunding.fundingCategoryCode
                 ))
                 .from(qFunding)
                 .join(qFunding.member, qMember)
@@ -351,7 +357,8 @@ public class FundingServiceImpl implements FundingService {
                                 .then("완료")
                                 .when(qFunding.closed.isTrue())
                                 .then("중단")
-                                .otherwise("펀딩중").as("status")
+                                .otherwise("펀딩중").as("status"),
+                        qFunding.fundingCategoryCode
                 ))
                 .from(qFunding)
                 .leftJoin(qGroupStatus).on(qGroupStatus.groupMember.memberId.eq(member.getMemberId()))
@@ -391,7 +398,8 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.fundingAccount,
                         qFunding.completed,
                         qFunding.closed,
-                        qFunding.deleted
+                        qFunding.deleted,
+                        qFunding.fundingCategoryCode
                 ))
                 .from(qFunding)
                 .join(qFunding.member, qMember)  // Funding과 Member 간의 관계 조인
@@ -408,13 +416,12 @@ public class FundingServiceImpl implements FundingService {
     }
 
     @Override
-    public Funding createFunding(Long memberId, Long productId, Long travelId, Long groupId) {
+    public Funding createFunding(Long memberId, Long productId, Long travelId, Long groupId, int categoryCode) {
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
         QGroup qGroup = QGroup.group;
         QCodeMaster qCodeMaster = QCodeMaster.codeMaster;
         QTravel qTravel = QTravel.travel;
-        int fundingCategoryCode = productId != null ? 901 : 902;
         //전달받은 id로 각 객체 조회
         Tuple tuple = query.select(
                         qMember,
@@ -425,7 +432,7 @@ public class FundingServiceImpl implements FundingService {
                 ).from(qMember)
                 .leftJoin(qProduct).on(productId != null ? qProduct.productId.eq(productId) : qProduct.productId.isNull())
                 .leftJoin(qTravel).on(travelId != null ? qTravel.travelId.eq(travelId) : qTravel.travelId.isNull())
-                .join(qCodeMaster).on(qCodeMaster.code.eq(fundingCategoryCode))
+                .join(qCodeMaster).on(qCodeMaster.code.eq(categoryCode))
                 .leftJoin(qGroup).on(groupId != null ? qGroup.groupId.eq(groupId) : Expressions.FALSE.isTrue())
                 .where(qMember.memberId.eq(memberId))
                 .fetchOne();

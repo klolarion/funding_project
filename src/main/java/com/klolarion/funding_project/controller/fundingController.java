@@ -38,9 +38,10 @@ public class fundingController {
     public String createFunding(@RequestParam(required = false, value = "productId") Long productId,
                                 @RequestParam(required = false, value = "travelId") Long travelId,
                                 @RequestParam(required = false, value = "groupId") Long groupId,
+                                @RequestParam(required = false, value = "statusCode") int statusCode,
                                 HttpSession session) {
         Member member = (Member) session.getAttribute("member");
-        fundingServiceImpl.createFunding(member.getMemberId(), productId, travelId, groupId);
+        fundingServiceImpl.createFunding(member.getMemberId(), productId, travelId, groupId, statusCode);
         return "redirect:/index";
     }
 }
