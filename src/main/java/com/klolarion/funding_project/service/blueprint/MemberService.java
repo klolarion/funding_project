@@ -57,4 +57,5 @@ public interface MemberService {
     Member saveOrUpdateUserNaver(OAuth2User principal);
 
     Member saveOrUpdateUserKakao(OAuth2User principal);
+
 }

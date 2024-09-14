@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +21,7 @@ public class RegisterController {
 
 
     @GetMapping
-    public String register(@AuthenticationPrincipal OAuth2User principal, Model model) {
+    public String register(@AuthenticationPrincipal OAuth2User principal, Model model, OAuth2AuthenticationToken token) {
         if (principal != null) {
 //            Member member = memberService.saveOrUpdateUserGoogle(principal);
             String registrationId = token.getAuthorizedClientRegistrationId();
@@ -36,6 +37,7 @@ public class RegisterController {
             } else if ("kakao".equals(registrationId)) {
                 // 카카오 로그인 처리
                 member = memberService.saveOrUpdateUserKakao(principal);
+
             } else {
                 // 다른 소셜 로그인이 있을 경우를 대비한 처리
                 throw new IllegalArgumentException("Unsupported provider: " + registrationId);
