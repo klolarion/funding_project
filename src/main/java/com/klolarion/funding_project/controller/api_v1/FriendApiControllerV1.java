@@ -47,7 +47,7 @@ public class FriendApiControllerV1 {
     @GetMapping
     public ResponseEntity<?> getAllFriends(){
         try {
-            List<SearchFriendDto> searchFriendDtos = friendService.friendList();
+            List<SearchFriendDto> searchFriendDtos = friendService.myFriendList();
             return ResponseEntity.status(HttpStatus.OK).body(searchFriendDtos);
         }catch (Exception e){
             log.error("친구 목록 조회 실패(서버 오류)", e);

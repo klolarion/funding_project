@@ -18,7 +18,7 @@ public interface FriendService {
     List<SearchFriendDto> searchFriend(String searchName);
 
     /*친구 목록*/
-    List<SearchFriendDto> friendList();
+    List<SearchFriendDto> myFriendList();
 
     /*친구 요청 목록*/
     List<FriendRequestDto> requestList();
