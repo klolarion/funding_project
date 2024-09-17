@@ -1,4 +1,5 @@
 spring:
+  base-url: http://localhost:9091
   application:
     name: funding_project
   security:
@@ -6,15 +7,15 @@ spring:
       client:
         registration:
           google:
-            client-id: {googld id}
-            client-secret: {google secret}
+            client-id: GAO0JWE09Ga094wje3g09awje
+            client-secret: awg09awe0fjg
             scope: profile, email
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             client-name: Google
 
           naver:
-            client-id: {naver id}
-            client-secret: {naver secret}
+            client-id: 1241251251251251251adawd
+            client-secret: 125124125
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/naver"
 
@@ -124,7 +125,7 @@ application:
   security:
     jwt:
       #      private-key : ${ALMAGEST_KEY}
-      private-key: 124124
+      secret-key: 124124
 
 server:
   port: 9091

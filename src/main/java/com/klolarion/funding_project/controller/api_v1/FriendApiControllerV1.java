@@ -1,26 +1,18 @@
 package com.klolarion.funding_project.controller.api_v1;
 
-import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.dto.friend.FriendRequestDto;
 import com.klolarion.funding_project.dto.friend.SearchFriendDto;
-import com.klolarion.funding_project.dto.member.MyPageDto;
-import com.klolarion.funding_project.repository.FriendRepository;
 import com.klolarion.funding_project.service.FriendServiceImpl;
-import com.klolarion.funding_project.service.MemberServiceImpl;
-import com.klolarion.funding_project.util.CurrentMember;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,15 +37,12 @@ public class FriendApiControllerV1 {
                                     mediaType = "application/json")),
             })
     @GetMapping
-    public ResponseEntity<?> getAllFriends(){
-        try {
-            List<SearchFriendDto> searchFriendDtos = friendService.myFriendList();
-            return ResponseEntity.status(HttpStatus.OK).body(searchFriendDtos);
-        }catch (Exception e){
-            log.error("친구 목록 조회 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
-        }
-    };
+    public ResponseEntity<?> getAllFriends() {
+        List<SearchFriendDto> searchFriendDtos = friendService.myFriendList();
+        return ResponseEntity.status(HttpStatus.OK).body(searchFriendDtos);
+    }
+
+    ;
 
     @Operation(summary = "친구 검색",
             tags = {"친구 API - V1"},
@@ -74,22 +63,15 @@ public class FriendApiControllerV1 {
                                     mediaType = "application/json")),
             })
     @GetMapping("/{friendName}")
-    public ResponseEntity<?> searchFriend(@PathVariable String friendName){
-        try {
-            List<SearchFriendDto> searchFriendDtos = friendService.searchFriend(friendName);
-            if(searchFriendDtos != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(searchFriendDtos);
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구를 찾을 수 없습니다.");
-        }catch (Exception e){
-            log.error("친구 검색 실패", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+    public ResponseEntity<?> searchFriend(@PathVariable String friendName) {
+        List<SearchFriendDto> searchFriendDtos = friendService.searchFriend(friendName);
+        if (searchFriendDtos != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(searchFriendDtos);
         }
-
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구를 찾을 수 없습니다.");
 
 
     }
-
 
 
     @Operation(summary = "친구 요청 목록",
@@ -105,15 +87,12 @@ public class FriendApiControllerV1 {
                                     mediaType = "application/json")),
             })
     @GetMapping("/request")
-    public ResponseEntity<?> getFriendRequests(){
-        try {
-            List<FriendRequestDto> friendRequestDtos = friendService.requestList();
-            return ResponseEntity.status(HttpStatus.OK).body(friendRequestDtos);
-        }catch (Exception e){
-            log.error("친구 요청 목록 조회 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
-        }
-    };
+    public ResponseEntity<?> getFriendRequests() {
+        List<FriendRequestDto> friendRequestDtos = friendService.requestList();
+        return ResponseEntity.status(HttpStatus.OK).body(friendRequestDtos);
+    }
+
+    ;
 
     @Operation(summary = "친구 추가",
             tags = {"친구 API - V1"},
@@ -131,16 +110,13 @@ public class FriendApiControllerV1 {
                                     mediaType = "application/json")),
             })
     @PostMapping("/{memberId}")
-    public ResponseEntity<?> addFriend(@PathVariable Long memberId){
-        try{
-            friendService.addFriend(memberId);
-            log.debug("친구 요청 성공, Data - ", memberId);
-            return ResponseEntity.status(HttpStatus.OK).body("친구 요청 성공");
-        }catch (Exception e){
-            log.error("친구 요청 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
-        }
-    };
+    public ResponseEntity<?> addFriend(@PathVariable Long memberId) {
+        friendService.addFriend(memberId);
+        log.debug("친구 요청 성공, Data - ", memberId);
+        return ResponseEntity.status(HttpStatus.OK).body("친구 요청 성공");
+    }
+
+    ;
 
 
     @Operation(summary = "친구 요청 수락",
@@ -161,21 +137,18 @@ public class FriendApiControllerV1 {
                                     mediaType = "application/json")),
             })
     @PutMapping("/{friendStatusId}")
-    public ResponseEntity<?> acceptFriend(@PathVariable Long friendStatusId){
-        try{
-            boolean result = friendService.acceptFriendRequest(friendStatusId);
-            if(result){
-                log.debug("친구 요청 수락 성공, Data - ", friendStatusId);
-                return ResponseEntity.status(HttpStatus.OK).body("친구 요청 수락 성공");
-            }else {
-                log.debug("친구 요청 수락 실패, Data - ", friendStatusId);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구 요청 수락 실패");
-            }
-        }catch (Exception e){
-            log.error("친구 요청 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+    public ResponseEntity<?> acceptFriend(@PathVariable Long friendStatusId) {
+        boolean result = friendService.acceptFriendRequest(friendStatusId);
+        if (result) {
+            log.debug("친구 요청 수락 성공, Data - ", friendStatusId);
+            return ResponseEntity.status(HttpStatus.OK).body("친구 요청 수락 성공");
+        } else {
+            log.debug("친구 요청 수락 실패, Data - ", friendStatusId);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구 요청 수락 실패");
         }
-    };
+    }
+
+    ;
 
 
     @Operation(summary = "친구 삭제",
@@ -196,21 +169,18 @@ public class FriendApiControllerV1 {
                                     mediaType = "application/json")),
             })
     @DeleteMapping("/{friendId}")
-    public ResponseEntity<?> removeFriend(@PathVariable Long friendId){
-        try{
-            boolean result = friendService.removeFriend(friendId);
-            if(result){
-                log.debug("친구 삭제 성공, Data - ", friendId);
-                return ResponseEntity.status(HttpStatus.OK).body("친구 삭제 성공");
-            }else {
-                log.debug("친구 삭제 실패, Data - ", friendId);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구 삭제 실패");
-            }
-        }catch (Exception e){
-            log.error("친구 삭제 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+    public ResponseEntity<?> removeFriend(@PathVariable Long friendId) {
+        boolean result = friendService.removeFriend(friendId);
+        if (result) {
+            log.debug("친구 삭제 성공, Data - ", friendId);
+            return ResponseEntity.status(HttpStatus.OK).body("친구 삭제 성공");
+        } else {
+            log.debug("친구 삭제 실패, Data - ", friendId);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구 삭제 실패");
         }
-    };
+    }
+
+    ;
 
     @Operation(summary = "친구 차단",
             tags = {"친구 API - V1"},
@@ -230,19 +200,16 @@ public class FriendApiControllerV1 {
                                     mediaType = "application/json")),
             })
     @DeleteMapping("/ban/{friendId}")
-    public ResponseEntity<?> banFriend(@PathVariable Long friendId){
-        try{
-            boolean result = friendService.banMember(friendId);
-            if(result){
-                log.debug("친구 차단 성공, Data - ", friendId);
-                return ResponseEntity.status(HttpStatus.OK).body("친구 차단 성공");
-            }else {
-                log.debug("친구 차단 실패, Data - ", friendId);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구 차단 실패");
-            }
-        }catch (Exception e){
-            log.error("친구 차단 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+    public ResponseEntity<?> banFriend(@PathVariable Long friendId) {
+        boolean result = friendService.banMember(friendId);
+        if (result) {
+            log.debug("친구 차단 성공, Data - ", friendId);
+            return ResponseEntity.status(HttpStatus.OK).body("친구 차단 성공");
+        } else {
+            log.debug("친구 차단 실패, Data - ", friendId);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구 차단 실패");
         }
-    };
+    }
+
+    ;
 }

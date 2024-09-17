@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.klolarion.funding_project.dto.ProductSearchDto;
 import com.klolarion.funding_project.util.HTMLUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +28,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SearchControllerV1 {
 
-    String clientId = "ywlRkIhdCqL3cszkfu8j"; //애플리케이션 클라이언트 아이디
-    String clientSecret = "29hrYrmnan"; //애플리케이션 클라이언트 시크릿
+    @Value("${spring.security.oauth2.client.registration.naver.client-id}")
+    private String clientId; //애플리케이션 클라이언트 아이디
+
+    @Value("${spring.security.oauth2.client.registration.naver.client-secret}")
+    private String clientSecret; //애플리케이션 클라이언트 시크릿
 
 
     @GetMapping("/naver/{param}")
@@ -42,7 +45,7 @@ public class SearchControllerV1 {
         }
 
 
-        int display = 20;
+        int display = 50; //검새결과수
         String sort = "date";
 
 

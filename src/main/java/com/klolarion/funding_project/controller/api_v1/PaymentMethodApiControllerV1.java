@@ -1,9 +1,7 @@
 package com.klolarion.funding_project.controller.api_v1;
 
 import com.klolarion.funding_project.domain.entity.Member;
-import com.klolarion.funding_project.domain.entity.PaymentMethod;
 import com.klolarion.funding_project.domain.entity.PaymentMethodList;
-import com.klolarion.funding_project.dto.member.MyPageDto;
 import com.klolarion.funding_project.dto.member.PaymentMethodDto;
 import com.klolarion.funding_project.service.AdminServiceImpl;
 import com.klolarion.funding_project.service.MemberServiceImpl;
@@ -19,8 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,26 +44,23 @@ public class PaymentMethodApiControllerV1 {
             })
     @GetMapping
     public ResponseEntity<?> paymentMethod() {
-        try {
-            Member member = currentMember.getMember();
-            //한방쿼리로 수정 가능한지 검토
-            PaymentMethodDto paymentMethodDto = new PaymentMethodDto(
-                    memberService.myPaymentLists(member.getMemberId()),
-                    adminService.paymentMethodList(),
-                    memberService.getMainPaymentMethod(member.getMemberId())
-            );
 
-            if(paymentMethodDto != null) {
-                log.debug("결제수단 페이지 호출 성공");
-                return ResponseEntity.status(HttpStatus.OK).body(paymentMethodDto);
-            }else{
-                log.debug("결제수단 페이지 호출 실패");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제수단 페이지 호출 실패");
-            }
-        } catch (Exception e) {
-            log.error("서버 오류", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+        Member member = currentMember.getMember();
+        //한방쿼리로 수정 가능한지 검토
+        PaymentMethodDto paymentMethodDto = new PaymentMethodDto(
+                memberService.myPaymentLists(member.getMemberId()),
+                adminService.paymentMethodList(),
+                memberService.getMainPaymentMethod(member.getMemberId())
+        );
+
+        if (paymentMethodDto != null) {
+            log.debug("결제수단 페이지 호출 성공");
+            return ResponseEntity.status(HttpStatus.OK).body(paymentMethodDto);
+        } else {
+            log.debug("결제수단 페이지 호출 실패");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제수단 페이지 호출 실패");
         }
+
     }
 
 
@@ -90,19 +83,16 @@ public class PaymentMethodApiControllerV1 {
             })
     @PostMapping("/{paymentMethodId}")
     public ResponseEntity<?> addMyPaymentMethod(@PathVariable Long paymentMethodId) {
-        try {
-            PaymentMethodList paymentMethodList = memberService.addPaymentMethod(paymentMethodId);
-            if(paymentMethodList != null){
-                log.debug("결제수단 추가 성공");
-                return ResponseEntity.status(HttpStatus.OK).body("결제수단 추가 성공");
-            }else{
-                log.debug("결제수단 추가 실패");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제수단 추가 실패");
-            }
-        } catch (Exception e) {
-            log.error("서버 오류", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+
+        PaymentMethodList paymentMethodList = memberService.addPaymentMethod(paymentMethodId);
+        if (paymentMethodList != null) {
+            log.debug("결제수단 추가 성공");
+            return ResponseEntity.status(HttpStatus.OK).body("결제수단 추가 성공");
+        } else {
+            log.debug("결제수단 추가 실패");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제수단 추가 실패");
         }
+
     }
 
 
@@ -126,19 +116,16 @@ public class PaymentMethodApiControllerV1 {
             })
     @PutMapping("/{myPaymentMethodId}")
     public ResponseEntity<?> addMainPaymentMethod(@PathVariable Long myPaymentMethodId) {
-        try {
-            boolean result = memberService.makeMainPayment(myPaymentMethodId);
-            if(result){
-                log.debug("주 결제수단 지정 성공");
-                return ResponseEntity.status(HttpStatus.OK).body("주 결제수단 지정 성공");
-            }else{
-                log.debug("주 결제수단 지정 실패");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("주 결제수단 지정 실패");
-            }
-        } catch (Exception e) {
-            log.error("서버 오류", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+
+        boolean result = memberService.makeMainPayment(myPaymentMethodId);
+        if (result) {
+            log.debug("주 결제수단 지정 성공");
+            return ResponseEntity.status(HttpStatus.OK).body("주 결제수단 지정 성공");
+        } else {
+            log.debug("주 결제수단 지정 실패");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("주 결제수단 지정 실패");
         }
+
     }
 
 
@@ -161,18 +148,15 @@ public class PaymentMethodApiControllerV1 {
             })
     @DeleteMapping("/{myPaymentMethodId}")
     public ResponseEntity<?> deletePaymentMethod(@PathVariable Long myPaymentMethodId) {
-        try {
-            boolean result = memberService.removePayment(myPaymentMethodId);
-            if(result){
-                log.debug("결제수단 등록 해제 성공");
-                return ResponseEntity.status(HttpStatus.OK).body("결제수단 등록 해제 성공");
-            }else{
-                log.debug("결제수단 등록 해제 실패");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제수단 등록 해제 실패");
-            }
-        } catch (Exception e) {
-            log.error("서버 오류", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+
+        boolean result = memberService.removePayment(myPaymentMethodId);
+        if (result) {
+            log.debug("결제수단 등록 해제 성공");
+            return ResponseEntity.status(HttpStatus.OK).body("결제수단 등록 해제 성공");
+        } else {
+            log.debug("결제수단 등록 해제 실패");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제수단 등록 해제 실패");
         }
+
     }
 }

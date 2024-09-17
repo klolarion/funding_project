@@ -54,19 +54,16 @@ public class GroupApiControllerV1 {
             })
     @GetMapping
     public ResponseEntity<?> group() {
-        try {
-            List<GroupDto> groupDtoList = groupServiceImpl.myLeaderGroups();
-            if (groupDtoList != null) {
-                log.debug("그룹 관리 페이지 호출 성공");
-                return ResponseEntity.status(HttpStatus.OK).body(groupDtoList);
-            } else {
-                log.debug("그룹 관리 페이지 호출 실패");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("그룹 관리 페이지 호출 실패");
-            }
-        } catch (Exception e) {
-            log.error("그룹 페이지 호출 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+
+        List<GroupDto> groupDtoList = groupServiceImpl.myLeaderGroups();
+        if (groupDtoList != null) {
+            log.debug("그룹 관리 페이지 호출 성공");
+            return ResponseEntity.status(HttpStatus.OK).body(groupDtoList);
+        } else {
+            log.debug("그룹 관리 페이지 호출 실패");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("그룹 관리 페이지 호출 실패");
         }
+
     }
 
     @Operation(summary = "그룹명 중복 확인",
@@ -88,19 +85,16 @@ public class GroupApiControllerV1 {
             })
     @GetMapping("/name")
     public ResponseEntity<?> groupNameCheck(@RequestParam String groupName) {
-        try {
-            boolean result = groupServiceImpl.groupNameCheck(groupName);
-            if (result) {
-                log.debug("그룹명 사용 가능, Data - ", groupName);
-                return ResponseEntity.status(HttpStatus.OK).body("그룹명 사용 가능");
-            } else {
-                log.debug("그룹명 중복, 사용 불가, Data - ", groupName);
-                return ResponseEntity.status(HttpStatus.OK).body("그룹명 중복, 사용 불가");
-            }
-        } catch (Exception e) {
-            log.error("서버 오류", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+
+        boolean result = groupServiceImpl.groupNameCheck(groupName);
+        if (result) {
+            log.debug("그룹명 사용 가능, Data - ", groupName);
+            return ResponseEntity.status(HttpStatus.OK).body("그룹명 사용 가능");
+        } else {
+            log.debug("그룹명 중복, 사용 불가, Data - ", groupName);
+            return ResponseEntity.status(HttpStatus.OK).body("그룹명 중복, 사용 불가");
         }
+
     }
 
 
@@ -125,19 +119,16 @@ public class GroupApiControllerV1 {
             })
     @PostMapping
     public ResponseEntity<?> createGroup(@RequestBody CreateGroupDto createGroupDto) {
-        try {
-            Group group = groupServiceImpl.startGroup(createGroupDto.getGroupName(), createGroupDto.getGroupCategory());
-            if (group != null) {
-                log.debug("그룹 생성 성공, Data - ", createGroupDto);
-                return ResponseEntity.status(HttpStatus.CREATED).body("그룹 생성 성공");
-            } else {
-                log.debug("그룹 생성 실패, Data - ", createGroupDto);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("그룹 생성 실패");
-            }
-        } catch (Exception e) {
-            log.error("그룹 생성 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+
+        Group group = groupServiceImpl.startGroup(createGroupDto.getGroupName(), createGroupDto.getGroupCategory());
+        if (group != null) {
+            log.debug("그룹 생성 성공, Data - ", createGroupDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("그룹 생성 성공");
+        } else {
+            log.debug("그룹 생성 실패, Data - ", createGroupDto);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("그룹 생성 실패");
         }
+
     }
 
     @Operation(summary = "내 그룹 관리",
@@ -160,19 +151,16 @@ public class GroupApiControllerV1 {
             })
     @GetMapping("/detail/{groupId}")
     public ResponseEntity<?> detail(@PathVariable Long groupId) {
-        try {
-            GroupDetailDto groupDetailDto = new GroupDetailDto(
-                    groupServiceImpl.groupDetail(groupId),
-                    groupServiceImpl.groupMembers(groupId),
-                    groupServiceImpl.requestedMembersToMyGroup(groupId),
-                    groupServiceImpl.invitedMembersToMyGroup(groupId)
-            );
-            log.debug("그룹 조회 성공, Data - ", groupId);
-            return ResponseEntity.status(HttpStatus.OK).body(groupDetailDto);
-        } catch (Exception e) {
-            log.error("그룹 조회 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
-        }
+
+        GroupDetailDto groupDetailDto = new GroupDetailDto(
+                groupServiceImpl.groupDetail(groupId),
+                groupServiceImpl.groupMembers(groupId),
+                groupServiceImpl.requestedMembersToMyGroup(groupId),
+                groupServiceImpl.invitedMembersToMyGroup(groupId)
+        );
+        log.debug("그룹 조회 성공, Data - ", groupId);
+        return ResponseEntity.status(HttpStatus.OK).body(groupDetailDto);
+
     }
 
 
@@ -196,19 +184,16 @@ public class GroupApiControllerV1 {
             })
     @GetMapping("/detail/member")
     public ResponseEntity<?> findMember(@RequestParam String memberName) {
-        try {
-            List<Member> members = memberServiceImpl.searchMember(memberName);
-            if (members != null) {
-                log.debug("사용자 조회 성공, Data - ", memberName);
-                return ResponseEntity.status(HttpStatus.OK).body("사용자 조회 성공");
-            } else {
-                log.debug("사용자 조회 실패, Data - ", memberName);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("사용자 조회 실패");
-            }
-        } catch (Exception e) {
-            log.error("사용자 조회 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+
+        List<Member> members = memberServiceImpl.searchMember(memberName);
+        if (members != null) {
+            log.debug("사용자 조회 성공, Data - ", memberName);
+            return ResponseEntity.status(HttpStatus.OK).body("사용자 조회 성공");
+        } else {
+            log.debug("사용자 조회 실패, Data - ", memberName);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("사용자 조회 실패");
         }
+
     }
 
 
@@ -233,19 +218,16 @@ public class GroupApiControllerV1 {
             })
     @PostMapping("/detail/member/{memberId}/{groupId}")
     public ResponseEntity<?> inviteMember(@PathVariable Long memberId, @PathVariable Long groupId) {
-        try {
-            GroupStatus groupStatus = groupServiceImpl.inviteMember(groupId, memberId);
-            if (groupStatus != null) {
-                log.debug("사용자 초대 성공, Data - ", memberId, ", ", groupId);
-                return ResponseEntity.status(HttpStatus.OK).body("사용자 초대 성공");
-            } else {
-                log.debug("사용자 초대 실패, Data - ", memberId, ", ", groupId);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("사용자 초대 실패");
-            }
-        } catch (Exception e) {
-            log.error("그룹 초대 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+
+        GroupStatus groupStatus = groupServiceImpl.inviteMember(groupId, memberId);
+        if (groupStatus != null) {
+            log.debug("사용자 초대 성공, Data - ", memberId, ", ", groupId);
+            return ResponseEntity.status(HttpStatus.OK).body("사용자 초대 성공");
+        } else {
+            log.debug("사용자 초대 실패, Data - ", memberId, ", ", groupId);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("사용자 초대 실패");
         }
+
     }
 
     @Operation(summary = "가입요청 수락",
@@ -269,19 +251,16 @@ public class GroupApiControllerV1 {
             })
     @PutMapping("/detail/member/{memberId}/{groupId}")
     public ResponseEntity<?> acceptRequest(@PathVariable Long memberId, @PathVariable Long groupId) {
-        try {
-            boolean result = groupServiceImpl.acceptMemberRequest(groupId, memberId);
-            if (result) {
-                log.debug("요청 수락 성공, Data - ", memberId, ", ", groupId);
-                return ResponseEntity.status(HttpStatus.OK).body("요청 수락 성공");
-            } else {
-                log.debug("요청 수락 실패, Data - ", memberId, ", ", groupId);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("요청 수락 실패");
-            }
-        } catch (Exception e) {
-            log.error("요청 수락 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+
+        boolean result = groupServiceImpl.acceptMemberRequest(groupId, memberId);
+        if (result) {
+            log.debug("요청 수락 성공, Data - ", memberId, ", ", groupId);
+            return ResponseEntity.status(HttpStatus.OK).body("요청 수락 성공");
+        } else {
+            log.debug("요청 수락 실패, Data - ", memberId, ", ", groupId);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("요청 수락 실패");
         }
+
     }
 
 
@@ -307,22 +286,19 @@ public class GroupApiControllerV1 {
             })
     @GetMapping("/info/{groupId}")
     public ResponseEntity<?> info(@PathVariable Long groupId) {
-        try {
-            Map<String, List<FundingListDto>> groupedMap = fundingServiceImpl.allFundingListByGroup(groupId);
-            GroupInfoDto groupInfoDto = new GroupInfoDto(
-                    groupServiceImpl.groupDetail(groupId),
-                    groupServiceImpl.groupMembers(groupId),
-                    groupedMap.values()
-                            .stream()
-                            .flatMap(List::stream)
-                            .collect(Collectors.toList())
-            );
-            log.debug("그룹 조회 성공, Data - ", groupId);
-            return ResponseEntity.status(HttpStatus.OK).body(groupInfoDto);
-        } catch (Exception e) {
-            log.error("그룹 조회 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
-        }
+
+        Map<String, List<FundingListDto>> groupedMap = fundingServiceImpl.allFundingListByGroup(groupId);
+        GroupInfoDto groupInfoDto = new GroupInfoDto(
+                groupServiceImpl.groupDetail(groupId),
+                groupServiceImpl.groupMembers(groupId),
+                groupedMap.values()
+                        .stream()
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList())
+        );
+        log.debug("그룹 조회 성공, Data - ", groupId);
+        return ResponseEntity.status(HttpStatus.OK).body(groupInfoDto);
+
     }
 
 
@@ -346,19 +322,16 @@ public class GroupApiControllerV1 {
             })
     @PostMapping("/info/request/{groupId}")
     public ResponseEntity<?> requestToGroup(@PathVariable Long groupId) {
-        try {
-            GroupStatus groupStatus = groupServiceImpl.requestToGroup(groupId);
-            if(groupStatus != null){
-                log.debug("가입 요청 성공, Data - ", groupId);
-                return ResponseEntity.status(HttpStatus.OK).body("가입 요청 성공");
-            }else{
-                log.debug("가입 요청 실패, Data - ", groupId);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("가입 요청 실패");
-            }
-        } catch (Exception e) {
-            log.error("가입 요청 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+
+        GroupStatus groupStatus = groupServiceImpl.requestToGroup(groupId);
+        if (groupStatus != null) {
+            log.debug("가입 요청 성공, Data - ", groupId);
+            return ResponseEntity.status(HttpStatus.OK).body("가입 요청 성공");
+        } else {
+            log.debug("가입 요청 실패, Data - ", groupId);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("가입 요청 실패");
         }
+
     }
 
 }

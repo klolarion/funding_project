@@ -40,19 +40,16 @@ public class MyPageApiControllerV1 {
             })
     @GetMapping
     public ResponseEntity<?> myPage() {
-        try {
-            //조회가 5개!!
-            Member member = currentMember.getMember();
-            MyPageDto myPageDto = new MyPageDto(
-                    fundingServiceImpl.myFundingList(member.getMemberId()),
-                    memberServiceImpl.getMainPaymentMethod(member.getMemberId()),
-                    memberServiceImpl.getMemberPageData(member.getMemberId()),
-                    memberServiceImpl.getMyActivity(member.getMemberId())
-            );
-            return ResponseEntity.status(HttpStatus.OK).body(myPageDto);
-        }catch (Exception e){
-            log.error("마이 페이지 호출 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("호출 실패");
-        }
+
+        //조회가 5개!!
+        Member member = currentMember.getMember();
+        MyPageDto myPageDto = new MyPageDto(
+                fundingServiceImpl.myFundingList(member.getMemberId()),
+                memberServiceImpl.getMainPaymentMethod(member.getMemberId()),
+                memberServiceImpl.getMemberPageData(member.getMemberId()),
+                memberServiceImpl.getMyActivity(member.getMemberId())
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(myPageDto);
+
     }
 }

@@ -16,18 +16,14 @@ public class AuthControllerV1 {
     private final AuthServiceImpl authService;
 
 
-
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDto registerDto){
-        try {
-            boolean result = authService.register(registerDto);
-            if(result) {
-                return ResponseEntity.status(HttpStatus.OK).body("");
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
+    public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
+
+        boolean result = authService.register(registerDto);
+        if (result) {
+            return ResponseEntity.status(HttpStatus.OK).body("");
         }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
     }
 
     @PostMapping("/check-account/{account}")
@@ -45,17 +41,16 @@ public class AuthControllerV1 {
     }
 
     @GetMapping("/account/{account}")
-    public ResponseEntity<?> lookAccount(@PathVariable String account){
+    public ResponseEntity<?> lookAccount(@PathVariable String account) {
         authService.lookAccount(account);
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
     @GetMapping("/tel/{tel}")
-    public ResponseEntity<?> lookTel(@PathVariable String tel){
+    public ResponseEntity<?> lookTel(@PathVariable String tel) {
         authService.lookTel(tel);
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
-
 
 
 }

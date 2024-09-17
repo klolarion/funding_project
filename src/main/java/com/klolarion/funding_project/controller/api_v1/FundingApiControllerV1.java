@@ -46,16 +46,11 @@ public class FundingApiControllerV1 {
             })
     @GetMapping("/")
     public ResponseEntity<?> fundingMain() {
-        try {
-            FundingMainDto fundingMainDto = new FundingMainDto(
-                    productService.allProducts(),
-                    groupService.myLeaderGroups()
-            );
-            return ResponseEntity.status(HttpStatus.OK).body(fundingMainDto);
-        } catch (Exception e) {
-            log.error("펀딩 메인페이지 호출 실패(서버 오류)", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("호출 실패");
-        }
+        FundingMainDto fundingMainDto = new FundingMainDto(
+                productService.allProducts(),
+                groupService.myLeaderGroups()
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(fundingMainDto);
     }
 
     @Operation(summary = "펀딩 생성",
@@ -73,18 +68,14 @@ public class FundingApiControllerV1 {
             })
     @PostMapping("/")
     public ResponseEntity<?> createFunding(@RequestBody CreateFundingDto createFundingDto) {
-        try {
-            Funding createdFunding = fundingService.createFundingApi(createFundingDto.getProductId(), createFundingDto.getTravelId(), createFundingDto.getGroupId());
-            if(createdFunding != null) {
-                log.debug("펀딩 생성 성공, Data -  ", createFundingDto);
-                return ResponseEntity.status(HttpStatus.CREATED).body("펀딩 생성 성공");
-            }else {
-                log.debug("펀딩 생성 실패, Data -  ", createFundingDto);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("펀딩 생성 실패");
-            }
-        } catch (Exception e) {
-            log.error("펀딩 생성 실패(서버 오류), Data -  ", createFundingDto, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("펀딩 생성 실패");
+
+        Funding createdFunding = fundingService.createFundingApi(createFundingDto.getProductId(), createFundingDto.getTravelId(), createFundingDto.getGroupId());
+        if (createdFunding != null) {
+            log.debug("펀딩 생성 성공, Data -  ", createFundingDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("펀딩 생성 성공");
+        } else {
+            log.debug("펀딩 생성 실패, Data -  ", createFundingDto);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("펀딩 생성 실패");
         }
     }
 
@@ -104,13 +95,8 @@ public class FundingApiControllerV1 {
             })
     @GetMapping("/{fundingId}")
     public ResponseEntity<?> detail(@PathVariable Long fundingId) {
-        try {
-            FundingListDto fundingListDto = fundingService.fundingDetail(fundingId);
-            return ResponseEntity.status(HttpStatus.OK).body(fundingListDto);
-        } catch (Exception e) {
-            log.error("펀딩 조회 실패(서버 오류), Data - ", fundingId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("호출 실패");
-        }
+        FundingListDto fundingListDto = fundingService.fundingDetail(fundingId);
+        return ResponseEntity.status(HttpStatus.OK).body(fundingListDto);
     }
 
     @Operation(summary = "펀딩 참여",
@@ -128,19 +114,15 @@ public class FundingApiControllerV1 {
             })
     @PutMapping
     public ResponseEntity<?> joinFunding(@RequestBody JoinFundingDto joinFundingDto) {
-        try {
-            boolean result = fundingService.joinFunding(joinFundingDto);
 
-            if (result) {
-                log.debug("펀딩 참여 성공, Data - ", joinFundingDto);
-                return ResponseEntity.status(HttpStatus.OK).body("펀딩 참여 성공");
-            } else {
-                log.debug("펀딩 참여 실패, Data -  ", joinFundingDto);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("펀딩 참여 실패");
-            }
-        } catch (Exception e) {
-            log.error("펀딩 참여 실패(서버 오류), Data -  ", joinFundingDto, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+        boolean result = fundingService.joinFunding(joinFundingDto);
+
+        if (result) {
+            log.debug("펀딩 참여 성공, Data - ", joinFundingDto);
+            return ResponseEntity.status(HttpStatus.OK).body("펀딩 참여 성공");
+        } else {
+            log.debug("펀딩 참여 실패, Data -  ", joinFundingDto);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("펀딩 참여 실패");
         }
     }
 
@@ -162,16 +144,13 @@ public class FundingApiControllerV1 {
     @GetMapping("/{searchParam}/{fundingCategoryCode}")
     public ResponseEntity<?> searchFunding(
             @RequestParam String searchParam,
-            @RequestParam(required = false) String fundingCategoryCode)
-    {
-        try {
-            List<FundingListDto> fundingListDtos = fundingService.searchFunding(searchParam, Integer.parseInt(fundingCategoryCode));
-            if(fundingListDtos != null){
-                return ResponseEntity.status(HttpStatus.OK).body(fundingListDtos);
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("펀딩 검색 실패");
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+            @RequestParam(required = false) String fundingCategoryCode) {
+
+        List<FundingListDto> fundingListDtos = fundingService.searchFunding(searchParam, Integer.parseInt(fundingCategoryCode));
+        if (fundingListDtos != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(fundingListDtos);
         }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("펀딩 검색 실패");
+
     }
 }

@@ -1,8 +1,6 @@
 package com.klolarion.funding_project.controller.api_v1;
 
-import com.klolarion.funding_project.dto.IndexDto;
 import com.klolarion.funding_project.dto.funding.FundingListDto;
-import com.klolarion.funding_project.dto.funding.FundingMainDto;
 import com.klolarion.funding_project.service.FundingServiceImpl;
 import com.klolarion.funding_project.service.GroupServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,18 +42,15 @@ public class IndexApiControllerV1 {
                                     mediaType = "application/json")),
             })
     @GetMapping
-    public ResponseEntity<?> getIndex(){
-        try {
-            List<FundingListDto> result = fundingServiceImpl.allFundingList();
-            if(result != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(result);
-            }else {
-                log.debug("정보 조회 실패 : Index");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("정보 조회 실패");
-            }
-        }catch (Exception e){
-            log.error("서버 오류, ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+    public ResponseEntity<?> getIndex() {
+
+        List<FundingListDto> result = fundingServiceImpl.allFundingList();
+        if (result != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } else {
+            log.debug("정보 조회 실패 : Index");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("정보 조회 실패");
         }
+
     }
 }

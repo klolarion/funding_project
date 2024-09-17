@@ -18,7 +18,10 @@ bin/
 !**/src/test/**/bin/
 
 ### QueryDSL ###
-/src/main/generated/
+/src/main/generated
+
+### Source ###
+/src/main/resources/application.yml
 
 ### Log ###
 /log
@@ -32,9 +35,6 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-### Sourse ###
-
-/src/main/resources/application.yml
 
 ### NetBeans ###
 /nbproject/private/
