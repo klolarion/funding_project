@@ -20,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/f2/v1/funding")
@@ -124,7 +126,6 @@ public class FundingApiControllerV1 {
                     @ApiResponse(responseCode = "400", description = "펀딩 참여 실패, 송금 실패", content = @Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "application/json")),
             })
-
     @PutMapping
     public ResponseEntity<?> joinFunding(@RequestBody JoinFundingDto joinFundingDto) {
         try {
@@ -143,4 +144,34 @@ public class FundingApiControllerV1 {
         }
     }
 
+
+    @Operation(summary = "펀딩 검색",
+            tags = {"펀딩 API - V1"},
+            description = "펀딩 주최자, 그룹의 이름 그리고 카데고리 코드로 펀딩 검색",
+            parameters = {
+                    @Parameter(name = "searchParam", description = "조회할 펀딩의 검색어", required = true, in = ParameterIn.PATH),
+                    @Parameter(name = "fundingCategoryCode", description = "조회할 펀딩의 카데고리 코드", required = true, in = ParameterIn.PATH)
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "펀딩 검색 성공", content = @Content(
+                            schema = @Schema(implementation = FundingListDto.class),
+                            mediaType = "application/json")),
+                    @ApiResponse(responseCode = "400", description = "펀딩 검색 실패", content = @Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "application/json")),
+            })
+    @GetMapping("/{searchParam}/{fundingCategoryCode}")
+    public ResponseEntity<?> searchFunding(
+            @RequestParam String searchParam,
+            @RequestParam(required = false) String fundingCategoryCode)
+    {
+        try {
+            List<FundingListDto> fundingListDtos = fundingService.searchFunding(searchParam, Integer.parseInt(fundingCategoryCode));
+            if(fundingListDtos != null){
+                return ResponseEntity.status(HttpStatus.OK).body(fundingListDtos);
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("펀딩 검색 실패");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+        }
+    }
 }

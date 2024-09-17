@@ -6,6 +6,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
+/*민감정보 암호화에 사용(계좌번호 등)*/
+
 public class AES {
 
     private static final String ALGORITHM = "AES";

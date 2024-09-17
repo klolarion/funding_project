@@ -48,7 +48,6 @@ public class IndexApiControllerV1 {
         try {
             List<FundingListDto> result = fundingServiceImpl.allFundingList();
             if(result != null) {
-                log.debug("정보 조회 성공 : Index");
                 return ResponseEntity.status(HttpStatus.OK).body(result);
             }else {
                 log.debug("정보 조회 실패 : Index");

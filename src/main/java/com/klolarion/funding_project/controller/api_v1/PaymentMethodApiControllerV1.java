@@ -54,7 +54,7 @@ public class PaymentMethodApiControllerV1 {
             PaymentMethodDto paymentMethodDto = new PaymentMethodDto(
                     memberService.myPaymentLists(member.getMemberId()),
                     adminService.paymentMethodList(),
-                    memberService.getMainPaymentMethod()
+                    memberService.getMainPaymentMethod(member.getMemberId())
             );
 
             if(paymentMethodDto != null) {

@@ -8,6 +8,7 @@ import com.klolarion.funding_project.repository.PaymentRepository;
 import com.klolarion.funding_project.service.blueprint.FundingService;
 import com.klolarion.funding_project.util.CurrentMember;
 import com.klolarion.funding_project.util.RandomAccountGenerator;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -84,12 +85,11 @@ public class FundingServiceImpl implements FundingService {
 
     /*내 펀딩 리스트 조회*/
     @Override
-    public List<FundingListDto> myFundingList() {
+    public List<FundingListDto> myFundingList(Long memberId) {
         QFunding qFunding = QFunding.funding;
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
         QTravel qTravel = QTravel.travel;
-        Member member = currentMember.getMember();
 
         List<FundingListDto> myFundingListDtos = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
@@ -125,7 +125,7 @@ public class FundingServiceImpl implements FundingService {
                 .leftJoin(qFunding.product, qProduct) // Product와 조인
                 .leftJoin(qFunding.travel, qTravel) // Travel과 조인
                 .where(
-                        qFunding.member.memberId.eq(member.getMemberId())  // 현재 로그인한 사용자와 관련된 펀딩만 조회
+                        qFunding.member.memberId.eq(memberId)  // 현재 로그인한 사용자와 관련된 펀딩만 조회
                 )
                 .fetch();
         em.flush();
@@ -649,5 +649,59 @@ public class FundingServiceImpl implements FundingService {
         em.flush();
         em.clear();
         return false;
+    }
+
+    @Override
+    public List<FundingListDto> searchFunding(String searchParam, Integer fundingCategoryCode) {
+        QFunding qFunding = QFunding.funding;
+        QFriend qFriend = QFriend.friend;
+        QMember qMember = QMember.member;
+        QProduct qProduct = QProduct.product;
+        QGroup qGroup = QGroup.group;
+
+        // 조건을 동적으로 생성하기 위한 BooleanBuilder
+        BooleanBuilder builder = new BooleanBuilder();
+
+        // 카테고리 코드가 null이 아닐 경우에만 조건 추가
+        if (fundingCategoryCode != null) {
+            builder.and(qFunding.fundingCategoryCode.eq(fundingCategoryCode));
+        }
+
+        // 검색 파라미터가 그룹명 또는 상품명에 포함된 경우 추가
+        if (searchParam != null && !searchParam.trim().isEmpty()) {
+            builder.and(
+                    qGroup.groupName.containsIgnoreCase(searchParam)
+                            .or(qProduct.productName.containsIgnoreCase(searchParam))
+            );
+        }
+
+        List<FundingListDto> searchedFundingList = query.select(Projections.constructor(FundingListDto.class,
+                        qFunding.fundingId,
+                        qMember.memberId,
+                        qGroup.groupId,
+                        qGroup.groupName,
+                        qMember.memberName,
+                        qProduct.productId,
+                        qProduct.productName,
+                        qFunding.travel.travelId,
+                        qFunding.travel.travelName,
+                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
+                        qFunding.totalFundingAmount,
+                        qFunding.currentFundingAmount,
+                        qFunding.fundingAccount,
+                        qFunding.completed,
+                        qFunding.closed,
+                        qFunding.deleted,
+                        qFunding.fundingCategoryCode
+                ))
+                .from(qFunding)
+                .join(qFunding.member, qMember)  // Funding과 Member 간의 관계 조인
+                .leftJoin(qFunding.group, qGroup)    // Funding과 Group 간의 관계 조인
+                .leftJoin(qFunding.product, qProduct) // Funding과 Product 간의 관계 조인
+                .leftJoin(qFriend).on(qFriend.requester.eq(qMember).or(qFriend.accepter.eq(qMember)))  // 친구 관계 조인
+                .where(builder)
+                .fetch();
+
+        return searchedFundingList;
     }
 }

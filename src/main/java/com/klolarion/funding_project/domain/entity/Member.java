@@ -31,7 +31,7 @@ public class Member extends BaseTime implements Serializable {
     @Size(max = 50)
     private String account;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     @Size(max = 50)
     private String email;
 
@@ -39,7 +39,7 @@ public class Member extends BaseTime implements Serializable {
     @Size(max = 20)
     private String tel;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     @Size(max = 100)
     private String memberName;
 
@@ -50,23 +50,36 @@ public class Member extends BaseTime implements Serializable {
     private boolean banned;
     private boolean offCd;
 
-    public Member(Role role, String email, String memberName, String provider, String providerId) {
-        this.paymentMethodList = null;
+
+    /*최초 사용자 등록*/
+    public void register(String account, String tel, Role role){
+        this.account = account;
+        this.tel = tel;
         this.role = role;
+    }
+
+    public void setEmail(String email){
         this.email = email;
-        this.memberName = memberName;
+    }
+
+    public void disableMember(){
+        this.enabled = false;
+    }
+
+    public void banMember(){
+        this.banned = true;
+    }
+
+    public void setMemberResigned(){
+        this.offCd = true;
+    }
+
+    public void changeTel(String tel){
+        this.tel = tel;
+    }
+
+    public void setProvider(String provider, String providerId){
         this.provider = provider;
         this.providerId = providerId;
-        this.enabled = true;
-        this.banned = false;
-        this.offCd = false;
     }
-
-    public Member(String account, String name, String email, Role role) {
-        this.account = account;
-        this.memberName = name;
-        this.email = email;
-        this.role = role;
-    }
-
 }

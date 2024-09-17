@@ -32,6 +32,10 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+### Sourse ###
+
+/src/main/resources/application.yml
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

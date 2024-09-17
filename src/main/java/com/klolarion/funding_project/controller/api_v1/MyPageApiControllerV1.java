@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/f2/v1")
+@RequestMapping("/api/f2/v1/my-page")
 @Slf4j
 public class MyPageApiControllerV1 {
     private final FundingServiceImpl fundingServiceImpl;
@@ -38,17 +38,16 @@ public class MyPageApiControllerV1 {
                             content = @Content(
                                     mediaType = "application/json")),
             })
-    @GetMapping("/mypage")
+    @GetMapping
     public ResponseEntity<?> myPage() {
         try {
             //조회가 5개!!
             Member member = currentMember.getMember();
-            // -> 컨트롤러에서 멤버 조회 후 서비스에 일괄전달방식으로 변경 필요 또는 마이페이지 서비스를 따로 만들어 거대한 한방쿼리 가능한지 검토 필요
             MyPageDto myPageDto = new MyPageDto(
-                    fundingServiceImpl.myFundingList(),
-                    memberServiceImpl.getMainPaymentMethod(),
-                    memberServiceImpl.getMemberPageData(),
-                    memberServiceImpl.getMyActivity()
+                    fundingServiceImpl.myFundingList(member.getMemberId()),
+                    memberServiceImpl.getMainPaymentMethod(member.getMemberId()),
+                    memberServiceImpl.getMemberPageData(member.getMemberId()),
+                    memberServiceImpl.getMyActivity(member.getMemberId())
             );
             return ResponseEntity.status(HttpStatus.OK).body(myPageDto);
         }catch (Exception e){

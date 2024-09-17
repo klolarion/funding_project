@@ -13,7 +13,7 @@ public interface FundingService {
     List<FundingListDto> allFundingList();
 
     /*내 펀딩 리스트 조회*/
-    List<FundingListDto> myFundingList();
+    List<FundingListDto> myFundingList(Long memberId);
 
     /*펀딩 조회*/
     FundingListDto fundingDetail(Long fundingID);
@@ -43,6 +43,9 @@ public interface FundingService {
 
     /*펀딩하기*/
     boolean joinFunding(JoinFundingDto joinFundingDto);
+
+    /*펀딩 검색*/
+    List<FundingListDto> searchFunding(String searchParam, Integer fundingCategoryCode);
 }
 
 
