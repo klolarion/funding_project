@@ -3,6 +3,7 @@ package com.klolarion.funding_project.service;
 import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.dto.funding.FundingListDto;
 import com.klolarion.funding_project.dto.funding.JoinFundingDto;
+import com.klolarion.funding_project.exception.ResourceNotFoundException;
 import com.klolarion.funding_project.repository.FundingRepository;
 import com.klolarion.funding_project.repository.PaymentRepository;
 import com.klolarion.funding_project.service.blueprint.FundingService;
@@ -80,6 +81,11 @@ public class FundingServiceImpl implements FundingService {
                 .fetch();
         em.flush();
         em.clear();
+
+        if (fundingListDtos == null || fundingListDtos.isEmpty()) {
+            throw new ResourceNotFoundException("펀딩 리스트를 찾을 수 없습니다.");
+        }
+
         return fundingListDtos;
     }
 

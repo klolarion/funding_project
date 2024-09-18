@@ -141,9 +141,9 @@ public class FundingApiControllerV1 {
                     @ApiResponse(responseCode = "400", description = "펀딩 검색 실패", content = @Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "application/json")),
             })
-    @GetMapping("/{searchParam}/{fundingCategoryCode}")
+    @GetMapping("/{searchParam}")
     public ResponseEntity<?> searchFunding(
-            @RequestParam String searchParam,
+            @PathVariable String searchParam,
             @RequestParam(required = false) String fundingCategoryCode) {
 
         List<FundingListDto> fundingListDtos = fundingService.searchFunding(searchParam, Integer.parseInt(fundingCategoryCode));

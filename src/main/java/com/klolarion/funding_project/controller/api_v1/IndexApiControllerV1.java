@@ -34,7 +34,7 @@ public class IndexApiControllerV1 {
                             content = @Content(
                                     schema = @Schema(implementation = FundingListDto.class),
                                     mediaType = "application/json")),
-                    @ApiResponse(responseCode = "400", description = "정보 조회 실패",
+                    @ApiResponse(responseCode = "404", description = "정보 조회 실패",
                             content = @Content(
                                     mediaType = "application/json")),
                     @ApiResponse(responseCode = "500", description = "서버 오류",
@@ -45,12 +45,7 @@ public class IndexApiControllerV1 {
     public ResponseEntity<?> getIndex() {
 
         List<FundingListDto> result = fundingServiceImpl.allFundingList();
-        if (result != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(result);
-        } else {
-            log.debug("정보 조회 실패 : Index");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("정보 조회 실패");
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(result);
 
     }
 }
