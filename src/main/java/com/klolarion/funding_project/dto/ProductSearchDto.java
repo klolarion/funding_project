@@ -14,7 +14,7 @@ public class ProductSearchDto {
     private String link;
     private String image;
     private String lprice;
-    private String mallname;
+    private String mallName;
     private String productId;
     private String productType;
     private String category1;

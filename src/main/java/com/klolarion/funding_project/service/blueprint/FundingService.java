@@ -42,7 +42,7 @@ public interface FundingService {
     boolean completeFunding(Long fundingId);
 
     /*펀딩하기*/
-    boolean joinFunding(JoinFundingDto joinFundingDto);
+    void joinFunding(JoinFundingDto joinFundingDto);
 
     /*펀딩 검색*/
     List<FundingListDto> searchFunding(String searchParam, Integer fundingCategoryCode);

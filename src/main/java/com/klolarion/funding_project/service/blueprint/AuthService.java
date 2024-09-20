@@ -11,15 +11,8 @@ public interface AuthService {
     /*계정찾기*/
     String findAccount(String tel);
 
-    /*구글로그인 테스트용*/
-    Member saveOrUpdateUserGoogle(OAuth2User oAuth2User);
-    /*네이버로그인 테스트용*/
-    Member saveOrUpdateUserNaver(OAuth2User oAuth2User);
-    /*카카오로그인 테스트용*/
-    Member saveOrUpdateUserKakao(OAuth2User oAuth2User);
-
     /*가입시 계정중복 확인*/
-    boolean lookAccount(String account);
+    void lookAccount(String account);
     /*가입시 전화번호중복 확인*/
-    boolean lookTel(String tel);
+    void lookTel(String tel);
 }

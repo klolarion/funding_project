@@ -4,6 +4,8 @@ import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.dto.funding.FundingListDto;
 import com.klolarion.funding_project.dto.funding.JoinFundingDto;
 import com.klolarion.funding_project.exception.ResourceNotFoundException;
+import com.klolarion.funding_project.exception.funding.InsufficientFundsException;
+import com.klolarion.funding_project.exception.funding.JoinFundingException;
 import com.klolarion.funding_project.repository.FundingRepository;
 import com.klolarion.funding_project.repository.PaymentRepository;
 import com.klolarion.funding_project.service.blueprint.FundingService;
@@ -136,6 +138,11 @@ public class FundingServiceImpl implements FundingService {
                 .fetch();
         em.flush();
         em.clear();
+
+        if (myFundingListDtos == null || myFundingListDtos.isEmpty()) {
+            throw new ResourceNotFoundException("펀딩 리스트를 찾을 수 없습니다.");
+        }
+
         return myFundingListDtos;
     }
 
@@ -179,7 +186,7 @@ public class FundingServiceImpl implements FundingService {
                                 .when(qFunding.closed.isTrue())
                                 .then("중단")
                                 .otherwise("펀딩중").as("status"),
-                                 qFunding.fundingCategoryCode
+                        qFunding.fundingCategoryCode
                 ))
                 .distinct()
                 .from(qFunding)
@@ -190,6 +197,11 @@ public class FundingServiceImpl implements FundingService {
                 .fetchOne();
         em.flush();
         em.clear();
+
+        if (fundingListDto == null) {
+            throw new ResourceNotFoundException("펀딩을 찾을 수 없습니다.");
+        }
+
         return fundingListDto;
     }
 
@@ -232,6 +244,10 @@ public class FundingServiceImpl implements FundingService {
                 .leftJoin(qGroupStatus).on(qGroupStatus.group.eq(qGroup)) // GroupStatus와 Group 간의 관계를 조인
                 .where(qFunding.group.groupId.eq(groupId))
                 .fetch();
+
+        if (allGroupFundingListDtos == null || allGroupFundingListDtos.isEmpty()) {
+            throw new ResourceNotFoundException("펀딩 리스트를 찾을 수 없습니다.");
+        }
 
         // 결과를 그룹 이름을 key로 하는 Map으로 변환
         Map<String, List<FundingListDto>> groupedFundingMap = allGroupFundingListDtos.stream()
@@ -280,6 +296,10 @@ public class FundingServiceImpl implements FundingService {
                         .and(qFriend.requester.memberId.eq(memberId).or(qFriend.accepter.memberId.eq(memberId)))  // 현재 사용자가 친구 관계에 포함되어 있는지 확인
                 )
                 .fetch();
+
+        if (allFriendFundingListDtos == null || allFriendFundingListDtos.isEmpty()) {
+            throw new ResourceNotFoundException("펀딩 리스트를 찾을 수 없습니다.");
+        }
 
         // 결과를 친구 이름을 key로 하는 Map으로 변환
         Map<String, List<FundingListDto>> groupedFundingMap = allFriendFundingListDtos.stream()
@@ -332,6 +352,10 @@ public class FundingServiceImpl implements FundingService {
                 )
                 .fetch();
 
+        if (friendFundingListDtos == null || friendFundingListDtos.isEmpty()) {
+            throw new ResourceNotFoundException("펀딩 리스트를 찾을 수 없습니다.");
+        }
+
         return friendFundingListDtos;
     }
 
@@ -376,6 +400,11 @@ public class FundingServiceImpl implements FundingService {
                 .fetch();
         em.flush();
         em.clear();
+
+        if (allGroupFundingListDtos == null || allGroupFundingListDtos.isEmpty()) {
+            throw new ResourceNotFoundException("펀딩 리스트를 찾을 수 없습니다.");
+        }
+
         return allGroupFundingListDtos;
     }
 
@@ -417,6 +446,10 @@ public class FundingServiceImpl implements FundingService {
                         .and(qFriend.banned.isFalse())
                         .and(qFriend.requester.memberId.eq(member.getMemberId()).or(qFriend.accepter.memberId.eq(member.getMemberId()))))
                 .fetch();
+
+        if (fundingListByProduct == null || fundingListByProduct.isEmpty()) {
+            throw new ResourceNotFoundException("펀딩 리스트를 찾을 수 없습니다.");
+        }
 
         return fundingListByProduct;
     }
@@ -575,10 +608,11 @@ public class FundingServiceImpl implements FundingService {
     }
 
     /*동시성제어 필요
-     * 결제수단이 등록되지 않은경우 예외발생 -> 처리필요*/
+     * 결제수단이 등록되지 않은경우 예외발생 -> 처리필요
+     * -> 최초가입시 결제수단 등록강제*/
     @Override
     @Transactional
-    public boolean joinFunding(JoinFundingDto joinFundingDto) {
+    public void joinFunding(JoinFundingDto joinFundingDto) {
 
         Long fundingId = joinFundingDto.getFundingId();
         Long memberId = joinFundingDto.getMemberId();
@@ -604,16 +638,22 @@ public class FundingServiceImpl implements FundingService {
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE) // 락 설정. 이 쿼리로 조회된 데이터에 대해서 읽기/쓰기 제한
                 .fetchOne();
 
+        if (result == null) {
+            throw new ResourceNotFoundException("펀딩 또는 결제 정보 조회에 실패했습니다.");
+        }
+
         Funding funding = result.get(qFunding);
         PaymentMethod paymentMethod = result.get(qPaymentMethod);
         Member member = result.get(qMember);
 
         Long balanceBefore = paymentMethod.getAvailableAmount();
 
-        //금액조건이 유효하면 송금처리
-        if (paymentMethod.getAvailableAmount() >= amount &&
-                funding.getTotalFundingAmount() - funding.getCurrentFundingAmount() >= amount) {
+        if (paymentMethod.getAvailableAmount() < amount ||
+                funding.getTotalFundingAmount() - funding.getCurrentFundingAmount() < amount) {
+            throw new InsufficientFundsException("잔액이 부족하거나 펀딩 가능한 금액이 부족합니다.");
+        }
 
+        try {
             long executeF = query.update(qFunding)
                     .set(qFunding.currentFundingAmount, funding.getCurrentFundingAmount() + amount)
                     .where(qFunding.fundingId.eq(fundingId))
@@ -624,6 +664,9 @@ public class FundingServiceImpl implements FundingService {
                     .where(qPaymentMethod.paymentMethodId.eq(paymentMethod.getPaymentMethodId()))
                     .execute();
 
+            if (executeF != 1 || executeP != 1) {
+                throw new Exception("펀딩 금액 또는 결제 가능 금액 업데이트에 실패했습니다."); // 500
+            }
 
             Payment payment = new Payment(
                     member,
@@ -636,25 +679,20 @@ public class FundingServiceImpl implements FundingService {
                     true
             );
 
-            //결제목록 생성
-            if (executeF == 1 && executeP == 1) {
-                Payment saved = paymentRepository.save(payment);
-                //저장과정에서 오류가 생기면 completed를 false로 저장.
-                if (saved == null) {
-                    payment.setCompletedFalse();
-                    paymentRepository.save(payment);
-                    em.flush();
-                    em.clear();
-                    return false;
-                }
+            Payment saved = paymentRepository.save(payment);
+            if (saved == null) {
+                payment.setCompletedFalse();
+                paymentRepository.save(payment);
                 em.flush();
                 em.clear();
-                return true;
+                throw new Exception("결제 저장 중 오류가 발생했습니다."); // 500
             }
+
+            em.flush();
+            em.clear();
+        } catch (Exception e) {
+            log.error("결제 저장 중 오류가 발생했습니다.", e);
         }
-        em.flush();
-        em.clear();
-        return false;
     }
 
     @Override
@@ -707,6 +745,10 @@ public class FundingServiceImpl implements FundingService {
                 .leftJoin(qFriend).on(qFriend.requester.eq(qMember).or(qFriend.accepter.eq(qMember)))  // 친구 관계 조인
                 .where(builder)
                 .fetch();
+
+        if (searchedFundingList == null || searchedFundingList.isEmpty()) {
+            throw new ResourceNotFoundException("펀딩 리스트를 찾을 수 없습니다.");
+        }
 
         return searchedFundingList;
     }

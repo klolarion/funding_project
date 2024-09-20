@@ -18,7 +18,6 @@ public class AuthControllerV1 {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
-
         boolean result = authService.register(registerDto);
         if (result) {
             return ResponseEntity.status(HttpStatus.OK).body("");
@@ -29,27 +28,19 @@ public class AuthControllerV1 {
     @PostMapping("/check-account/{account}")
     public ResponseEntity<?> checkAccount(@PathVariable String account) {
         String provider = authService.checkAccount(account);
-
-        if (provider != null) {
-            // 소셜 로그인 제공자
-            return ResponseEntity.status(HttpStatus.OK).body(provider);
-        } else {
-            // 등록되지 않은 계정의 경우
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("등록된 소셜 로그인 정보가 없습니다.");
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(provider);
     }
 
     @GetMapping("/account/{account}")
     public ResponseEntity<?> lookAccount(@PathVariable String account) {
         authService.lookAccount(account);
-        return ResponseEntity.status(HttpStatus.OK).body("");
+        return ResponseEntity.status(HttpStatus.OK).body("계정 사용 가능");
     }
 
     @GetMapping("/tel/{tel}")
     public ResponseEntity<?> lookTel(@PathVariable String tel) {
         authService.lookTel(tel);
-        return ResponseEntity.status(HttpStatus.OK).body("");
+        return ResponseEntity.status(HttpStatus.OK).body("전화번호 사용 가능");
     }
 
 

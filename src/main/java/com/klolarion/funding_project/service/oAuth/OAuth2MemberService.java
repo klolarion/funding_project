@@ -1,5 +1,7 @@
-package com.klolarion.funding_project.util.OAuth;
+package com.klolarion.funding_project.service.oAuth;
 
+import com.klolarion.funding_project.util.oAuth.OAuth2MemberUpdate;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +16,9 @@ import java.util.Collections;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class OAuth2MemberService extends DefaultOAuth2UserService {
+    private final OAuth2MemberUpdate oAuth2MemberUpdate;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -33,6 +37,7 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
             // Google의 경우 기본적으로 제공되는 속성
             email = (String) attributes.get("email");
             name = (String) attributes.get("name");
+
 
             System.out.println("google login : " + email + ", " + name);
         } else if ("naver".equals(registrationId)) {

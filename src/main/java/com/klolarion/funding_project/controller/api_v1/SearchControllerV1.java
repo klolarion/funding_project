@@ -68,6 +68,7 @@ public class SearchControllerV1 {
             if (itemsNode.isArray()) {
                 for (JsonNode itemNode : itemsNode) {
                     ProductSearchDto dto = objectMapper.treeToValue(itemNode, ProductSearchDto.class);
+//                    System.out.println(dto);
                     dto.setTitle(HTMLUtil.removeHtmlTags(dto.getTitle()));
                     result.add(dto);
                 }

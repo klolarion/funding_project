@@ -1,6 +1,6 @@
 package com.klolarion.funding_project.config;
 
-import com.klolarion.funding_project.util.OAuth.OAuth2MemberService;
+import com.klolarion.funding_project.service.oAuth.OAuth2MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +19,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-//@EnableWebSecurity(debug = true) //http관련 상세 디버깅용
-@EnableWebSecurity
+@EnableWebSecurity(debug = true) //http관련 상세 디버깅용
+//@EnableWebSecurity
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
 

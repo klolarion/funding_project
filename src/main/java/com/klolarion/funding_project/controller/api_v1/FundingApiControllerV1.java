@@ -40,6 +40,7 @@ public class FundingApiControllerV1 {
                             content = @Content(
                                     schema = @Schema(implementation = FundingMainDto.class),
                                     mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "정보 조회 실패", content = @Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "500", description = "서버 오류",
                             content = @Content(
                                     mediaType = "application/json")),
@@ -69,7 +70,12 @@ public class FundingApiControllerV1 {
     @PostMapping("/")
     public ResponseEntity<?> createFunding(@RequestBody CreateFundingDto createFundingDto) {
 
-        Funding createdFunding = fundingService.createFundingApi(createFundingDto.getProductId(), createFundingDto.getTravelId(), createFundingDto.getGroupId());
+        Funding createdFunding = fundingService.createFunding(
+                createFundingDto.getProductId(),
+                createFundingDto.getTravelId(),
+                createFundingDto.getGroupId(),
+                createFundingDto.getGroupId(),
+                createFundingDto.getFundingCategoryCode());
         if (createdFunding != null) {
             log.debug("펀딩 생성 성공, Data -  ", createFundingDto);
             return ResponseEntity.status(HttpStatus.CREATED).body("펀딩 생성 성공");
@@ -90,6 +96,7 @@ public class FundingApiControllerV1 {
                             content = @Content(
                                     schema = @Schema(implementation = FundingListDto.class),
                                     mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "정보 조회 실패", content = @Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "500", description = "서버 오류",
                             content = @Content(mediaType = "application/json")),
             })
@@ -115,15 +122,8 @@ public class FundingApiControllerV1 {
     @PutMapping
     public ResponseEntity<?> joinFunding(@RequestBody JoinFundingDto joinFundingDto) {
 
-        boolean result = fundingService.joinFunding(joinFundingDto);
-
-        if (result) {
-            log.debug("펀딩 참여 성공, Data - ", joinFundingDto);
-            return ResponseEntity.status(HttpStatus.OK).body("펀딩 참여 성공");
-        } else {
-            log.debug("펀딩 참여 실패, Data -  ", joinFundingDto);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("펀딩 참여 실패");
-        }
+        fundingService.joinFunding(joinFundingDto);
+        return ResponseEntity.status(HttpStatus.OK).body("펀딩 참여 성공");
     }
 
 
@@ -138,7 +138,7 @@ public class FundingApiControllerV1 {
                     @ApiResponse(responseCode = "200", description = "펀딩 검색 성공", content = @Content(
                             schema = @Schema(implementation = FundingListDto.class),
                             mediaType = "application/json")),
-                    @ApiResponse(responseCode = "400", description = "펀딩 검색 실패", content = @Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "펀딩 검색 실패", content = @Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "application/json")),
             })
     @GetMapping("/{searchParam}")
@@ -147,10 +147,8 @@ public class FundingApiControllerV1 {
             @RequestParam(required = false) String fundingCategoryCode) {
 
         List<FundingListDto> fundingListDtos = fundingService.searchFunding(searchParam, Integer.parseInt(fundingCategoryCode));
-        if (fundingListDtos != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(fundingListDtos);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("펀딩 검색 실패");
+
+        return ResponseEntity.status(HttpStatus.OK).body(fundingListDtos);
 
     }
 }

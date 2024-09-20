@@ -4,6 +4,9 @@ import com.klolarion.funding_project.domain.entity.Member;
 import com.klolarion.funding_project.domain.entity.QMember;
 import com.klolarion.funding_project.domain.entity.Role;
 import com.klolarion.funding_project.dto.auth.RegisterDto;
+import com.klolarion.funding_project.exception.auth.CheckAccountException;
+import com.klolarion.funding_project.exception.auth.LookAccountException;
+import com.klolarion.funding_project.exception.auth.LookTelException;
 import com.klolarion.funding_project.repository.MemberRepository;
 import com.klolarion.funding_project.repository.RoleRepository;
 import com.klolarion.funding_project.service.blueprint.AuthService;
@@ -35,8 +38,13 @@ public class AuthServiceImpl implements AuthService {
             //없으면 db조회 후 캐싱
             String provider = query.select(qMember.provider).from(qMember).where(qMember.account.eq(account)).fetchOne();
 //            redisService.setData(account, provider, 10, TimeUnit.DAYS);
+            if(provider == null){
+                throw new CheckAccountException("등록된 소셜 로그인 정보가 없습니다.");
+            }
+
             return provider;
         }
+
         return data;
     };
 
@@ -64,100 +72,10 @@ public class AuthServiceImpl implements AuthService {
         return query.select(qMember.account).from(qMember).where(qMember.tel.eq(tel)).fetchOne();
     }
 
-    @Override
-    public Member saveOrUpdateUserGoogle(OAuth2User oAuth2User) {
 
-        Optional<Role> role = roleRepository.findById(2L); //USER
-        Role defauleRole = role.orElseThrow(() -> new UsernameNotFoundException("Role not found"));
-
-        String googleId = oAuth2User.getAttribute("sub");
-        String email = oAuth2User.getAttribute("email");
-        String name = oAuth2User.getAttribute("name");
-        boolean enabled = oAuth2User.getAttribute("email_verified");
-
-        return memberRepository.findByAccount(googleId)
-                .map(member -> {
-                    member.setEmail(email);
-                    member.setMemberName(name);
-                    return memberRepository.save(member);
-                })
-                .orElseGet(() -> {
-                    Member member = new Member();
-                    member.setAccount(googleId);
-                    member.setEmail(email);
-                    member.setMemberName(name);
-                    member.setRole(defauleRole); // 기본 권한 설정
-                    member.setProvider("Google");
-                    member.setTel("");
-                    member.setEnabled(enabled);
-                    return memberRepository.save(member);
-                });
-    }
 
     @Override
-    public Member saveOrUpdateUserNaver(OAuth2User oAuth2User) {
-        System.out.printf("hi");
-        Optional<Role> role = roleRepository.findById(2L); //USER
-        Role defauleRole = role.orElseThrow(() -> new UsernameNotFoundException("Role not found"));
-//        System.out.println("oauth" + oAuth2User);
-        String naverId = oAuth2User.getAttribute("id");
-        String email = oAuth2User.getAttribute("email");
-        String name = oAuth2User.getAttribute("name");
-//        boolean enabled = oAuth2User.getAttribute("email_verified");
-
-        return memberRepository.findByAccount(naverId)
-                .map(member -> {
-                    member.setEmail(email);
-                    member.setMemberName(name);
-                    return memberRepository.save(member);
-                })
-                .orElseGet(() -> {
-                    Member member = new Member();
-                    member.setAccount(naverId);
-                    member.setEmail(email);
-                    member.setMemberName(name);
-                    member.setRole(defauleRole); // 기본 권한 설정
-                    member.setProvider("Naver");
-                    member.setTel(" ");
-//                    member.setEnabled(enabled);
-                    return memberRepository.save(member);
-                });
-//        return null;
-    }
-
-    @Override
-    public Member saveOrUpdateUserKakao(OAuth2User oAuth2User) {
-        System.out.printf("hi");
-        Optional<Role> role = roleRepository.findById(2L); //USER
-        Role defauleRole = role.orElseThrow(() -> new UsernameNotFoundException("Role not found"));
-//        System.out.println("oauth" + oAuth2User);
-        String kakaoId = oAuth2User.getAttribute("id");
-        String email = oAuth2User.getAttribute("email");
-        String name = oAuth2User.getAttribute("name");
-//        boolean enabled = oAuth2User.getAttribute("email_verified");
-
-        return memberRepository.findByAccount(kakaoId)
-                .map(member -> {
-                    member.setEmail(email);
-                    member.setMemberName(name);
-                    return memberRepository.save(member);
-                })
-                .orElseGet(() -> {
-                    Member member = new Member();
-                    member.setAccount(kakaoId);
-                    member.setEmail(email);
-                    member.setMemberName(name);
-                    member.setRole(defauleRole); // 기본 권한 설정
-                    member.setProvider("Kakao");
-                    member.setTel(" ");
-//                    member.setEnabled(enabled);
-                    return memberRepository.save(member);
-                });
-//        return null;
-    }
-
-    @Override
-    public boolean lookAccount(String account){
+    public void lookAccount(String account){
         QMember qMember = QMember.member;
 
         Integer count = query
@@ -166,12 +84,13 @@ public class AuthServiceImpl implements AuthService {
                 .where(qMember.account.eq(account))
                 .fetchFirst();  // 첫 번째 결과를 가져옴, 없으면 null 반환
 
-        // count가 null이 아니면 true, 아니면 false 반환
-        return count != null;
+        if (count != null) {
+            throw new LookAccountException("이미 사용 중인 전화번호입니다.");
+        }
     }
 
     @Override
-    public boolean lookTel(String tel){
+    public void lookTel(String tel){
         QMember qMember = QMember.member;
 
         Integer count = query
@@ -180,7 +99,8 @@ public class AuthServiceImpl implements AuthService {
                 .where(qMember.tel.eq(tel))
                 .fetchFirst();  // 첫 번째 결과를 가져옴, 없으면 null 반환
 
-        // count가 null이 아니면 true, 아니면 false 반환
-        return count != null;
+        if (count != null) {
+            throw new LookTelException("이미 사용 중인 전화번호입니다.");
+        }
     }
 }
