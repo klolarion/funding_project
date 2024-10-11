@@ -67,7 +67,7 @@ public class FriendServiceImpl implements FriendService {
         List<SearchFriendDto> searchFriendDtoList = query.select(
                         Projections.constructor(SearchFriendDto.class,
                                 qMember.memberId,
-                                qMember.memberName
+                                qMember.nickName
                         ))
                 .from(qMember)
                 //status requester, accepter 둘 중 하나라도 일치하면 조인
@@ -75,7 +75,7 @@ public class FriendServiceImpl implements FriendService {
                         .or(qFriendStatus.accepter.memberId.eq(member.getMemberId())))
                 .where(qFriendStatus.accepted.isFalse() //status accepted false
                         .and(qFriendStatus.denied.isFalse()) //status denied false
-                        .and(qMember.memberName.contains(searchName))//검색이름으로 필터링
+                        .and(qMember.nickName.contains(searchName))//검색이름으로 필터링
                 .and(JPAExpressions.selectOne() // friend에 없어야함
                         .from(qFriend)
                         .where(qFriend.requester.memberId.eq(qFriendStatus.requester.memberId)
@@ -98,7 +98,7 @@ public class FriendServiceImpl implements FriendService {
         List<SearchFriendDto> friends = query
                 .select(Projections.constructor(SearchFriendDto.class,
                         qMember.memberId,
-                        qMember.memberName
+                        qMember.nickName
                 ))
                 .from(qFriend)
                 .join(qMember).on(
@@ -124,7 +124,7 @@ public class FriendServiceImpl implements FriendService {
         List<FriendRequestDto> friendRequests = query.select(Projections.constructor(FriendRequestDto.class,
                         qFriendStatus.friendStatusId,
                         qFriendStatus.requester.memberId,
-                        qFriendStatus.requester.memberName))
+                        qFriendStatus.requester.nickName))
                 .from(qFriendStatus)
                 .where(
                         qFriendStatus.accepter.memberId.eq(member.getMemberId())

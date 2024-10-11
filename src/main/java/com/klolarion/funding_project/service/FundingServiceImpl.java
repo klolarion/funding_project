@@ -3,9 +3,8 @@ package com.klolarion.funding_project.service;
 import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.dto.funding.FundingListDto;
 import com.klolarion.funding_project.dto.funding.JoinFundingDto;
-import com.klolarion.funding_project.exception.ResourceNotFoundException;
+import com.klolarion.funding_project.exception.base_exceptions.ResourceNotFoundException;
 import com.klolarion.funding_project.exception.funding.InsufficientFundsException;
-import com.klolarion.funding_project.exception.funding.JoinFundingException;
 import com.klolarion.funding_project.repository.FundingRepository;
 import com.klolarion.funding_project.repository.PaymentRepository;
 import com.klolarion.funding_project.service.blueprint.FundingService;
@@ -51,7 +50,7 @@ public class FundingServiceImpl implements FundingService {
         List<FundingListDto> fundingListDtos = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
                         qFunding.member.memberId,
-                        qFunding.member.memberName,
+                        qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
                         qFunding.travel.travelId,
@@ -102,7 +101,7 @@ public class FundingServiceImpl implements FundingService {
         List<FundingListDto> myFundingListDtos = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
                         qFunding.member.memberId,
-                        qFunding.member.memberName,
+                        qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
                         qFunding.travel.travelId,
@@ -162,7 +161,7 @@ public class FundingServiceImpl implements FundingService {
 //                    new CaseBuilder()
 //                        .when(qFunding.group.groupName.isNull()).then(Expressions.constant(""))  // 그룹 이름이 null인 경우 빈 문자열로 처리
 //                        .otherwise(qFunding.group.groupName),
-                        qFunding.member.memberName,
+                        qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
                         qFunding.travel.travelId,
@@ -220,7 +219,7 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.memberId,
                         qGroup.groupId,
                         qGroup.groupName,
-                        qFunding.member.memberName,
+                        qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
                         qFunding.travel.travelId,
@@ -272,7 +271,7 @@ public class FundingServiceImpl implements FundingService {
                         qMember.memberId,
                         qGroup.groupId,
                         qGroup.groupName,
-                        qMember.memberName,
+                        qMember.nickName,
                         qProduct.productId,
                         qProduct.productName,
                         qFunding.travel.travelId,
@@ -303,7 +302,7 @@ public class FundingServiceImpl implements FundingService {
 
         // 결과를 친구 이름을 key로 하는 Map으로 변환
         Map<String, List<FundingListDto>> groupedFundingMap = allFriendFundingListDtos.stream()
-                .collect(Collectors.groupingBy(FundingListDto::getMemberName)); // 친구 이름으로 그룹화
+                .collect(Collectors.groupingBy(FundingListDto::getNickName)); // 친구 이름으로 그룹화
 
         return groupedFundingMap;
     }
@@ -322,7 +321,7 @@ public class FundingServiceImpl implements FundingService {
                         qMember.memberId,
                         qGroup.groupId,
                         qGroup.groupName,
-                        qMember.memberName,
+                        qMember.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
                         qFunding.travel.travelId,
@@ -371,7 +370,7 @@ public class FundingServiceImpl implements FundingService {
         List<FundingListDto> allGroupFundingListDtos = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
                         qFunding.member.memberId,
-                        qFunding.member.memberName,
+                        qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
                         qFunding.travel.travelId,
@@ -422,7 +421,7 @@ public class FundingServiceImpl implements FundingService {
                         qMember.memberId,
                         qGroup.groupId,
                         qGroup.groupName,
-                        qMember.memberName,
+                        qMember.nickName,
                         qProduct.productId,
                         qProduct.productName,
                         qFunding.travel.travelId,
@@ -724,7 +723,7 @@ public class FundingServiceImpl implements FundingService {
                         qMember.memberId,
                         qGroup.groupId,
                         qGroup.groupName,
-                        qMember.memberName,
+                        qMember.nickName,
                         qProduct.productId,
                         qProduct.productName,
                         qFunding.travel.travelId,

@@ -45,7 +45,7 @@ public class FundingApiControllerV1 {
                             content = @Content(
                                     mediaType = "application/json")),
             })
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<?> fundingMain() {
         FundingMainDto fundingMainDto = new FundingMainDto(
                 productService.allProducts(),
@@ -67,7 +67,7 @@ public class FundingApiControllerV1 {
                     @ApiResponse(responseCode = "400", description = "펀딩 생성 실패", content = @Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "application/json")),
             })
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<?> createFunding(@RequestBody CreateFundingDto createFundingDto) {
 
         Funding createdFunding = fundingService.createFunding(
@@ -100,7 +100,7 @@ public class FundingApiControllerV1 {
                     @ApiResponse(responseCode = "500", description = "서버 오류",
                             content = @Content(mediaType = "application/json")),
             })
-    @GetMapping("/{fundingId}")
+    @GetMapping("/{fundingId}/detail")
     public ResponseEntity<?> detail(@PathVariable Long fundingId) {
         FundingListDto fundingListDto = fundingService.fundingDetail(fundingId);
         return ResponseEntity.status(HttpStatus.OK).body(fundingListDto);
@@ -141,7 +141,7 @@ public class FundingApiControllerV1 {
                     @ApiResponse(responseCode = "404", description = "펀딩 검색 실패", content = @Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "application/json")),
             })
-    @GetMapping("/{searchParam}")
+    @GetMapping("/{searchParam}/search")
     public ResponseEntity<?> searchFunding(
             @PathVariable String searchParam,
             @RequestParam(required = false) String fundingCategoryCode) {

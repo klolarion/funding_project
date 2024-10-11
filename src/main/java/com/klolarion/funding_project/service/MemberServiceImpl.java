@@ -7,7 +7,6 @@ import com.klolarion.funding_project.repository.MemberRepository;
 import com.klolarion.funding_project.repository.PaymentMethodListRepository;
 import com.klolarion.funding_project.service.blueprint.MemberService;
 import com.klolarion.funding_project.util.CurrentMember;
-import com.klolarion.funding_project.util.RedisService;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -31,10 +30,6 @@ public class MemberServiceImpl implements MemberService {
     private final JPAQueryFactory query;
     private final CurrentMember currentMember;
 
-    @Override
-    public Member getMember(String account){
-        return memberRepository.findByAccount(account).orElseThrow(() -> new UsernameNotFoundException("사용자 조회 실패"));
-    }
 
     public MemberDto getMemberPageData(Long memberId){
         QMember qMember = QMember.member;
@@ -43,12 +38,9 @@ public class MemberServiceImpl implements MemberService {
         return query.select(Projections.constructor(MemberDto.class,
                         qMember.memberId,
                         qMember.role.roleName,
-                        qMember.account,
                         qMember.email,
-                        qMember.tel,
-                        qMember.memberName,
+                        qMember.nickName,
                         qMember.provider,
-                        qMember.providerId,
                         qMemberStatus.memberStatusId,
                         qMemberStatus.memberStatusCode,
                         qMemberStatus.statusExpires
@@ -111,9 +103,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member getMember(String account) {
+        return null;
+    }
+
+    @Override
     public List<Member>  searchMember(String memberName){
         QMember qMember = QMember.member;
-        List<Member> fetch = query.selectFrom(qMember).where(qMember.memberName.contains(memberName)).fetch();
+        List<Member> fetch = query.selectFrom(qMember).where(qMember.nickName.contains(memberName)).fetch();
         em.flush();
         em.clear();
         return fetch;

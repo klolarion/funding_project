@@ -24,8 +24,6 @@ public class QMember extends EntityPathBase<Member> {
 
     public final QBaseTime _super = new QBaseTime(this);
 
-    public final StringPath account = createString("account");
-
     public final BooleanPath banned = createBoolean("banned");
 
     //inherited
@@ -40,7 +38,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
-    public final StringPath memberName = createString("memberName");
+    public final StringPath nickName = createString("nickName");
 
     public final BooleanPath offCd = createBoolean("offCd");
 
@@ -48,11 +46,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath provider = createString("provider");
 
-    public final StringPath providerId = createString("providerId");
-
     public final QRole role;
-
-    public final StringPath tel = createString("tel");
 
     public QMember(String variable) {
         this(Member.class, forVariable(variable), INITS);

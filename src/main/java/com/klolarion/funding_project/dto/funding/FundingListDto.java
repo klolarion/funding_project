@@ -12,7 +12,7 @@ public class FundingListDto {
     private Long memberId;
     private Long groupId;
     private String groupName;
-    private String memberName;
+    private String nickName;
     private Long productId;
     private String productName;
     private Long travelId;
@@ -24,12 +24,12 @@ public class FundingListDto {
     private String status;
     private int fundingCategoryCode;
 
-    public FundingListDto(Long fundingId, Long memberId, String memberName, Long productId, String productName, Long travelId, String travelName,
+    public FundingListDto(Long fundingId, Long memberId, String nickName, Long productId, String productName, Long travelId, String travelName,
                          double progress, Long totalFundingAmount, Long currentFundingAmount,
                          String fundingAccount, String status, int fundingCategoryCode) {
         this.fundingId = fundingId;
         this.memberId = memberId;
-        this.memberName = memberName;
+        this.nickName = nickName;
         this.productId = productId;
         this.productName = productName;
         this.travelId = travelId;

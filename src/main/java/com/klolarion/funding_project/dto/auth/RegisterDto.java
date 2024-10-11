@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class RegisterDto {
     private String account;
     private String tel;
+    private String memberName;
 }

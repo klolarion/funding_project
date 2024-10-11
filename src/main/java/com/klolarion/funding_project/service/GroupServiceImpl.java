@@ -84,7 +84,7 @@ public class GroupServiceImpl implements GroupService {
         List<GroupDto> groups = query.select(Projections.constructor(GroupDto.class,
                         qGroup.groupId,
                         qGroup.groupLeader.memberId,
-                        qMember.memberName.as("groupLeaderName"),
+                        qMember.nickName.as("groupLeaderName"),
                         qGroup.groupName,
                         JPAExpressions.select(qGroupStatus.countDistinct())
                                 .from(qGroupStatus)
@@ -111,7 +111,7 @@ public class GroupServiceImpl implements GroupService {
         List<GroupDto> groups = query.select(Projections.constructor(GroupDto.class,
                         qGroup.groupId,
                         qGroup.groupLeader.memberId,
-                        qMember.memberName.as("groupLeaderName"),
+                        qMember.nickName.as("groupLeaderName"),
                         qGroup.groupName,
                         JPAExpressions.select(qGroupStatus.countDistinct())
                                 .from(qGroupStatus)
@@ -142,7 +142,7 @@ public class GroupServiceImpl implements GroupService {
         List<GroupDto> groups = query.select(Projections.constructor(GroupDto.class,
                         qGroup.groupId,
                         qGroup.groupLeader.memberId,
-                        qMember.memberName.as("groupLeaderName"),
+                        qMember.nickName.as("groupLeaderName"),
                         qGroup.groupName,
                         JPAExpressions.select(qGroupStatus.countDistinct())
                                 .from(qGroupStatus)
@@ -170,7 +170,7 @@ public class GroupServiceImpl implements GroupService {
         List<GroupDto> groups = query.select(Projections.constructor(GroupDto.class,
                         qGroup.groupId,
                         qGroup.groupLeader.memberId,
-                        qMember.memberName.as("groupLeaderName"),
+                        qMember.nickName.as("groupLeaderName"),
                         qGroup.groupName,
                         JPAExpressions.select(qGroupStatus.countDistinct())
                         .from(qGroupStatus)
@@ -205,7 +205,7 @@ public class GroupServiceImpl implements GroupService {
         List<GroupDto> groups = query.select(Projections.constructor(GroupDto.class,
                         qGroup.groupId,
                         qGroup.groupLeader.memberId,
-                        qMember.memberName.as("groupLeaderName"),
+                        qMember.nickName.as("groupLeaderName"),
                         qGroup.groupName,
                         JPAExpressions.select(qGroupStatus.countDistinct())
                                 .from(qGroupStatus)
@@ -257,7 +257,7 @@ public class GroupServiceImpl implements GroupService {
         List<Tuple> results = query.select(
                         qGroup.groupId,
                         qGroup.groupLeader.memberId,
-                        qMember.memberName.as("groupLeaderName"),
+                        qMember.nickName.as("groupLeaderName"),
                         qGroup.groupName,
                         qGroupStatus.group.countDistinct().as("groupMemberCount"),
                         qFunding.fundingId,  // 각 필드를 명시적으로 추가
@@ -274,7 +274,7 @@ public class GroupServiceImpl implements GroupService {
                 .groupBy(
                         qGroup.groupId,
                         qGroup.groupLeader.memberId,
-                        qMember.memberName,
+                        qMember.nickName,
                         qGroup.groupName,
                         qFunding.fundingId // 명시적으로 그룹화
                 )
@@ -290,7 +290,7 @@ public class GroupServiceImpl implements GroupService {
                 groupDto = new GroupDto();
                 groupDto.setGroupId(groupIdTmp);
                 groupDto.setGroupLeaderId(tuple.get(qGroup.groupLeader.memberId));
-                groupDto.setGroupLeaderName(tuple.get(qMember.memberName.as("groupLeaderName")));
+                groupDto.setGroupLeaderName(tuple.get(qMember.nickName.as("groupLeaderName")));
                 groupDto.setGroupName(tuple.get(qGroup.groupName));
                 groupDto.setGroupMemberCount(tuple.get(qGroupStatus.group.countDistinct().as("groupMemberCount")));
                 groupDto.setGroupCategoryCode(tuple.get(qGroup.groupCategoryCode));
@@ -325,7 +325,7 @@ public class GroupServiceImpl implements GroupService {
         List<Tuple> results = query.select(
                         qGroup.groupId,
                         qGroup.groupLeader.memberId,
-                        qMember.memberName.as("groupLeaderName"),
+                        qMember.nickName.as("groupLeaderName"),
                         qGroup.groupName,
                         qGroupStatus.group.countDistinct().as("groupMemberCount"),
                         qFunding.fundingId,  // 각 필드를 명시적으로 추가
@@ -342,7 +342,7 @@ public class GroupServiceImpl implements GroupService {
                 .groupBy(
                         qGroup.groupId,
                         qGroup.groupLeader.memberId,
-                        qMember.memberName,
+                        qMember.nickName,
                         qGroup.groupName,
                         qFunding.fundingId // 명시적으로 그룹화
                 )
@@ -358,7 +358,7 @@ public class GroupServiceImpl implements GroupService {
                 groupDto = new GroupDto();
                 groupDto.setGroupId(groupIdTmp);
                 groupDto.setGroupLeaderId(tuple.get(qGroup.groupLeader.memberId));
-                groupDto.setGroupLeaderName(tuple.get(qMember.memberName.as("groupLeaderName")));
+                groupDto.setGroupLeaderName(tuple.get(qMember.nickName.as("groupLeaderName")));
                 groupDto.setGroupName(tuple.get(qGroup.groupName));
                 groupDto.setGroupMemberCount(tuple.get(qGroupStatus.group.countDistinct().as("groupMemberCount")));
                 groupDto.setGroupCategoryCode(tuple.get(qGroup.groupCategoryCode));

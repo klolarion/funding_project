@@ -27,36 +27,20 @@ public class Member extends BaseTime implements Serializable {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @Column(nullable = false, unique = true)
-    @Size(max = 50)
-    private String account;
-
     @Column(unique = true)
     @Size(max = 50)
     private String email;
 
-    @Column(nullable = false, unique = true)
-    @Size(max = 20)
-    private String tel;
-
     @Column(unique = true)
     @Size(max = 100)
-    private String memberName;
+    private String nickName;
 
     private String provider; //공급자 (google, facebook ...)
-    private String providerId; //공급 아이디 ?
 
     private boolean enabled;
     private boolean banned;
     private boolean offCd;
 
-
-    /*최초 사용자 등록*/
-    public void register(String account, String tel, Role role){
-        this.account = account;
-        this.tel = tel;
-        this.role = role;
-    }
 
     public void setEmail(String email){
         this.email = email;
@@ -74,12 +58,4 @@ public class Member extends BaseTime implements Serializable {
         this.offCd = true;
     }
 
-    public void changeTel(String tel){
-        this.tel = tel;
-    }
-
-    public void setProvider(String provider, String providerId){
-        this.provider = provider;
-        this.providerId = providerId;
-    }
 }

@@ -18,20 +18,18 @@ public class MemberDto {
 
     private Long memberId;
     private String role;
-    private String account;
     private String email;
-    private String tel;
 
 
-    private String memberName;
+    private String nickName;
 
     private String provider; //공급자 (google, facebook ...)
-    private String providerId; //공급 아이디 ?
 
     private boolean enabled;
     private boolean banned;
 
 
+    //사용자 등록
     private Long memberStatusId;
     private int memberStatusCode;
     private LocalDateTime statusExpires;

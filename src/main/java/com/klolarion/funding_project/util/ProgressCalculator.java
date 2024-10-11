@@ -2,6 +2,8 @@ package com.klolarion.funding_project.util;
 
 import org.springframework.stereotype.Component;
 
+
+//현재 db쿼리에서 수행함
 @Component
 public class ProgressCalculator {
     public double calculateProgress(Long currentFundingAmount, Long totalFundingAmount) {
