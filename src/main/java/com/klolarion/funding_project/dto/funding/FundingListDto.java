@@ -15,8 +15,6 @@ public class FundingListDto {
     private String nickName;
     private Long productId;
     private String productName;
-    private Long travelId;
-    private String travelName;
     private double progress;
     private Long totalFundingAmount;
     private Long currentFundingAmount;
@@ -24,7 +22,7 @@ public class FundingListDto {
     private String status;
     private int fundingCategoryCode;
 
-    public FundingListDto(Long fundingId, Long memberId, String nickName, Long productId, String productName, Long travelId, String travelName,
+    public FundingListDto(Long fundingId, Long memberId, String nickName, Long productId, String productName,
                          double progress, Long totalFundingAmount, Long currentFundingAmount,
                          String fundingAccount, String status, int fundingCategoryCode) {
         this.fundingId = fundingId;
@@ -32,8 +30,6 @@ public class FundingListDto {
         this.nickName = nickName;
         this.productId = productId;
         this.productName = productName;
-        this.travelId = travelId;
-        this.travelName = travelName;
         this.progress = progress;
         this.totalFundingAmount = totalFundingAmount;
         this.currentFundingAmount = currentFundingAmount;

@@ -3,13 +3,8 @@ package com.klolarion.funding_project.util;
 import com.klolarion.funding_project.domain.entity.Member;
 import com.klolarion.funding_project.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 /**
  * 시큐리티 컨텍스트에서 사용자 정보를 불러와서 사용

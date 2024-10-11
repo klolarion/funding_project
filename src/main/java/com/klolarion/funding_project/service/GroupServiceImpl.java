@@ -102,34 +102,6 @@ public class GroupServiceImpl implements GroupService {
         return groups;
     }
 
-    public List<GroupDto> myLeaderTravelGroups() {
-        Member member = currentMember.getMember();
-        QGroup qGroup = QGroup.group;
-        QGroupStatus qGroupStatus = QGroupStatus.groupStatus;
-        QMember qMember = QMember.member;
-
-        List<GroupDto> groups = query.select(Projections.constructor(GroupDto.class,
-                        qGroup.groupId,
-                        qGroup.groupLeader.memberId,
-                        qMember.nickName.as("groupLeaderName"),
-                        qGroup.groupName,
-                        JPAExpressions.select(qGroupStatus.countDistinct())
-                                .from(qGroupStatus)
-                                .where(qGroupStatus.group.groupId.eq(qGroup.groupId)),
-                        qGroup.groupCategoryCode
-                ))
-                .from(qGroup)
-                .join(qGroupStatus).on(qGroup.groupId.eq(qGroupStatus.group.groupId))
-                .join(qMember).on(qGroup.groupLeader.memberId.eq(qMember.memberId))
-                .where(qGroupStatus.groupMember.memberId.eq(member.getMemberId())
-                        .and(qGroup.groupCategoryCode.eq(902)))
-                .fetch();
-
-        em.flush();
-        em.clear();
-        return groups;
-    }
-
 
     //illigal argument excep
     @Override

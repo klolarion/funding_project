@@ -72,7 +72,6 @@ public class FundingApiControllerV1 {
 
         Funding createdFunding = fundingService.createFunding(
                 createFundingDto.getProductId(),
-                createFundingDto.getTravelId(),
                 createFundingDto.getGroupId(),
                 createFundingDto.getGroupId(),
                 createFundingDto.getFundingCategoryCode());

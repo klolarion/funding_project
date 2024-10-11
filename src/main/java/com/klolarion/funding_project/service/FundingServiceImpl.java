@@ -45,7 +45,6 @@ public class FundingServiceImpl implements FundingService {
         QFunding qFunding = QFunding.funding;
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
-        QTravel qTravel = QTravel.travel;
 
         List<FundingListDto> fundingListDtos = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
@@ -53,8 +52,6 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-                        qFunding.travel.travelId,
-                        qFunding.travel.travelName,
                         // progress를 소수점 첫 번째 자리까지만 표시
                         Expressions.numberTemplate(Double.class,
                                 "ROUND({0}, 1)",
@@ -78,7 +75,6 @@ public class FundingServiceImpl implements FundingService {
                 .from(qFunding)
                 .join(qFunding.member, qMember)   // Member와 조인
                 .leftJoin(qFunding.product, qProduct) // Product와 조인
-                .leftJoin(qFunding.travel, qTravel) // Travel과 조인
                 .fetch();
         em.flush();
         em.clear();
@@ -96,7 +92,6 @@ public class FundingServiceImpl implements FundingService {
         QFunding qFunding = QFunding.funding;
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
-        QTravel qTravel = QTravel.travel;
 
         List<FundingListDto> myFundingListDtos = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
@@ -104,8 +99,6 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-                        qFunding.travel.travelId,
-                        qFunding.travel.travelName,
                         // progress를 소수점 첫 번째 자리까지만 표시
                         Expressions.numberTemplate(Double.class,
                                 "ROUND({0}, 1)",
@@ -130,7 +123,6 @@ public class FundingServiceImpl implements FundingService {
                 .from(qFunding)
                 .join(qFunding.member, qMember)   // Member와 조인
                 .leftJoin(qFunding.product, qProduct) // Product와 조인
-                .leftJoin(qFunding.travel, qTravel) // Travel과 조인
                 .where(
                         qFunding.member.memberId.eq(memberId)  // 현재 로그인한 사용자와 관련된 펀딩만 조회
                 )
@@ -148,7 +140,6 @@ public class FundingServiceImpl implements FundingService {
     public FundingListDto fundingDetail(Long fundingId) {
         QFunding qFunding = QFunding.funding;
         QProduct qProduct = QProduct.product;
-        QTravel qTravel = QTravel.travel;
         QGroup qGroup = QGroup.group;
         FundingListDto fundingListDto = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
@@ -164,8 +155,6 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-                        qFunding.travel.travelId,
-                        qFunding.travel.travelName,
                         // progress를 소수점 첫 번째 자리까지만 표시
                         Expressions.numberTemplate(Double.class,
                                 "ROUND({0}, 1)",
@@ -190,7 +179,6 @@ public class FundingServiceImpl implements FundingService {
                 .distinct()
                 .from(qFunding)
                 .leftJoin(qFunding.product, qProduct) // Product와 조인
-                .leftJoin(qFunding.travel, qTravel) // Travel과 조인
                 .leftJoin(qFunding.group, qGroup) // Group과 조인
                 .where(qFunding.fundingId.eq(fundingId))  // 특정 fundingId에 해당하는 펀딩 조회
                 .fetchOne();
@@ -222,8 +210,6 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-                        qFunding.travel.travelId,
-                        qFunding.travel.travelName,
                         qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
@@ -274,8 +260,6 @@ public class FundingServiceImpl implements FundingService {
                         qMember.nickName,
                         qProduct.productId,
                         qProduct.productName,
-                        qFunding.travel.travelId,
-                        qFunding.travel.travelName,
                         qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
@@ -324,8 +308,6 @@ public class FundingServiceImpl implements FundingService {
                         qMember.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-                        qFunding.travel.travelId,
-                        qFunding.travel.travelName,
                         qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
@@ -373,8 +355,6 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-                        qFunding.travel.travelId,
-                        qFunding.travel.travelName,
                         qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
@@ -424,8 +404,6 @@ public class FundingServiceImpl implements FundingService {
                         qMember.nickName,
                         qProduct.productId,
                         qProduct.productName,
-                        qFunding.travel.travelId,
-                        qFunding.travel.travelName,
                         qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
@@ -454,22 +432,19 @@ public class FundingServiceImpl implements FundingService {
     }
 
     @Override
-    public Funding createFunding(Long memberId, Long productId, Long travelId, Long groupId, int categoryCode) {
+    public Funding createFunding(Long memberId, Long productId, Long groupId, int categoryCode) {
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
         QGroup qGroup = QGroup.group;
         QCodeMaster qCodeMaster = QCodeMaster.codeMaster;
-        QTravel qTravel = QTravel.travel;
         //전달받은 id로 각 객체 조회
         Tuple tuple = query.select(
                         qMember,
                         qProduct,
                         qGroup,
-                        qTravel,
                         qCodeMaster
                 ).from(qMember)
                 .leftJoin(qProduct).on(productId != null ? qProduct.productId.eq(productId) : qProduct.productId.isNull())
-                .leftJoin(qTravel).on(travelId != null ? qTravel.travelId.eq(travelId) : qTravel.travelId.isNull())
                 .join(qCodeMaster).on(qCodeMaster.code.eq(categoryCode))
                 .leftJoin(qGroup).on(groupId != null ? qGroup.groupId.eq(groupId) : Expressions.FALSE.isTrue())
                 .where(qMember.memberId.eq(memberId))
@@ -479,26 +454,7 @@ public class FundingServiceImpl implements FundingService {
         Product product = tuple.get(qProduct);
         Group group = tuple.get(qGroup);
         CodeMaster codeMaster = tuple.get(qCodeMaster);
-        Travel travel = tuple.get(qTravel);
 
-        if (travel != null) {
-            Funding funding = new Funding(
-                    member,
-                    null,
-                    travel,
-                    group,
-                    travel.getPrice(),
-                    randomAccountGenerator.generateRandomAccount(),
-                    codeMaster.getCode()
-            );
-
-
-            //여행과 펀딩은 1:1매핑으로 하나의 여행으로 여러번 펀딩할 수 없음
-            Funding saved = fundingRepository.save(funding);
-            em.flush();
-            em.clear();
-            return saved;
-        }
 
         //상품 재고, 재입고여부, 판매종료여부 확인
         if (product.getStock() > 0 || product.isRestock() || !product.isSaleFinished()) {
@@ -506,7 +462,6 @@ public class FundingServiceImpl implements FundingService {
             Funding funding = new Funding(
                     member,
                     product,
-                    null,
                     group,
                     product.getPrice(),
                     randomAccountGenerator.generateRandomAccount(),
@@ -526,25 +481,22 @@ public class FundingServiceImpl implements FundingService {
     }
 
     @Override
-    public Funding createFundingApi(Long productId, Long travelId, Long groupId) {
+    public Funding createFundingApi(Long productId, Long groupId) {
         //결제수단이 없으면
         Member m = currentMember.getMember();
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
         QGroup qGroup = QGroup.group;
         QCodeMaster qCodeMaster = QCodeMaster.codeMaster;
-        QTravel qTravel = QTravel.travel;
         int fundingCategoryCode = productId != null ? 901 : 902;
         //전달받은 id로 각 객체 조회
         Tuple tuple = query.select(
                         qMember,
                         qProduct,
                         qGroup,
-                        qTravel,
                         qCodeMaster
                 ).from(qMember)
                 .leftJoin(qProduct).on(qProduct.productId.eq(productId))
-                .leftJoin(qTravel).on(qTravel.travelId.eq(travelId))
                 .join(qCodeMaster).on(qCodeMaster.code.eq(fundingCategoryCode))
                 .leftJoin(qGroup).on(groupId != null ? qGroup.groupId.eq(groupId) : Expressions.FALSE.isTrue())
                 .where(qMember.memberId.eq(m.getMemberId()))
@@ -554,24 +506,6 @@ public class FundingServiceImpl implements FundingService {
         Product product = tuple.get(qProduct);
         Group group = tuple.get(qGroup);
         CodeMaster codeMaster = tuple.get(qCodeMaster);
-        Travel travel = tuple.get(qTravel);
-
-        if (travel != null) {
-            Funding funding = new Funding(
-                    member,
-                    null,
-                    travel,
-                    group,
-                    product.getPrice(),
-                    randomAccountGenerator.generateRandomAccount(),
-                    codeMaster.getCode()
-            );
-
-            Funding saved = fundingRepository.save(funding);
-            em.flush();
-            em.clear();
-            return saved;
-        }
 
         //상품 재고, 재입고여부, 판매종료여부 확인
         if (product.getStock() > 0 || product.isRestock() || !product.isSaleFinished()) {
@@ -579,7 +513,6 @@ public class FundingServiceImpl implements FundingService {
             Funding funding = new Funding(
                     member,
                     product,
-                    null,
                     group,
                     product.getPrice(),
                     randomAccountGenerator.generateRandomAccount(),
@@ -726,8 +659,6 @@ public class FundingServiceImpl implements FundingService {
                         qMember.nickName,
                         qProduct.productId,
                         qProduct.productName,
-                        qFunding.travel.travelId,
-                        qFunding.travel.travelName,
                         qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,

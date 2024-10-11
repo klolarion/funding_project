@@ -21,10 +21,6 @@ public class Funding extends BaseTime{
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @OneToOne
-    @JoinColumn(name = "travel_id")
-    private Travel travel;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id")
     private Group group;
@@ -46,11 +42,10 @@ public class Funding extends BaseTime{
     private boolean closed;
     private boolean deleted;
 
-    public Funding(Member member, Product product, Travel travel, Group group, Long totalFundingAmount, String fundingAccount, int fundingCategoryCode) {
+    public Funding(Member member, Product product, Group group, Long totalFundingAmount, String fundingAccount, int fundingCategoryCode) {
         this.member = member;
         this.product = product;
         this.group = group;
-        this.travel = travel;
         this.totalFundingAmount = totalFundingAmount;
         this.currentFundingAmount = 0L;
         this.fundingAccount = fundingAccount;

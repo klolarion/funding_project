@@ -17,10 +17,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -38,6 +41,18 @@ public class SpringSecurityConfig {
     private final CustomSuccessHandler customSuccessHandler;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
     private final JwtFilter jwtFilter;
+
+    private static final String[] PUBLIC_API_URL = {
+            "/api/f1/**",
+            "/oauth/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
+
+    private static final String[] ADMIN_API_URL = {
+            "/admin/**"
+    };
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -49,14 +64,10 @@ public class SpringSecurityConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         //경로 관리
         http.authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll()
-//                        .requestMatchers(
-//                                "/api/f1/**",
-//                                "/oauth/**",
-//                                "/v3/api-docs/**",
-//                                "/swagger-ui/**").permitAll() // 특정 경로는 모든 사용자에게 허용
-//                                // .requestMatchers("/admin/**").hasRole("ADMIN")
-//                        .anyRequest().authenticated() // 나머지 요청은 인증 필요
+//                        .anyRequest().permitAll()
+                        .requestMatchers(PUBLIC_API_URL).permitAll()
+                        .requestMatchers(ADMIN_API_URL).hasRole("ADMIN")
+                        .anyRequest().authenticated()
         );
 
         //From 로그인 disable
@@ -80,6 +91,7 @@ public class SpringSecurityConfig {
                         .logoutSuccessHandler(customLogoutSuccessHandler)  // 커스텀 로그아웃 성공 핸들러 적용
                         .invalidateHttpSession(true)  // 세션 무효화
                         .clearAuthentication(true)
+
                         .deleteCookies("JSESSIONID", "access_token", "refresh_token")
                 );
 
@@ -93,11 +105,12 @@ public class SpringSecurityConfig {
         http.exceptionHandling(exceptionHandling ->
                         exceptionHandling
                                 .authenticationEntryPoint((request, response, authException) -> {
-                                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); //401
                                     response.setCharacterEncoding("utf-8");
                                     response.setContentType("text/html; charset=UTF-8");
                                     response.getWriter().write("인증되지 않은 사용자입니다.");
                                 }));
+
 //                                .accessDeniedHandler((request, response, accessDeniedException) -> { //404도 같이 처리
 //                                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 //                                    response.setCharacterEncoding("utf-8");

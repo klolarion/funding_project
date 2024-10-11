@@ -128,12 +128,9 @@ INSERT INTO group_status (accepted, banned, exited, invited, requested, group_id
 INSERT INTO group_status (accepted, banned, exited, invited, requested, group_id, group_leader_id, group_member_id, group_status_id) VALUES (true, false, false, false, false, 3, 1, 1, 3);
 
 
-INSERT INTO funding (closed, completed, deleted, current_funding_amount, funding_id, travel_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date, funding_category_code) VALUES (false, false, false, 1000, 1, null, 1, 1, 3, 4200, '24. 8. 16. 오후 5:11', '620-65697-37', '24. 8. 16. 오후 5:11', 901);
-INSERT INTO funding (closed, completed, deleted, current_funding_amount, funding_id, travel_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date, funding_category_code) VALUES (false, false, false, 500, 2, null, null, 1, 5, 15000, '24. 8. 16. 오후 5:14', '540-75235-09', '24. 8. 16. 오후 5:14', 901);
-INSERT INTO funding (closed, completed, deleted, current_funding_amount, funding_id, travel_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date, funding_category_code) VALUES (false, false, false, 0, 3, null, 2, 1, 2, 8000, '24. 8. 16. 오후 5:14', '946-49182-93', '24. 8. 16. 오후 5:14', 901);
-
-
-INSERT INTO travel (travel_name, end_date, group_id, member_id, price, start_date, travel_id, description, city) VALUES ('부산호캉스', '2024-10-24 21:11:29.000000', 3, 1, 1500000, '2024-10-20 12:00:00.000000', 1, '부산호캉스 돼지국밥냠냠', '부산');
+INSERT INTO funding (closed, completed, deleted, current_funding_amount, funding_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date, funding_category_code) VALUES (false, false, false, 1000, 1, 1, 1, 3, 4200, '24. 8. 16. 오후 5:11', '620-65697-37', '24. 8. 16. 오후 5:11', 901);
+INSERT INTO funding (closed, completed, deleted, current_funding_amount, funding_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date, funding_category_code) VALUES (false, false, false, 500, 2, null, 1, 5, 15000, '24. 8. 16. 오후 5:14', '540-75235-09', '24. 8. 16. 오후 5:14', 901);
+INSERT INTO funding (closed, completed, deleted, current_funding_amount, funding_id, group_id, member_id, product_id, total_funding_amount, created_date, funding_account, last_modified_date, funding_category_code) VALUES (false, false, false, 0, 3, 2, 1, 2, 8000, '24. 8. 16. 오후 5:14', '946-49182-93', '24. 8. 16. 오후 5:14', 901);
 
 -- INSERT INTO friend_status (accepted, denied, accepter_id, friend_status_id, requester_id, created_date, last_modified_date) VALUES (true, false, 9, 1, 1, null, null);
 -- INSERT INTO friend_status (accepted, denied, accepter_id, friend_status_id, requester_id, created_date, last_modified_date) VALUES (false, false, 9, 2, 2, null, null);
