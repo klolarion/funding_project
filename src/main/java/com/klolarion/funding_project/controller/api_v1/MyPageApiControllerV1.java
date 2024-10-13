@@ -2,7 +2,7 @@ package com.klolarion.funding_project.controller.api_v1;
 
 import com.klolarion.funding_project.converter.DTOConverter;
 import com.klolarion.funding_project.domain.entity.Member;
-import com.klolarion.funding_project.dto.PaymentMethodListDto;
+import com.klolarion.funding_project.dto.payment.PaymentMethodListDto;
 import com.klolarion.funding_project.dto.member.MyPageDto;
 import com.klolarion.funding_project.service.FundingServiceImpl;
 import com.klolarion.funding_project.service.MemberServiceImpl;

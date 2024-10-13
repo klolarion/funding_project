@@ -116,7 +116,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public List<PaymentMethodList> myPaymentLists(Long memberId) {
+    public List<PaymentMethodList> myPaymentMethodLists(Long memberId) {
         QPaymentMethodList qPaymentMethodList = QPaymentMethodList.paymentMethodList;
         List<PaymentMethodList> paymentMethodList = query.selectFrom(qPaymentMethodList)
                 .where(qPaymentMethodList.member.memberId.eq(memberId)
@@ -128,7 +128,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // 결제수단 관련 수정시 캐시 데이터도 수정해야함
-
     @Override
     public PaymentMethodList addPaymentMethod(Long paymentMethodId) {
         QPaymentMethod qPaymentMethod = QPaymentMethod.paymentMethod;

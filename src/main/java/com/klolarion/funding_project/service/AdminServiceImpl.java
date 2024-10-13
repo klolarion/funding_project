@@ -1,7 +1,7 @@
 //package com.klolarion.funding_project.service;
 //
 //import com.klolarion.funding_project.domain.entity.*;
-//import com.klolarion.funding_project.dto.PaymentMethodDto;
+//import com.klolarion.funding_project.dto.payment.PaymentMethodDto;
 //import com.klolarion.funding_project.repository.CodeRepository;
 //import com.klolarion.funding_project.repository.PaymentMethodRepository;
 //import com.klolarion.funding_project.repository.PaymentRepository;

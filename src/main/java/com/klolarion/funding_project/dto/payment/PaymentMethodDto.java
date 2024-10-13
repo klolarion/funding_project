@@ -1,4 +1,4 @@
-package com.klolarion.funding_project.dto;
+package com.klolarion.funding_project.dto.payment;
 
 import com.klolarion.funding_project.domain.entity.PaymentMethod;
 import lombok.AllArgsConstructor;

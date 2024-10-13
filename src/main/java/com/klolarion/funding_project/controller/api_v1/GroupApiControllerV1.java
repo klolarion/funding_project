@@ -4,10 +4,7 @@ import com.klolarion.funding_project.domain.entity.Group;
 import com.klolarion.funding_project.domain.entity.GroupStatus;
 import com.klolarion.funding_project.domain.entity.Member;
 import com.klolarion.funding_project.dto.funding.FundingListDto;
-import com.klolarion.funding_project.dto.group.CreateGroupDto;
-import com.klolarion.funding_project.dto.group.GroupDetailDto;
-import com.klolarion.funding_project.dto.group.GroupDto;
-import com.klolarion.funding_project.dto.group.GroupInfoDto;
+import com.klolarion.funding_project.dto.group.*;
 import com.klolarion.funding_project.service.FundingServiceImpl;
 import com.klolarion.funding_project.service.GroupServiceImpl;
 import com.klolarion.funding_project.service.MemberServiceImpl;
@@ -55,14 +52,15 @@ public class GroupApiControllerV1 {
     @GetMapping
     public ResponseEntity<?> group() {
 
-        List<GroupDto> groupDtoList = groupServiceImpl.myLeaderGroups();
-        if (groupDtoList != null) {
-            log.debug("그룹 관리 페이지 호출 성공");
-            return ResponseEntity.status(HttpStatus.OK).body(groupDtoList);
-        } else {
-            log.debug("그룹 관리 페이지 호출 실패");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("그룹 관리 페이지 호출 실패");
-        }
+        List<GroupDto> createdGroups = groupServiceImpl.myLeaderGroups();
+        List<GroupDto> assignedGroups = groupServiceImpl.myGroups();
+
+        GroupPageDto groupPageDto = new GroupPageDto(
+                createdGroups,
+                assignedGroups
+        );
+
+        return ResponseEntity.status(HttpStatus.OK).body(groupPageDto);
 
     }
 

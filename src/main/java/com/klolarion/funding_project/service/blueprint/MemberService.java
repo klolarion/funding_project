@@ -21,7 +21,7 @@ public interface MemberService {
     Member myInfo();
 
     /*내 결제수단 목록*/
-    List<PaymentMethodList> myPaymentLists(Long memberId);
+    List<PaymentMethodList> myPaymentMethodLists(Long memberId);
 
     /*결제수단 추가*/
     PaymentMethodList addPaymentMethod(Long paymentMethodId);

@@ -1,7 +1,7 @@
 package com.klolarion.funding_project.dto.member;
 
-import com.klolarion.funding_project.dto.PaymentMethodDto;
-import com.klolarion.funding_project.dto.PaymentMethodListDto;
+import com.klolarion.funding_project.dto.payment.PaymentMethodDto;
+import com.klolarion.funding_project.dto.payment.PaymentMethodListDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

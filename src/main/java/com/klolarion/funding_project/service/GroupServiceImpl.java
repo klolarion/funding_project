@@ -104,6 +104,7 @@ public class GroupServiceImpl implements GroupService {
 
 
     //illigal argument excep
+    /*내가 속한 그룹*/
     @Override
     public List<GroupDto> myGroups() {
         Member member = currentMember.getMember();
@@ -132,6 +133,7 @@ public class GroupServiceImpl implements GroupService {
         return groups;
     }
 
+    /*내가 속하지 않은 모든 그룹*/
     @Override
     public List<GroupDto> allGroupExceptMy(){
         Member member = currentMember.getMember();

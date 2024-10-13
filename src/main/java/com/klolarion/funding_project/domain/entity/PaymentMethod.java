@@ -2,7 +2,6 @@ package com.klolarion.funding_project.domain.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class PaymentMethod extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

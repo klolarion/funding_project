@@ -3,8 +3,8 @@ package com.klolarion.funding_project.controller.api_v1;
 import com.klolarion.funding_project.converter.DTOConverter;
 import com.klolarion.funding_project.domain.entity.Member;
 import com.klolarion.funding_project.domain.entity.PaymentMethodList;
-import com.klolarion.funding_project.dto.PaymentMethodDto;
-import com.klolarion.funding_project.dto.PaymentMethodListDto;
+import com.klolarion.funding_project.dto.payment.PaymentMethodDto;
+import com.klolarion.funding_project.dto.payment.PaymentMethodListDto;
 import com.klolarion.funding_project.dto.member.MyPaymentMethodDto;
 import com.klolarion.funding_project.service.MemberServiceImpl;
 import com.klolarion.funding_project.service.PaymentServiceImpl;
@@ -52,7 +52,7 @@ public class PaymentMethodApiControllerV1 {
 
         //한방쿼리로 수정 가능한지 검토
         MyPaymentMethodDto paymentMethodDto = new MyPaymentMethodDto(
-                DTOConverter.toDtoList(memberService.myPaymentLists(member.getMemberId()), paymentMethodLists -> new PaymentMethodListDto(
+                DTOConverter.toDtoList(memberService.myPaymentMethodLists(member.getMemberId()), paymentMethodLists -> new PaymentMethodListDto(
                         paymentMethodLists.getPaymentMethodListId(),
                         paymentMethodLists.getPaymentMethod().getPaymentMethodId(),
                         paymentMethodLists.getPaymentMethod().getPaymentName(),

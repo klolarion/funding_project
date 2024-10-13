@@ -11,7 +11,7 @@ import lombok.*;
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Payment extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
