@@ -17,13 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -64,10 +61,10 @@ public class SpringSecurityConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         //경로 관리
         http.authorizeHttpRequests(authorize -> authorize
-//                        .anyRequest().permitAll()
-                        .requestMatchers(PUBLIC_API_URL).permitAll()
-                        .requestMatchers(ADMIN_API_URL).hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
+//                        .requestMatchers(PUBLIC_API_URL).permitAll()
+//                        .requestMatchers(ADMIN_API_URL).hasRole("ADMIN")
+//                        .anyRequest().authenticated()
         );
 
         //From 로그인 disable

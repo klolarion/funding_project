@@ -45,10 +45,13 @@ public class FundingServiceImpl implements FundingService {
         QFunding qFunding = QFunding.funding;
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
+        QGroup qGroup = QGroup.group;
 
         List<FundingListDto> fundingListDtos = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
                         qFunding.member.memberId,
+                        qFunding.group.groupId,
+                        qFunding.group.groupName,
                         qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
@@ -74,7 +77,11 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.fundingCategoryCode))
                 .from(qFunding)
                 .join(qFunding.member, qMember)   // Member와 조인
+                .leftJoin(qFunding.group, qGroup)
                 .leftJoin(qFunding.product, qProduct) // Product와 조인
+                .where(qFunding.completed.isFalse()
+                        .and(qFunding.closed.isFalse())
+                        .and(qFunding.deleted.isFalse()))
                 .fetch();
         em.flush();
         em.clear();
@@ -92,10 +99,13 @@ public class FundingServiceImpl implements FundingService {
         QFunding qFunding = QFunding.funding;
         QMember qMember = QMember.member;
         QProduct qProduct = QProduct.product;
+        QGroup qGroup = QGroup.group;
 
         List<FundingListDto> myFundingListDtos = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
                         qFunding.member.memberId,
+                        qFunding.group.groupId,
+                        qFunding.group.groupName,
                         qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
@@ -122,6 +132,7 @@ public class FundingServiceImpl implements FundingService {
                 ))
                 .from(qFunding)
                 .join(qFunding.member, qMember)   // Member와 조인
+                .leftJoin(qFunding.group, qGroup)
                 .leftJoin(qFunding.product, qProduct) // Product와 조인
                 .where(
                         qFunding.member.memberId.eq(memberId)  // 현재 로그인한 사용자와 관련된 펀딩만 조회
@@ -141,17 +152,13 @@ public class FundingServiceImpl implements FundingService {
         QFunding qFunding = QFunding.funding;
         QProduct qProduct = QProduct.product;
         QGroup qGroup = QGroup.group;
+
+
         FundingListDto fundingListDto = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
                         qFunding.member.memberId,
                         qFunding.group.groupId,
                         qFunding.group.groupName,
-//                        new CaseBuilder()
-//                        .when(qFunding.group.groupId.isNull()).then(Expressions.constant(0L))  // 그룹 ID가 null인 경우 null로 처리
-//                        .otherwise(qFunding.group.groupId),  // 그룹 ID가 null이 아닌 경우
-//                    new CaseBuilder()
-//                        .when(qFunding.group.groupName.isNull()).then(Expressions.constant(""))  // 그룹 이름이 null인 경우 빈 문자열로 처리
-//                        .otherwise(qFunding.group.groupName),
                         qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
@@ -210,7 +217,13 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
+                        Expressions.numberTemplate(Double.class,
+                                "ROUND({0}, 1)",
+                                qFunding.currentFundingAmount.doubleValue()
+                                        .divide(qFunding.totalFundingAmount.doubleValue())
+                                        .multiply(100)
+                                        .coalesce(0.0)
+                        ).as("progress"),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
                         qFunding.fundingAccount,
@@ -260,7 +273,13 @@ public class FundingServiceImpl implements FundingService {
                         qMember.nickName,
                         qProduct.productId,
                         qProduct.productName,
-                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
+                        Expressions.numberTemplate(Double.class,
+                                "ROUND({0}, 1)",
+                                qFunding.currentFundingAmount.doubleValue()
+                                        .divide(qFunding.totalFundingAmount.doubleValue())
+                                        .multiply(100)
+                                        .coalesce(0.0)
+                        ).as("progress"),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
                         qFunding.fundingAccount,
@@ -308,7 +327,13 @@ public class FundingServiceImpl implements FundingService {
                         qMember.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
+                        Expressions.numberTemplate(Double.class,
+                                "ROUND({0}, 1)",
+                                qFunding.currentFundingAmount.doubleValue()
+                                        .divide(qFunding.totalFundingAmount.doubleValue())
+                                        .multiply(100)
+                                        .coalesce(0.0)
+                        ).as("progress"),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
                         qFunding.fundingAccount,
@@ -355,7 +380,13 @@ public class FundingServiceImpl implements FundingService {
                         qFunding.member.nickName,
                         qFunding.product.productId,
                         qFunding.product.productName,
-                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0).as("progress"),
+                        Expressions.numberTemplate(Double.class,
+                                "ROUND({0}, 1)",
+                                qFunding.currentFundingAmount.doubleValue()
+                                        .divide(qFunding.totalFundingAmount.doubleValue())
+                                        .multiply(100)
+                                        .coalesce(0.0)
+                        ).as("progress"),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
                         qFunding.fundingAccount,
@@ -404,7 +435,13 @@ public class FundingServiceImpl implements FundingService {
                         qMember.nickName,
                         qProduct.productId,
                         qProduct.productName,
-                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
+                        Expressions.numberTemplate(Double.class,
+                                "ROUND({0}, 1)",
+                                qFunding.currentFundingAmount.doubleValue()
+                                        .divide(qFunding.totalFundingAmount.doubleValue())
+                                        .multiply(100)
+                                        .coalesce(0.0)
+                        ).as("progress"),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
                         qFunding.fundingAccount,
@@ -585,12 +622,17 @@ public class FundingServiceImpl implements FundingService {
             throw new InsufficientFundsException("잔액이 부족하거나 펀딩 가능한 금액이 부족합니다.");
         }
 
+        //수정될 펀딩금액이 완료금액과 일치하는지 확인
+        boolean isFinished = funding.getCurrentFundingAmount() + amount == funding.getTotalFundingAmount();
         try {
+            //펀딩 금액 수정
             long executeF = query.update(qFunding)
                     .set(qFunding.currentFundingAmount, funding.getCurrentFundingAmount() + amount)
+                    .set(qFunding.completed, isFinished)
                     .where(qFunding.fundingId.eq(fundingId))
                     .execute();
 
+            //계좌 금액 수정
             long executeP = query.update(qPaymentMethod)
                     .set(qPaymentMethod.availableAmount, paymentMethod.getAvailableAmount() - amount)
                     .where(qPaymentMethod.paymentMethodId.eq(paymentMethod.getPaymentMethodId()))
@@ -600,6 +642,7 @@ public class FundingServiceImpl implements FundingService {
                 throw new Exception("펀딩 금액 또는 결제 가능 금액 업데이트에 실패했습니다."); // 500
             }
 
+            //결제 목록 생성
             Payment payment = new Payment(
                     member,
                     paymentMethod,
@@ -611,6 +654,7 @@ public class FundingServiceImpl implements FundingService {
                     true
             );
 
+            //결제 목록 저장
             Payment saved = paymentRepository.save(payment);
             if (saved == null) {
                 payment.setCompletedFalse();
@@ -647,9 +691,14 @@ public class FundingServiceImpl implements FundingService {
         if (searchParam != null && !searchParam.trim().isEmpty()) {
             builder.and(
                     qGroup.groupName.containsIgnoreCase(searchParam)
-                            .or(qProduct.productName.containsIgnoreCase(searchParam))
+                            .or(qProduct.productName.containsIgnoreCase(searchParam)
+                                    .or(qMember.nickName.containsIgnoreCase(searchParam)))
             );
         }
+
+        //진행중인 펀딩만 검색
+        builder.and(qFunding.completed.isFalse());
+
 
         List<FundingListDto> searchedFundingList = query.select(Projections.constructor(FundingListDto.class,
                         qFunding.fundingId,
@@ -659,13 +708,24 @@ public class FundingServiceImpl implements FundingService {
                         qMember.nickName,
                         qProduct.productId,
                         qProduct.productName,
-                        qFunding.currentFundingAmount.doubleValue().divide(qFunding.totalFundingAmount.doubleValue()).multiply(100).coalesce(0.0),
+                        Expressions.numberTemplate(Double.class,
+                                "ROUND({0}, 1)",
+                                qFunding.currentFundingAmount.doubleValue()
+                                        .divide(qFunding.totalFundingAmount.doubleValue())
+                                        .multiply(100)
+                                        .coalesce(0.0)
+                        ).as("progress"),
                         qFunding.totalFundingAmount,
                         qFunding.currentFundingAmount,
                         qFunding.fundingAccount,
-                        qFunding.completed,
-                        qFunding.closed,
-                        qFunding.deleted,
+                        new CaseBuilder()
+                                .when(qFunding.deleted.isTrue())
+                                .then("삭제")
+                                .when(qFunding.completed.isTrue())
+                                .then("완료")
+                                .when(qFunding.closed.isTrue())
+                                .then("중단")
+                                .otherwise("펀딩중").as("status"),
                         qFunding.fundingCategoryCode
                 ))
                 .from(qFunding)

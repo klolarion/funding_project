@@ -11,11 +11,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -41,11 +40,11 @@ public class MemberServiceImpl implements MemberService {
                         qMember.email,
                         qMember.nickName,
                         qMember.provider,
-                        qMemberStatus.memberStatusId,
                         qMemberStatus.memberStatusCode,
                         qMemberStatus.statusExpires
 
                 )).from(qMember)
+                .where(qMember.memberId.eq(memberId))
                 .leftJoin(qMemberStatus).on(qMemberStatus.member.memberId.eq(memberId))
                 .fetchOne();
 
@@ -59,20 +58,19 @@ public class MemberServiceImpl implements MemberService {
 
 
         return query.select(Projections.constructor(MyActivityDto.class,
-                qFunding.count(),
+                qFunding.countDistinct(),
                 qPayment.amount.sum(),
-                qGroup.count(),
-                qGroupStatus.count()
+                qGroup.countDistinct(),
+                qGroupStatus.countDistinct()
                 ))
                 .from(qFunding)
-                .join(qGroup).on(qGroup.groupLeader.memberId.eq(memberId))
-                .join(qGroupStatus).on(qGroupStatus.groupMember.memberId.eq(memberId))
-                .join(qPayment).on(qPayment.member.memberId.eq(memberId))
-                .where(qGroupStatus.accepted.isTrue()
-                        .and(qGroupStatus.banned).isFalse()
-                        .and(qGroupStatus.exited.isFalse())
-                        .and(qGroup.groupActive.isTrue())
-                        .and(qPayment.completed.isTrue()))
+                .join(qGroup).on(qGroup.groupLeader.memberId.eq(memberId).and(qGroup.groupActive.isTrue()))
+                .join(qGroupStatus).on(qGroupStatus.groupMember.memberId.eq(memberId)
+                        .and(qGroupStatus.accepted.isTrue()
+                        .and(qGroupStatus.banned.isFalse())
+                        .and(qGroupStatus.exited.isFalse())))
+                .join(qPayment).on(qPayment.member.memberId.eq(memberId).and(qPayment.completed.isTrue()))
+                .where(qFunding.member.memberId.eq(memberId))
                 .fetchOne();
     }
 
@@ -122,7 +120,8 @@ public class MemberServiceImpl implements MemberService {
         QPaymentMethodList qPaymentMethodList = QPaymentMethodList.paymentMethodList;
         List<PaymentMethodList> paymentMethodList = query.selectFrom(qPaymentMethodList)
                 .where(qPaymentMethodList.member.memberId.eq(memberId)
-                        .and(qPaymentMethodList.offCd.isFalse())).fetch();
+                        .and(qPaymentMethodList.offCd.isFalse())
+                        .and(qPaymentMethodList.mainPayment.isFalse())).fetch();
         em.flush();
         em.clear();
         return paymentMethodList;
@@ -141,34 +140,49 @@ public class MemberServiceImpl implements MemberService {
 
 
         //이미 등록된 결제수단인지 확인
-        //null이면 등록
         PaymentMethodList fetched = query.selectFrom(qPaymentMethodList).where(
                 qPaymentMethodList.member.memberId.eq(member.getMemberId())
                         .and(qPaymentMethodList.paymentMethod.paymentMethodId.eq(paymentMethodId))
         ).fetchFirst();
 
+
+        //조회된 데이터의 off_cd를 확인 후 false로 변경
         if(fetched != null){
+            long executed = query.update(qPaymentMethodList)
+                    .set(qPaymentMethodList.offCd, false)
+                    .where(qPaymentMethodList.paymentMethodListId.eq(fetched.getPaymentMethodListId())
+                            .and(qPaymentMethodList.member.memberId.eq(member.getMemberId())))
+                    .execute();
             return null;
+        }else{
+            //데이터가 없으면 새로 생성
+            return paymentMethodListRepository.save(paymentMethodList);
         }
-        return paymentMethodListRepository.save(paymentMethodList);
     }
 
     @Override
     public boolean makeMainPayment(Long paymentMethodListId) {
         Long memberId = currentMember.getMember().getMemberId();
         QPaymentMethodList qPaymentMethodList = QPaymentMethodList.paymentMethodList;
-        long result = query.update(qPaymentMethodList)
-                .set(qPaymentMethodList.mainPayment,
-                        new CaseBuilder()
-                                .when(qPaymentMethodList.paymentMethodListId.eq(paymentMethodListId)
-                                        .and(qPaymentMethodList.member.memberId.eq(memberId))).then(true)
-                                .otherwise(false)
-                )
-                .where(qPaymentMethodList.member.memberId.eq(memberId))
-                .execute();
-        em.flush();
-        em.clear();
-        return result == 1L;
+
+        try {
+            query.update(qPaymentMethodList)
+                    .set(qPaymentMethodList.mainPayment,
+                            new CaseBuilder()
+                                    .when(qPaymentMethodList.paymentMethodListId.eq(paymentMethodListId)
+                                            .and(qPaymentMethodList.member.memberId.eq(memberId))).then(true)
+                                    .otherwise(false)
+                    )
+                    .where(qPaymentMethodList.member.memberId.eq(memberId))
+                    .execute();
+
+            em.flush();
+            em.clear();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

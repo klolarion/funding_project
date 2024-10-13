@@ -1,14 +1,10 @@
 package com.klolarion.funding_project.dto.member;
 
-import com.klolarion.funding_project.domain.entity.PaymentMethodList;
-import com.klolarion.funding_project.domain.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Data
@@ -30,7 +26,17 @@ public class MemberDto {
 
 
     //사용자 등록
-    private Long memberStatusId;
+    private String memberStatus;
     private int memberStatusCode;
     private LocalDateTime statusExpires;
+
+    public MemberDto(Long memberId, String role, String email, String nickName, String provider, int memberStatusCode, LocalDateTime statusExpires) {
+        this.memberId = memberId;
+        this.role = role;
+        this.email = email;
+        this.nickName = nickName;
+        this.provider = provider;
+        this.memberStatus = memberStatusCode == 1202? "핑크" : memberStatusCode == 1203 ? "실버" : "일반";
+        this.statusExpires = statusExpires;
+    }
 }

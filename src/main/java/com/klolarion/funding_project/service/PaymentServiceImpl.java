@@ -1,8 +1,6 @@
 package com.klolarion.funding_project.service;
 
-import com.klolarion.funding_project.domain.entity.Member;
-import com.klolarion.funding_project.domain.entity.Payment;
-import com.klolarion.funding_project.domain.entity.QPayment;
+import com.klolarion.funding_project.domain.entity.*;
 import com.klolarion.funding_project.service.blueprint.PaymentService;
 import com.klolarion.funding_project.util.CurrentMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -30,5 +28,12 @@ public class PaymentServiceImpl implements PaymentService {
 
         return query.selectFrom(qPayment).where(qPayment.member.memberId.eq(member.getMemberId())).fetch();
 
+    }
+
+    @Override
+    public List<PaymentMethod> paymentMethodList() {
+        QPaymentMethod qPaymentMethod = QPaymentMethod.paymentMethod;
+        List<PaymentMethod> fetched = query.selectFrom(qPaymentMethod).fetch();
+        return fetched;
     }
 }

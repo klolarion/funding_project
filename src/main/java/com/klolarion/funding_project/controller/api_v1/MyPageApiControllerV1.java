@@ -1,6 +1,8 @@
 package com.klolarion.funding_project.controller.api_v1;
 
+import com.klolarion.funding_project.converter.DTOConverter;
 import com.klolarion.funding_project.domain.entity.Member;
+import com.klolarion.funding_project.dto.PaymentMethodListDto;
 import com.klolarion.funding_project.dto.member.MyPageDto;
 import com.klolarion.funding_project.service.FundingServiceImpl;
 import com.klolarion.funding_project.service.MemberServiceImpl;
@@ -42,10 +44,12 @@ public class MyPageApiControllerV1 {
     public ResponseEntity<?> myPage() {
 
         //조회가 5개!!
+        //각 서비스결과를 단기간 캐싱해두고 수정시 캐시도 수정하는 방식으로 변경 필요
         Member member = currentMember.getMember();
+
         MyPageDto myPageDto = new MyPageDto(
                 fundingServiceImpl.myFundingList(member.getMemberId()),
-                memberServiceImpl.getMainPaymentMethod(member.getMemberId()),
+                DTOConverter.toDto(memberServiceImpl.getMainPaymentMethod(member.getMemberId()), PaymentMethodListDto::fromDomainToPaymentMethodListDto),
                 memberServiceImpl.getMemberPageData(member.getMemberId()),
                 memberServiceImpl.getMyActivity(member.getMemberId())
         );

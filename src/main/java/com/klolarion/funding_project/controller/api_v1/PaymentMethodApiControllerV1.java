@@ -1,10 +1,13 @@
 package com.klolarion.funding_project.controller.api_v1;
 
+import com.klolarion.funding_project.converter.DTOConverter;
 import com.klolarion.funding_project.domain.entity.Member;
 import com.klolarion.funding_project.domain.entity.PaymentMethodList;
-import com.klolarion.funding_project.dto.member.PaymentMethodDto;
-import com.klolarion.funding_project.service.AdminServiceImpl;
+import com.klolarion.funding_project.dto.PaymentMethodDto;
+import com.klolarion.funding_project.dto.PaymentMethodListDto;
+import com.klolarion.funding_project.dto.member.MyPaymentMethodDto;
 import com.klolarion.funding_project.service.MemberServiceImpl;
+import com.klolarion.funding_project.service.PaymentServiceImpl;
 import com.klolarion.funding_project.util.CurrentMember;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,8 +27,8 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class PaymentMethodApiControllerV1 {
     private final MemberServiceImpl memberService;
-    private final AdminServiceImpl adminService;
     private final CurrentMember currentMember;
+    private final PaymentServiceImpl paymentService;
 
     @Operation(summary = "결제수단 페이지",
             tags = {"결제수단 API - V1"},
@@ -46,20 +49,30 @@ public class PaymentMethodApiControllerV1 {
     public ResponseEntity<?> paymentMethod() {
 
         Member member = currentMember.getMember();
+
         //한방쿼리로 수정 가능한지 검토
-        PaymentMethodDto paymentMethodDto = new PaymentMethodDto(
-                memberService.myPaymentLists(member.getMemberId()),
-                adminService.paymentMethodList(),
-                memberService.getMainPaymentMethod(member.getMemberId())
+        MyPaymentMethodDto paymentMethodDto = new MyPaymentMethodDto(
+                DTOConverter.toDtoList(memberService.myPaymentLists(member.getMemberId()), paymentMethodLists -> new PaymentMethodListDto(
+                        paymentMethodLists.getPaymentMethodListId(),
+                        paymentMethodLists.getPaymentMethod().getPaymentMethodId(),
+                        paymentMethodLists.getPaymentMethod().getPaymentName(),
+                        paymentMethodLists.getPaymentMethod().getAccountNumber(),
+                        paymentMethodLists.getMember().getMemberId(),
+                        paymentMethodLists.isMainPayment(),
+                        paymentMethodLists.getPaymentMethod().getAvailableAmount()
+                )),
+                DTOConverter.toDtoList(paymentService.paymentMethodList(), paymentMethods -> new PaymentMethodDto(
+                        paymentMethods.getPaymentCode(),
+                        paymentMethods.getPaymentMethodId(),
+                        paymentMethods.getPaymentName(),
+                        paymentMethods.getAccountNumber(),
+                        paymentMethods.getAvailableAmount()
+                )),
+                DTOConverter.toDto(memberService.getMainPaymentMethod(member.getMemberId()), PaymentMethodListDto::fromDomainToPaymentMethodListDto)
         );
 
-        if (paymentMethodDto != null) {
-            log.debug("결제수단 페이지 호출 성공");
-            return ResponseEntity.status(HttpStatus.OK).body(paymentMethodDto);
-        } else {
-            log.debug("결제수단 페이지 호출 실패");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제수단 페이지 호출 실패");
-        }
+        log.debug("결제수단 페이지 호출 성공");
+        return ResponseEntity.status(HttpStatus.OK).body(paymentMethodDto);
 
     }
 
@@ -82,16 +95,10 @@ public class PaymentMethodApiControllerV1 {
                                     mediaType = "application/json")),
             })
     @PostMapping("/{paymentMethodId}")
-    public ResponseEntity<?> addMyPaymentMethod(@PathVariable Long paymentMethodId) {
+    public ResponseEntity<?> addMyPaymentMethod(@PathVariable("paymentMethodId") Long paymentMethodId) {
 
         PaymentMethodList paymentMethodList = memberService.addPaymentMethod(paymentMethodId);
-        if (paymentMethodList != null) {
-            log.debug("결제수단 추가 성공");
-            return ResponseEntity.status(HttpStatus.OK).body("결제수단 추가 성공");
-        } else {
-            log.debug("결제수단 추가 실패");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제수단 추가 실패");
-        }
+        return ResponseEntity.status(HttpStatus.OK).body("결제수단 추가 성공");
 
     }
 
@@ -115,7 +122,7 @@ public class PaymentMethodApiControllerV1 {
                                     mediaType = "application/json")),
             })
     @PutMapping("/{myPaymentMethodId}")
-    public ResponseEntity<?> addMainPaymentMethod(@PathVariable Long myPaymentMethodId) {
+    public ResponseEntity<?> addMainPaymentMethod(@PathVariable("myPaymentMethodId") Long myPaymentMethodId) {
 
         boolean result = memberService.makeMainPayment(myPaymentMethodId);
         if (result) {
@@ -147,7 +154,7 @@ public class PaymentMethodApiControllerV1 {
                                     mediaType = "application/json")),
             })
     @DeleteMapping("/{myPaymentMethodId}")
-    public ResponseEntity<?> deletePaymentMethod(@PathVariable Long myPaymentMethodId) {
+    public ResponseEntity<?> deletePaymentMethod(@PathVariable("myPaymentMethodId") Long myPaymentMethodId) {
 
         boolean result = memberService.removePayment(myPaymentMethodId);
         if (result) {

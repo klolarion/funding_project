@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MyActivityDto {
-    private int myFundingCount;
+    private Long myFundingCount;
     private Long fundingAmount;
-    private int createdGroupCount;
-    private int joinedGroupCount;
+    private Long createdGroupCount;
+    private Long joinedGroupCount;
 }

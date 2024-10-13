@@ -12,6 +12,4 @@ public class JoinFundingDto {
     private Long fundingId;
     private Long amount;
     private Long memberId;
-    private Long groupId;
-    private Long paymentMethodListId;
 }

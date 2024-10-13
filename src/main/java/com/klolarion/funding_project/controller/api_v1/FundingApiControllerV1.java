@@ -100,7 +100,7 @@ public class FundingApiControllerV1 {
                             content = @Content(mediaType = "application/json")),
             })
     @GetMapping("/{fundingId}/detail")
-    public ResponseEntity<?> detail(@PathVariable Long fundingId) {
+    public ResponseEntity<?> detail(@PathVariable("fundingId") Long fundingId) {
         FundingListDto fundingListDto = fundingService.fundingDetail(fundingId);
         return ResponseEntity.status(HttpStatus.OK).body(fundingListDto);
     }
@@ -130,8 +130,8 @@ public class FundingApiControllerV1 {
             tags = {"펀딩 API - V1"},
             description = "펀딩 주최자, 그룹의 이름 그리고 카데고리 코드로 펀딩 검색",
             parameters = {
-                    @Parameter(name = "searchParam", description = "조회할 펀딩의 검색어", required = true, in = ParameterIn.PATH),
-                    @Parameter(name = "fundingCategoryCode", description = "조회할 펀딩의 카데고리 코드", required = true, in = ParameterIn.PATH)
+                    @Parameter(name = "searchParam", description = "조회할 펀딩의 검색어", required = false, in = ParameterIn.PATH),
+                    @Parameter(name = "fundingCategoryCode", description = "조회할 펀딩의 카데고리 코드", required = false, in = ParameterIn.QUERY)
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "펀딩 검색 성공", content = @Content(
@@ -142,10 +142,10 @@ public class FundingApiControllerV1 {
             })
     @GetMapping("/{searchParam}/search")
     public ResponseEntity<?> searchFunding(
-            @PathVariable String searchParam,
-            @RequestParam(required = false) String fundingCategoryCode) {
+            @PathVariable(value = "searchParam", required = false) String searchParam,
+            @RequestParam(value = "fundingCategoryCode", required = false) Integer fundingCategoryCode) {
 
-        List<FundingListDto> fundingListDtos = fundingService.searchFunding(searchParam, Integer.parseInt(fundingCategoryCode));
+        List<FundingListDto> fundingListDtos = fundingService.searchFunding(searchParam, fundingCategoryCode);
 
         return ResponseEntity.status(HttpStatus.OK).body(fundingListDtos);
 
